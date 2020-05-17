@@ -23,5 +23,5 @@ days|ether|finney|hours|minutes|seconds|szabo|weeks|wei|years {return Units;}
 "//".* {/*Ignore*/}
 "+"|"-"|"*"|"/"|"=" {return Operador;}
 {L}({L}|{D})* {lexeme=yytext(); return Identificador;}
-("(-"{D}+")")|{D}+ {lexeme=yytext(); return Numero;}
+("(-"{D}+")")|{D}+ {lexeme=yytext(); return Literal;}
  . {return ERROR;}

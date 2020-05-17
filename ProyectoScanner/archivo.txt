@@ -1,1 +1,1 @@
-Pragma = + - if else while for hours minutes seconds uint32 szabo
+while
