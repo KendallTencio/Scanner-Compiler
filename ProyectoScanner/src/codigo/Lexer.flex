@@ -5,11 +5,17 @@ import static codigo.Tokens.*;
 %type Tokens
 L=[a-zA-Z_]+
 D=[0-9]+
+H=[0-9a-fA-F]+
 espacio=[ ,\t,\r,\n]+
 %{
     public String lexeme;
 %}
+
 %%
+(hex\"{H}{H}{H}{H}{H}{H}{H}{H}\")|(hex'{H}{H}{H}{H}{H}{H}{H}{H}') {lexeme=yytext(); return Literal;}
+
+\"({L}|{D}|{espacio}|(\\u{H}{H}{H}{H})|(\\x{H}{H})|(\\n)|(\\t)|(\\r))*\" {lexeme=yytext(); return Literal;}
+
 address|as|bool|break|byte|bytes|constructor|
 continue|contract|delete|do|else|enum|false|
 for|from|function|hex|if|import|int|internal|
@@ -22,6 +28,7 @@ days|ether|finney|hours|minutes|seconds|szabo|weeks|wei|years {return Units;}
 {espacio} {/*Ignore*/}
 "//".* {/*Ignore*/}
 "+"|"-"|"*"|"/"|"=" {return Operador;}
+
 {L}({L}|{D})* {lexeme=yytext(); return Identificador;}
 ("(-"{D}+")")|{D}+ {lexeme=yytext(); return Literal;}
  . {return ERROR;}
