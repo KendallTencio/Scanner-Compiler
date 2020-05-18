@@ -1,1 +1,1 @@
-while
+"Hola" 'h' 1035e-10 hola Hola34 2 + 3 if

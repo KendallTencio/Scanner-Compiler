@@ -5,6 +5,7 @@ import static codigo.Tokens.*;
 %type Tokens
 L=[a-zA-Z_]+
 D=[0-9]+
+E = "e"
 espacio=[ ,\t,\r,\n]+
 %{
     public String lexeme;
@@ -21,7 +22,12 @@ balance|call|callcode|delegate|call|send|transfer {return Transac;}
 days|ether|finney|hours|minutes|seconds|szabo|weeks|wei|years {return Units;}
 {espacio} {/*Ignore*/}
 "//".* {/*Ignore*/}
-"+"|"-"|"*"|"/"|"=" {return Operador;}
+"!="|"&&"|"=="|"!"|"|"|"<="|"<<"|">="|">>"|
+"**"|"/"|"%"|"*"|"<"|">"|","|";"|"."|"("|")"|
+"["|"]"|"?"|":"|"{"|"}"|"+="|"-="|"*="|"/="|"&"|
+"^"|"~"|"+"|"-"|"=" {return Operador;}
 {L}({L}|{D})* {lexeme=yytext(); return Identificador;}
-("(-"{D}+")")|{D}+ {lexeme=yytext(); return Literal;}
+("-"{D}+"")|{D}+ {lexeme=yytext(); return Literal;}
+(("-"{D}+"")|{D}+){E}(("-"{D}+"")|{D}+) {lexeme=yytext(); return Literal;}
+(\"({L})*\")|('{L}') {lexeme=yytext(); return Literal;}
  . {return ERROR;}
