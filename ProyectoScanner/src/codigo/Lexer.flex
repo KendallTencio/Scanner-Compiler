@@ -29,5 +29,5 @@ days|ether|finney|hours|minutes|seconds|szabo|weeks|wei|years {return Units;}
 {L}({L}|{D})* {lexeme=yytext(); return Identificador;}
 ("-"{D}+"")|{D}+ {lexeme=yytext(); return Literal;}
 (("-"{D}+"")|{D}+){E}(("-"{D}+"")|{D}+) {lexeme=yytext(); return Literal;}
-(\"({L})*\")|('{L}') {lexeme=yytext(); return Literal;}
+(\"(({espacio})*({L}|{D})*({espacio})*({L}|{D})*({espacio})*)*\")|('({L}|{D})') {lexeme=yytext(); return Literal;} 
  . {return ERROR;}
