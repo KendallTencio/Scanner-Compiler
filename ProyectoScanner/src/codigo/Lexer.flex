@@ -7,7 +7,14 @@ L=[a-zA-Z_]+
 D=[0-9]+
 E = "e"
 H=[0-9a-fA-F]+
+
+FL = ({FL1}|{FL2}|{FL3}){EX}?
+FL1 = [0-9]+ \. [0-9]* 
+FL2 = \. [0-9]+ 
+FL3 = [0-9]+ \.
+EX=[0-9]+ [eE] [+-]? [0-9]+
 espacio=[ ,\t,\r,\n]+
+
 %{
     public String lexeme;
 %}
@@ -16,7 +23,7 @@ espacio=[ ,\t,\r,\n]+
 (hex\"{H}{H}{H}{H}{H}{H}{H}{H}\")|(hex'{H}{H}{H}{H}{H}{H}{H}{H}') {lexeme=yytext(); return Literal;}
 
 \"({L}|{D}|{espacio}|(\\u{H}{H}{H}{H})|(\\x{H}{H})|(\\n)|(\\t)|(\\r))*\" {lexeme=yytext(); return Literal;}
-
+{FL} {lexeme=yytext(); return Literal;}
 address|as|bool|break|byte|bytes|constructor|
 continue|contract|delete|do|else|enum|false|
 for|from|function|hex|if|import|int|internal|
@@ -33,7 +40,9 @@ days|ether|finney|hours|minutes|seconds|szabo|weeks|wei|years {return Units;}
 "["|"]"|"?"|":"|"{"|"}"|"+="|"-="|"*="|"/="|"&"|
 "^"|"~"|"+"|"-"|"=" {return Operador;}
 {L}({L}|{D})* {lexeme=yytext(); return Identificador;}
+
 ("-"{D}+"")|{D}+ {lexeme=yytext(); return Literal;}
 (("-"{D}+"")|{D}+){E}(("-"{D}+"")|{D}+) {lexeme=yytext(); return Literal;}
+
 (\"(({espacio})*({L}|{D})*({espacio})*({L}|{D})*({espacio})*)*\")|('({L}|{D})') {lexeme=yytext(); return Literal;} 
  . {return ERROR;}
