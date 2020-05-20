@@ -13,4 +13,4 @@ public class Principal {
         File archivo = new File(ruta);
         JFlex.Main.generate(archivo);
     }
-}
+} 

@@ -5,17 +5,27 @@ import java.io.StringReader;
 import java.lang.reflect.Constructor;
 
 public class AnalizadorLexico {
+    private String errores = "";
     
     public AnalizadorLexico(){
         
     }
     
+    public void anadirError(int linea, String error){
+        errores += "Línea: "+ linea + "\n" + error;
+    }
+    
+    public String getErrores(){
+        return errores;
+    }
+    
     public String analizarLexico(String txtEntrada) throws IOException{
-        int cont = 1;
+        int contLinea = 1;
         
         String expr = (String) txtEntrada;
         Lexer lexer = new Lexer(new StringReader(expr));
-        String resultado = "Línea: " + cont + "\tTipo\n";
+        String resultado = "\nLínea: " + contLinea + "\tTipo\n";
+        String errorMsj = "";
         while(true){
             Tokens token = lexer.yylex();
             if(token == null){;
@@ -23,11 +33,12 @@ public class AnalizadorLexico {
             }
             switch (token) {
                     case Linea:
-                        cont++;
-                        resultado += "Línea: " + cont + "\n";
+                        contLinea++;
+                        resultado += "\nLínea: " + contLinea + "\n";
                     break;  
                     case ERROR:
-                        resultado += "Símbolo no definido\n";
+                        errorMsj += "Símbolo no definido\n";
+                        anadirError(contLinea, errorMsj);
                         break;
                     case Identificador: case Literal: case Reservadas:
                         resultado += lexer.lexeme + "\t" + token + "\n";

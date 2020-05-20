@@ -15,7 +15,6 @@ FL3 = [0-9]+ \.
 FL4 = \. [0-9]+ [eE] [+-]? [0-9]+
 EX = [0-9]+ [eE] [+-]? [0-9]+
 espacio=[ ,\t,\r]+
-
 %{
     public String lexeme;
 %}
@@ -36,7 +35,7 @@ balance|call|callcode|delegate|call|send|transfer {lexeme=yytext(); return Trans
 days|ether|finney|hours|minutes|seconds|szabo|weeks|wei|years {lexeme=yytext(); return Units;}
 {espacio} {/*Ignore*/}
 "//".* {/*Ignore*/}
-"/*"({L}|{D}|{espacio})*"*/" {/*Ignore*/}
+"/*"("\n"|{L}|{D}|{espacio})*"*/" {/*Ignore*/}
 "!="|"&&"|"=="|"!"|"|"|"<="|"<<"|">="|">>"|
 "**"|"/"|"%"|"*"|"<"|">"|","|";"|"."|"("|")"|
 "["|"]"|"?"|":"|"{"|"}"|"+="|"-="|"*="|"/="|"&"|
