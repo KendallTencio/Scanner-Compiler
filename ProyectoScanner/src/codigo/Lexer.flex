@@ -14,7 +14,7 @@ FL2 = \. [0-9]+
 FL3 = [0-9]+ \.
 FL4 = \. [0-9]+ [eE] [+-]? [0-9]+
 EX = [0-9]+ [eE] [+-]? [0-9]+
-espacio=[ ,\t,\r,\n]+
+espacio=[ ,\t,\r]+
 
 %{
     public String lexeme;
@@ -22,7 +22,7 @@ espacio=[ ,\t,\r,\n]+
 
 %%
 (hex\"{H}{H}{H}{H}{H}{H}{H}{H}\")|(hex'{H}{H}{H}{H}{H}{H}{H}{H}') {lexeme=yytext(); return Literal;}
-
+"\n" {return Linea;}
 \"({L}|{D}|{espacio}|(\\u{H}{H}{H}{H})|(\\x{H}{H})|(\\n)|(\\t)|(\\r))*\" {lexeme=yytext(); return Literal;}
 {FL} {lexeme=yytext(); return Literal;}
 address|as|bool|break|byte|bytes|constructor|
@@ -32,14 +32,15 @@ mapping|modifier|payable|Pragma|private|public|
 return|returns|solidity|string|struct|this|true|
 ufixed|uint|var|view|while|uint8|uint32|int16|
 bytes4|bytes8|exc {lexeme=yytext(); return Reservadas;}
-balance|call|callcode|delegate|call|send|transfer {return Transac;}
-days|ether|finney|hours|minutes|seconds|szabo|weeks|wei|years {return Units;}
+balance|call|callcode|delegate|call|send|transfer {lexeme=yytext(); return Transac;}
+days|ether|finney|hours|minutes|seconds|szabo|weeks|wei|years {lexeme=yytext(); return Units;}
 {espacio} {/*Ignore*/}
 "//".* {/*Ignore*/}
+"/*"({L}|{D}|{espacio})*"*/" {/*Ignore*/}
 "!="|"&&"|"=="|"!"|"|"|"<="|"<<"|">="|">>"|
 "**"|"/"|"%"|"*"|"<"|">"|","|";"|"."|"("|")"|
 "["|"]"|"?"|":"|"{"|"}"|"+="|"-="|"*="|"/="|"&"|
-"^"|"~"|"+"|"-"|"=" {return Operador;}
+"^"|"~"|"+"|"-"|"=" {lexeme=yytext(); return Operador;}
 {L}({L}|{D})* {lexeme=yytext(); return Identificador;}
 
 ("-"{D}+"")|{D}+ {lexeme=yytext(); return Literal;}

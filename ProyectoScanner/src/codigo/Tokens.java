@@ -7,5 +7,6 @@ public enum Tokens {
     Units,
     Identificador,
     Literal,
+    Linea,
     ERROR
 }

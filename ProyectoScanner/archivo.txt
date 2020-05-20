@@ -1,1 +1,7 @@
-dd d3 " Hola  df fgf" if "else"
+?cx
+if
+else 
+x = 0
+$
+hola
+"Hola "
