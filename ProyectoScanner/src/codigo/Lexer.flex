@@ -30,7 +30,7 @@ for|from|function|hex|if|import|int|internal|
 mapping|modifier|payable|Pragma|private|public|
 return|returns|solidity|string|struct|this|true|
 ufixed|uint|var|view|while|uint8|uint32|int16|
-bytes4|bytes8|exc {lexeme=yytext(); return Reservadas;}
+bytes4|bytes8 {lexeme=yytext(); return Reservadas;}
 balance|call|callcode|delegate|call|send|transfer {lexeme=yytext(); return Transac;}
 days|ether|finney|hours|minutes|seconds|szabo|weeks|wei|years {lexeme=yytext(); return Units;}
 {espacio} {/*Ignore*/}
