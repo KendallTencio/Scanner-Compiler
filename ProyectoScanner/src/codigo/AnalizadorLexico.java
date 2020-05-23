@@ -14,7 +14,7 @@ public class AnalizadorLexico {
     }
     
     public String getStringErrores(){
-        String strErrores = "";
+        String strErrores = "Tipos de errores encontrados: " + listaErrores.size() + "\n\n";
         for (int i = 0; i < listaErrores.size(); i++){
             TokenError tokenError = (TokenError) listaErrores.get(i);
             strErrores += tokenError.getStringError(); 
@@ -49,7 +49,7 @@ public class AnalizadorLexico {
         
         String expr = (String) txtEntrada;
         Lexer lexer = new Lexer(new StringReader(expr));
-        String resultado = "\nLínea: " + contLinea + "\tTipo\n";
+        String resultado = "Línea: " + contLinea + "\tTipo\n";
         String idError = "";
         while(true){
             Tokens token = lexer.yylex();
@@ -61,7 +61,7 @@ public class AnalizadorLexico {
                         contLinea++;
                         resultado += "\nLínea: " + contLinea + "\n";
                     break;  
-                    case ERROR:
+                    case ERROR: case ERROR_Identificador: case ERROR_Simbolo:
                         idError += token; //Por el momento todos los errores son los mismos
                         //anadirError(contLinea, errorMsj);
                         if(comprobarIdErrorNuevo(idError)){
