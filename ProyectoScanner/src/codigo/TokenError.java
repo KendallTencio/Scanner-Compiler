@@ -4,11 +4,11 @@ import java.util.ArrayList;
 
 public class TokenError {
     private String IDTokenError;
-    private ArrayList<String> lineasDeTokenError = new ArrayList<String>();
+    private ArrayList<String[]> lineasDeTokenError = new ArrayList<String[]>();
     
     public TokenError(String msjError, int linea){
         setIDTokenError(msjError);
-        setLineaTokenError(linea);
+        setLineaTokenError(linea, 1); //Número de apariciones es 1 la primera vez que se construye
     }
     
     public String getIDTokenError(){
@@ -29,34 +29,42 @@ public class TokenError {
         boolean primeraLinea = true;
         for (int i = 0; i < lineasDeTokenError.size(); i++) {
             if(primeraLinea){
-                listaLineasError += " ("+ lineasDeTokenError.get(i);
+                listaLineasError += " ["+ lineasDeTokenError.get(i)[0];
                 primeraLinea = false;
             }
             else{
-                listaLineasError += ", " + lineasDeTokenError.get(i);
+                listaLineasError += ", " + lineasDeTokenError.get(i)[0];
+            }
+            if(Integer.parseInt(lineasDeTokenError.get(i)[1]) > 1){ //No me gusta estarlo pasando constantemente de Str a Int y viceversa. :I
+                listaLineasError += "("+lineasDeTokenError.get(i)[1]+")";
             }
         }
         strTokenError += getIDTokenError();
-        strTokenError += listaLineasError + ")\n";
+        strTokenError += listaLineasError + "]\n";
         return strTokenError;
     }
     
-    public void setLineaTokenError(int lineaNueva){
+    public void setLineaTokenError(int lineaNueva, int numApariciones){
         String lineaStr = Integer.toString(lineaNueva);
-        lineasDeTokenError.add(lineaStr);
+        String numAparStr = Integer.toString(numApariciones);
+        String[] contenidoLinea = {lineaStr, numAparStr};
+        lineasDeTokenError.add(contenidoLinea);
     }
     
     public void agregarLineaTokenError(String lineaNueva){
         boolean lineaAgregada = false;
+        int cantidadAparicionesInt;
         for (int numLinea = 0; numLinea < lineasDeTokenError.size(); numLinea++) {
-           if(lineasDeTokenError.get(numLinea).equals(lineaNueva)){
+           if(lineasDeTokenError.get(numLinea)[0].equals(lineaNueva)){ 
                lineaAgregada = true;
+               cantidadAparicionesInt = Integer.parseInt(lineasDeTokenError.get(numLinea)[1]);
+               cantidadAparicionesInt += 1;                               //Se le agregó 1 a la cant actual de errores en esa línea.
+               lineasDeTokenError.get(numLinea)[1] = Integer.toString(cantidadAparicionesInt);
                break;
            }
         }
         if(!lineaAgregada){
-            lineasDeTokenError.add(lineaNueva);
-            
+            setLineaTokenError(Integer.parseInt(lineaNueva), 1); //Cantidad de apariciones es 1
         }
     }
 }

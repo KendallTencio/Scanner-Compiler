@@ -138,13 +138,14 @@ public class FrmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAnalizarActionPerformed
 
     private void cargarCodeBotonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cargarCodeBotonActionPerformed
-        JFileChooser chooser = new JFileChooser();
-        chooser.showOpenDialog(null);
-        File archivoLeido = new File(chooser.getSelectedFile().getAbsolutePath());
-        
         try{
+            JFileChooser chooser = new JFileChooser();
+            chooser.showOpenDialog(null);
+            File archivoLeido = new File(chooser.getSelectedFile().getAbsolutePath());
+        
             String ST = new String(Files.readAllBytes(archivoLeido.toPath()));
             txtEntrada.setText(ST);
+        } catch(NullPointerException e) {
         } catch (FileNotFoundException ex) {
             Logger.getLogger(FrmPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
