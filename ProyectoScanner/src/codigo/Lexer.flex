@@ -22,7 +22,12 @@ espacio=[ ,\t,\r]+
 %%
 (hex\"{H}{H}{H}{H}{H}{H}{H}{H}\")|(hex'{H}{H}{H}{H}{H}{H}{H}{H}') {lexeme=yytext(); return Literal;}
 "\n" {return Linea;}
-\"({L}|{D}|{espacio}|(\\u{H}{H}{H}{H})|(\\x{H}{H})|(\\n)|(\\t)|(\\r))*\" {lexeme=yytext(); return Literal;}
+
+/*
+(\"({L}|{D}|{espacio}|(\\u{H}{H}{H}{H})|(\\x{H}{H})|(\\n)|(\\t)|(\\r))*\")| ('({L}|{D}|{espacio}|(\\u{H}{H}{H}{H})|(\\x{H}{H})|(\\n)|(\\t)|(\\r))*') {lexeme=yytext(); return Literal;}
+*/
+('([^(\n)(\\n)(\\t)(\\r)]|(\\n)|(\\t)|(\\r))*')|(\"([^(\n)(\\n)(\\t)(\\r)]|(\\n)|(\\t)|(\\r))*\") {lexeme=yytext(); return Literal;}
+
 {FL} {lexeme=yytext(); return Literal;}
 address|as|bool|break|byte|bytes|constructor|
 continue|contract|delete|do|else|enum|false|
@@ -34,8 +39,10 @@ bytes4|bytes8|exc {lexeme=yytext(); return Reservadas;}
 balance|call|callcode|delegate|call|send|transfer {lexeme=yytext(); return Transac;}
 days|ether|finney|hours|minutes|seconds|szabo|weeks|wei|years {lexeme=yytext(); return Units;}
 {espacio} {/*Ignore*/}
+
 "//".* {/*Ignore*/}
-"/*"("\n"|{L}|{D}|{espacio})*"*/" {/*Ignore*/}
+"/*"( [^*] | (\*+[^*/]) )*\*+\/ {/*Ignore*/}
+
 "!="|"&&"|"=="|"!"|"|"|"<="|"<<"|">="|">>"|
 "**"|"/"|"%"|"*"|"<"|">"|","|";"|"."|"("|")"|
 "["|"]"|"?"|":"|"{"|"}"|"+="|"-="|"*="|"/="|"&"|
@@ -44,6 +51,9 @@ days|ether|finney|hours|minutes|seconds|szabo|weeks|wei|years {lexeme=yytext(); 
 
 ("-"{D}+"")|{D}+ {lexeme=yytext(); return Literal;}
 (("-"{D}+"")|{D}+){E}(("-"{D}+"")|{D}+) {lexeme=yytext(); return Literal;}
-
+/*
 (\"(({espacio})*({L}|{D})*({espacio})*({L}|{D})*({espacio})*)*\")|('({L}|{D})') {lexeme=yytext(); return Literal;} 
+*/
+
+{D}+([^( )(\n)(\t)(\r)(!=)(&&)(==)(!)(|)(<=)(<<)(>=)(>>)(**)(/)(%)(*)(<)(>)(,)(;)(.)("(")(")")("[")("]")(?)(:)({)(})(+=)(-=)(*=)(/=)(&)("^")(~)(+)("-")(=)])* {lexeme=yytext(); return ERROR;}
  . {return ERROR;}
