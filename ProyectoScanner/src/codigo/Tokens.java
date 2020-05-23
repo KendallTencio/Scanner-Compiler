@@ -8,5 +8,6 @@ public enum Tokens {
     Identificador,
     Literal,
     Linea,
-    ERROR
+    ERRORIdentificador,
+    ERROR,
 }
