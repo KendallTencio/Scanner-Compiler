@@ -9,6 +9,8 @@ public class AnalizadorLexico {
     private String errores = "";
     private ArrayList<TokenError> listaErrores = new ArrayList<TokenError>();
     
+    Report report = new Report();
+    
     public AnalizadorLexico(){
         
     }
@@ -55,7 +57,7 @@ public class AnalizadorLexico {
             Tokens token = lexer.yylex();
             contLinea = lexer.linea();
             if(token == null){;
-                return resultado;
+                return this.report.generateReport();
             }
             resultado += "\nLínea: " + (contLinea) + "\n";
             switch (token) {
@@ -73,11 +75,14 @@ public class AnalizadorLexico {
                         break;
                     case Identificador: case Literal: case Reservadas:
                         resultado += lexer.lexeme + "\t" + token + "\n";
+                        this.report.analyze(lexer.lexeme, token.toString(), String.valueOf(contLinea));
                         break;  
                     default:
                         resultado += lexer.lexeme + "\t" + token + "\n";
+                        this.report.analyze(lexer.lexeme, token.toString(), String.valueOf(contLinea));
                         break;
                 }
         }
+        
     }
 }
