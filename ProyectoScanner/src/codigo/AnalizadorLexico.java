@@ -49,18 +49,16 @@ public class AnalizadorLexico {
         
         String expr = (String) txtEntrada;
         Lexer lexer = new Lexer(new StringReader(expr));
-        String resultado = "Línea: " + contLinea + "\tTipo\n";
+        String resultado = "";
         String idError = "";
         while(true){
             Tokens token = lexer.yylex();
+            contLinea = lexer.linea();
             if(token == null){;
                 return resultado;
             }
+            resultado += "\nLínea: " + (contLinea) + "\n";
             switch (token) {
-                    case Linea:
-                        contLinea++;
-                        resultado += "\nLínea: " + contLinea + "\n";
-                    break;  
                     case ERROR: case ERROR_Identificador: case ERROR_Simbolo:
                         idError += token; //Por el momento todos los errores son los mismos
                         //anadirError(contLinea, errorMsj);

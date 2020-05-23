@@ -7,8 +7,7 @@ public enum Tokens {
     Units,
     Identificador,
     Literal,
-    Linea,
     ERROR_Identificador,
     ERROR_Simbolo,
-    ERROR,
+    ERROR
 }
