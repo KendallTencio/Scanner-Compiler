@@ -3,8 +3,8 @@ package codigo;
 import java.util.ArrayList;
 
 public class TokenError {
-    private String IDTokenError;
-    private ArrayList<String[]> lineasDeTokenError = new ArrayList<String[]>();
+    private String IDTokenError;     //Se tiene un ID y una lista de parejas String de {Línea, CantidadDeApariciones}
+    private ArrayList<String[]> lineasDeTokenError = new ArrayList<String[]>(); 
     
     public TokenError(String msjError, int linea){
         setIDTokenError(msjError);

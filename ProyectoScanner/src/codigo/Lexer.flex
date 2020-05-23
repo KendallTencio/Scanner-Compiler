@@ -34,8 +34,7 @@ continue|contract|delete|do|else|enum|false|
 for|from|function|hex|if|import|int|internal|
 mapping|modifier|payable|Pragma|private|public|
 return|returns|solidity|string|struct|this|true|
-ufixed|uint|var|view|while|uint8|uint32|
-bytes4|bytes8 {lexeme=yytext(); return Reservadas;}
+ufixed|uint|var|view|while {lexeme=yytext(); return Reservadas;}
 
 int8|int16|int24|int32|int40|int48|int56|int64|int72|
 int80|int88|int96|int104|int112|int120|int128|int136|
@@ -71,6 +70,8 @@ days|ether|finney|hours|minutes|seconds|szabo|weeks|wei|years {lexeme=yytext(); 
 
 ("-"{D}+"")|{D}+ {lexeme=yytext(); return Literal;}
 (("-"{D}+"")|{D}+){E}(("-"{D}+"")|{D}+) {lexeme=yytext(); return Literal;}
+
+{D}*{L}* {return ERROR;}
 
 (\"(({espacio})*({L}|{D})*({espacio})*({L}|{D})*({espacio})*)*\")|('({L}|{D})') {lexeme=yytext(); return Literal;} 
  . {return ERROR;}
