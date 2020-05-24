@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class TokenError {
     private String IDTokenError;     //Se tiene un ID y una lista de parejas String de {Línea, CantidadDeApariciones}
-    private ArrayList<String[]> lineasDeTokenError = new ArrayList<String[]>(); 
+    private ArrayList<String[]> lineasDeTokenError = new ArrayList<>(); 
     
     public TokenError(String msjError, int linea){
         setIDTokenError(msjError);
@@ -29,7 +29,7 @@ public class TokenError {
         boolean primeraLinea = true;
         for (int i = 0; i < lineasDeTokenError.size(); i++) {
             if(primeraLinea){
-                listaLineasError += " ["+ lineasDeTokenError.get(i)[0];
+                listaLineasError += "   Líneas:"+ lineasDeTokenError.get(i)[0];
                 primeraLinea = false;
             }
             else{
@@ -40,7 +40,7 @@ public class TokenError {
             }
         }
         strTokenError += getIDTokenError();
-        strTokenError += listaLineasError + "]\n";
+        strTokenError += listaLineasError + "\n";
         return strTokenError;
     }
     

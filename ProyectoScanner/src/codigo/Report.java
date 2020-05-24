@@ -60,7 +60,12 @@ public class Report {
         String result = "";
         Set<String> value = lines.keySet();
         for(String key: value){
-            result = result+key+" ("+lines.get(key)+")"+", ";
+            if(lines.get(key) == 1){ //Si la ocurrencia del token es 1
+                result = result+key+", ";
+            }
+            else{
+                result = result+key+"("+lines.get(key)+")"+", ";
+            }
         }
         return result.substring(0, result.length() - 2);
     }

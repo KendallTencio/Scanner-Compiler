@@ -24,7 +24,6 @@ public class FrmPrincipal extends javax.swing.JFrame {
         AnalizadorLexico analizadorLex = new AnalizadorLexico();
         String resultado = analizadorLex.analizarLexico(txtEntrada.getText());
         String errores = analizadorLex.getStringErrores();
-        System.out.println(errores);
         txtResultado.setText(resultado);
         txtErrores.setText(errores);
     }
