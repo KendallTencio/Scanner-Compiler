@@ -2,12 +2,13 @@ package codigo;
 
 import java.io.IOException;
 import java.io.StringReader;
-import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 
 public class AnalizadorLexico {
     private String errores = "";
     private ArrayList<TokenError> listaErrores = new ArrayList<TokenError>();
+    
+    private Report report = new Report();
     
     public AnalizadorLexico(){
         
@@ -45,41 +46,34 @@ public class AnalizadorLexico {
     }
     
     public String analizarLexico(String txtEntrada) throws IOException{
-        int contLinea = 1;
+        int lineaActualToken = 1;
         
         String expr = (String) txtEntrada;
         Lexer lexer = new Lexer(new StringReader(expr));
-        String resultado = "Línea: " + contLinea + "\tTipo\n";
-        String idError = "";
         while(true){
             Tokens token = lexer.yylex();
+            lineaActualToken = lexer.linea();
             if(token == null){;
-                return resultado;
+                return this.report.generateReport();
             }
             switch (token) {
-                    case Linea:
-                        contLinea++;
-                        resultado += "\nLínea: " + contLinea + "\n";
-                    break;  
                     case ERROR: case ERROR_Identificador: case ERROR_Simbolo:
-                        idError += token; //Por el momento todos los errores son los mismos
-                        //anadirError(contLinea, errorMsj);
-                        if(comprobarIdErrorNuevo(idError)){
-                            TokenError tokenErrorNuevo = new TokenError(idError, contLinea);
+                        if(comprobarIdErrorNuevo(token.toString())){
+                            TokenError tokenErrorNuevo = new TokenError(token.toString(), lineaActualToken);
                             listaErrores.add(tokenErrorNuevo);
                         }
                         else{
-                            agregarLineaATokenErrorExistente(idError, contLinea);
+                            agregarLineaATokenErrorExistente(token.toString(), lineaActualToken);
                         }
-                        idError = "";
                         break;
                     case Identificador: case Literal: case Reservadas:
-                        resultado += lexer.lexeme + "\t" + token + "\n";
+                        this.report.analyze(lexer.lexeme, token.toString(), String.valueOf(lineaActualToken));
                         break;  
                     default:
-                        resultado += lexer.lexeme + "\t" + token + "\n";
+                        this.report.analyze(lexer.lexeme, token.toString(), String.valueOf(lineaActualToken));
                         break;
                 }
         }
+        
     }
 }
