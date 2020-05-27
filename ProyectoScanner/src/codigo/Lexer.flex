@@ -9,14 +9,20 @@ D=[0-9]+
 E = "e"
 H=[0-9a-fA-F]+
 
-FL = [-]? ({FL1}|{FL2}|{FL3}|{FL4}){EX}?
+FL = [-]? ({FL1}|{FL2}|{FL3}|{FL4}|{Cient1}|{Cient2}|{Cient3})
 FL1 = [0-9]+ \. [0-9]*
 FL2 = \. [0-9]+
 FL3 = [0-9]+ \.
-FL4 = \. [0-9]+ [eE] [+-]? [0-9]+
-EX = [0-9]+ [eE] [+-]? [0-9]+
+FL4 = [0-9]*
+Cient1 = \. [0-9]+ [eE] [+-]? [0-9]+
+Cient2 = [0-9]+ [eE] [+-]? [0-9]+
+Cient3 = [0-9]+ \. [0-9]+ [eE] [+-]? [0-9]+
 espacio=[ \n,\t,\r]+
 
+CientError = ([-]? ({CientE1}|{CientE2}|{CientE3}))
+CientE1 = \. [0-9]+ [eE] [+-]? [0-9]+ \. [0-9]*?
+CientE2 = [0-9]+ [eE] [+-]? [0-9]+ \. [0-9]*?
+CientE3 = [0-9]+ \. [0-9]+ [eE] [+-]? [0-9]+ \. [0-9]*?
 
 
 %{
@@ -35,6 +41,7 @@ espacio=[ \n,\t,\r]+
 ('([^(\n)(\\n)(\\t)(\\r)]|(\\n)|(\\t)|(\\r))*')|(\"([^(\n)(\\n)(\\t)(\\r)]|(\\n)|(\\t)|(\\r))*\") { lexeme=yytext(); return Literal;}
 
 {FL} { lexeme=yytext(); return Literal;}
+{CientError} { lexeme=yytext(); return ERROR_NotacionCientifica;}
 
 address|as|bool|break|byte|bytes|constructor|
 continue|contract|delete|do|else|enum|false|
@@ -75,8 +82,7 @@ days|ether|finney|hours|minutes|seconds|szabo|weeks|wei|years { lexeme=yytext();
 "^"|"~"|"+"|"-"|"=" { lexeme=yytext(); return Operador;}
 {L}({L}|{D})* { lexeme=yytext(); return Identificador;}
 
-("-"{D}+"")|{D}+ { lexeme=yytext(); return Literal;}
-(("-"{D}+"")|{D}+){E}(("-"{D}+"")|{D}+) { lexeme=yytext(); return Literal;}
+
 /*
 (\"(({espacio})*({L}|{D})*({espacio})*({L}|{D})*({espacio})*)*\")|('({L}|{D})') {lexeme=yytext(); return Literal;}
 */
