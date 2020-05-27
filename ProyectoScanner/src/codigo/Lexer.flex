@@ -34,11 +34,17 @@ CientE3 = [0-9]+ \. [0-9]+ [eE] [+-]? [0-9]+ \. [0-9]*?
 (hex\"{H}{H}{H}{H}{H}{H}{H}{H}\")|(hex'{H}{H}{H}{H}{H}{H}{H}{H}') { lexeme=yytext(); return Literal;}
 
 
-
+/*
+(\"(({espacio})*({L}|{D})*({espacio})*({L}|{D})*({espacio})*)*\")|('({L}|{D})') {lexeme=yytext(); return Literal;}
+*/
 /*
 (\"({L}|{D}|{espacio}|(\\u{H}{H}{H}{H})|(\\x{H}{H})|(\\n)|(\\t)|(\\r))*\")| ('({L}|{D}|{espacio}|(\\u{H}{H}{H}{H})|(\\x{H}{H})|(\\n)|(\\t)|(\\r))*') {lexeme=yytext(); return Literal;}
 */
-('([^(\n)(\\n)(\\t)(\\r)]|(\\n)|(\\t)|(\\r))*')|(\"([^(\n)(\\n)(\\t)(\\r)]|(\\n)|(\\t)|(\\r))*\") { lexeme=yytext(); return Literal;}
+
+('([^(\n)(')])*')|(\"([^(\n)(\")])*\") { lexeme=yytext(); return Literal;}
+
+
+// \"[^]*\" {lexeme=yytext(); return Literal;}
 
 {FL} { lexeme=yytext(); return Literal;}
 {CientError} { lexeme=yytext(); return ERROR_NotacionCientifica;}
@@ -82,10 +88,6 @@ days|ether|finney|hours|minutes|seconds|szabo|weeks|wei|years { lexeme=yytext();
 "^"|"~"|"+"|"-"|"=" { lexeme=yytext(); return Operador;}
 {L}({L}|{D})* { lexeme=yytext(); return Identificador;}
 
-
-/*
-(\"(({espacio})*({L}|{D})*({espacio})*({L}|{D})*({espacio})*)*\")|('({L}|{D})') {lexeme=yytext(); return Literal;}
-*/
 
 {D}+([^( )(\n)(\t)(\r)(!=)(&&)(==)(!)(|)(<=)(<<)(>=)(>>)(**)(/)(%)(*)(<)(>)(,)(;)(.)("(")(")")("[")("]")(?)(:)({)(})(+=)(-=)(*=)(/=)(&)("^")(~)(+)("-")(=)])* { lexeme=yytext(); return ERROR_Identificador;}
  . { return ERROR;}

@@ -8,7 +8,7 @@ public class Principal {
         String ruta = currentDirectory+"/src/codigo/Lexer.flex";
         generarLexer(ruta);
     }
-
+ 
     public static void generarLexer(String ruta){
         File archivo = new File(ruta);
         JFlex.Main.generate(archivo);
