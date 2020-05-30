@@ -4,21 +4,31 @@ import static codigo.Tokens.*;
 %class Lexer
 %type Tokens
 %line
-%unicode
 L=[a-zA-Z_]+
-D=[0-9]+
 E = "e"
 H=[0-9a-fA-F]+
 
-FL = [-]? ({FL1}|{FL2}|{FL3}|{FL4}){EX}?
+FL = ({FL1}|{FL2}|{FL3}|{Cient1}|{Cient2}|{Cient3})
 FL1 = [0-9]+ \. [0-9]*
 FL2 = \. [0-9]+
-FL3 = [0-9]+ \.
-FL4 = \. [0-9]+ [eE] [+-]? [0-9]+
-EX = [0-9]+ [eE] [+-]? [0-9]+
+FL3 = [0-9]+
+Cient1 = \. [0-9]+ [eE] [+-]? [0-9]+
+Cient2 = [0-9]+ [eE] [+-]? [0-9]+
+Cient3 = [0-9]+ \. [0-9]+ [eE] [+-]? [0-9]+
 espacio=[ \n,\t,\r]+
 
+CientError = ({CientE1}|{CientE2}|{CientE3}|{CientE4}|{CientE5}|{CientE6})
+CientE1 = \. [0-9]+ [eE] [+-]? [0-9]+ \. [0-9]*?
+CientE2 = [0-9]+ [eE] [+-]? [0-9]+ \. [0-9]*?
+CientE3 = [0-9]+ \. [0-9]+ [eE] [+-]? [0-9]+ \. [0-9]*?
+CientE4 = [0][0] \. [0-9]+ [eE] [+-]? [0-9]+ 
+CientE5 = [0][0-9]+ [eE] [+-]? [0-9]+ 
+CientE6 = [0][0-9]+ \. [0-9]+ [eE] [+-]? [0-9]+ 
 
+FLE = ({FLE1}|{FLE2}|{FLE4})
+FLE1 = [0][0-9]+ \. [0-9]*
+FLE2 = [0][0] \. [0-9]+
+FLE4 = [0][0-9]*
 
 %{
     public String lexeme;
@@ -26,19 +36,20 @@ espacio=[ \n,\t,\r]+
 %}
 
 %%
+"/*"|"*/" {return ERROR_Comentario;}
+{FLE} { lexeme=yytext(); return ERROR_LiteralCero;}
+{CientError} { lexeme=yytext(); return ERROR_NotacionCientifica;}
+{FL3}([^( )(\n)(\t)(\r)(!=)(&&)(==)(!)(|)(<=)(<<)(>=)(>>)(**)(/)(%)(*)(<)(>)(,)(;)(.)("(")(")")("[")("]")(?)(:)({)(})(+=)(-=)(*=)(/=)(&)("^")(~)(+)("-")(=)])* { lexeme=yytext(); return ERROR_Identificador;}
+
+
 (hex\"{H}{H}{H}{H}{H}{H}{H}{H}\")|(hex'{H}{H}{H}{H}{H}{H}{H}{H}') { lexeme=yytext(); return Literal;}
 
-"0"({D})+{FL} { return ERROR;} 
-/*
+('([^(\n)(')])*')|(\"([^(\n)(\")])*\") { lexeme=yytext(); return Literal;}
+("/*"([^])*"*/") {/*Ignore*/}
 
-\"([^(\n)])*\" { lexeme=yytext(); return Literal;}
-
-(\"({L}|{D}|{espacio}|(\\u{H}{H}{H}{H})|(\\x{H}{H})|(\\n)|(\\t)|(\\r)|[^(\n)])*\")| ('({L}|{D}|{espacio}|(\\u{H}{H}{H}{H})|(\\x{H}{H})|(\\n)|(\\t)|(\\r))*') {lexeme=yytext(); return Literal;}
-
-*/
-('([^(\n)(')]|(\\u{H}{H}{H}{H})|(\\x{H}{H}))*')|(\"([^(\n)(\\n)(\\t)(\\r)]|(\\n)|(\\t)|(\\r))*\") { lexeme=yytext(); return Literal;}
 
 {FL} { lexeme=yytext(); return Literal;}
+
 
 address|as|bool|break|byte|bytes|constructor|
 continue|contract|delete|do|else|enum|false|
@@ -71,19 +82,13 @@ days|ether|finney|hours|minutes|seconds|szabo|weeks|wei|years { lexeme=yytext();
 {espacio} {/*Ignore*/}
 
 "//".* {/*Ignore*/}
-"/*"( [^*] | (\*+[^*/]) )*\*+\/ {/*Ignore*/}
+//"/*"( [^*] | (\*+[^*/]) )*\*+\/ {/*Ignore*/}
 
 "!="|"&&"|"=="|"!"|"|"|"<="|"<<"|">="|">>"|
 "**"|"/"|"%"|"*"|"<"|">"|","|";"|"."|"("|")"|
 "["|"]"|"?"|":"|"{"|"}"|"+="|"-="|"*="|"/="|"&"|
 "^"|"~"|"+"|"-"|"=" { lexeme=yytext(); return Operador;}
-{L}({L}|{D})* { lexeme=yytext(); return Identificador;}
+{L}({L}|{FL3})* { lexeme=yytext(); return Identificador;}
 
-("-"{D}+"")|{D}+ { lexeme=yytext(); return Literal;}
-(("-"{D}+"")|{D}+){E}(("-"{D}+"")|{D}+) { lexeme=yytext(); return Literal;}
-/*
-(\"(({espacio})*({L}|{D})*({espacio})*({L}|{D})*({espacio})*)*\")|('({L}|{D})') {lexeme=yytext(); return Literal;}
-*/
 
-{D}+([^( )(\n)(\t)(\r)(!=)(&&)(==)(!)(|)(<=)(<<)(>=)(>>)(**)(/)(%)(*)(<)(>)(,)(;)(.)("(")(")")("[")("]")(?)(:)({)(})(+=)(-=)(*=)(/=)(&)("^")(~)(+)("-")(=)])* { lexeme=yytext(); return ERROR_Identificador;}
  . { return ERROR;}

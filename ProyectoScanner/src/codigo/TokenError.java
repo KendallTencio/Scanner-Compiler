@@ -29,7 +29,7 @@ public class TokenError {
         boolean primeraLinea = true;
         for (int i = 0; i < lineasDeTokenError.size(); i++) {
             if(primeraLinea){
-                listaLineasError += "   Líneas:"+ lineasDeTokenError.get(i)[0];
+                listaLineasError += "       Líneas:"+ lineasDeTokenError.get(i)[0];
                 primeraLinea = false;
             }
             else{
