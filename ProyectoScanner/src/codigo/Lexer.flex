@@ -39,6 +39,8 @@ FLE4 = [0][0-9]*
 "/*"|"*/" {return ERROR_Comentario;}
 {FLE} { lexeme=yytext(); return ERROR_LiteralCero;}
 {CientError} { lexeme=yytext(); return ERROR_NotacionCientifica;}
+{FL} { lexeme=yytext(); return Literal;}
+
 {FL3}([^( )(\n)(\t)(\r)(!=)(&&)(==)(!)(|)(<=)(<<)(>=)(>>)(**)(/)(%)(*)(<)(>)(,)(;)(.)("(")(")")("[")("]")(?)(:)({)(})(+=)(-=)(*=)(/=)(&)("^")(~)(+)("-")(=)])* { lexeme=yytext(); return ERROR_Identificador;}
 
 
@@ -48,7 +50,7 @@ FLE4 = [0][0-9]*
 ("/*"([^])*"*/") {/*Ignore*/}
 
 
-{FL} { lexeme=yytext(); return Literal;}
+
 
 
 address|as|bool|break|byte|bytes|constructor|
