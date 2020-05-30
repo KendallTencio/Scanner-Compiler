@@ -57,7 +57,7 @@ public class AnalizadorLexico {
                 return this.report.generateReport();
             }
             switch (token) {
-                    case ERROR: case ERROR_Identificador: case ERROR_Simbolo: case ERROR_NotacionCientifica:
+                    case ERROR: case ERROR_Identificador: case ERROR_Simbolo: case ERROR_NotacionCientifica: case ERROR_LiteralCero: case ERROR_Comentario:
                         if(comprobarIdErrorNuevo(token.toString())){
                             TokenError tokenErrorNuevo = new TokenError(token.toString(), lineaActualToken);
                             listaErrores.add(tokenErrorNuevo);
