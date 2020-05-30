@@ -4,6 +4,7 @@ import static codigo.Tokens.*;
 %class Lexer
 %type Tokens
 %line
+%unicode
 L=[a-zA-Z_]+
 D=[0-9]+
 E = "e"
@@ -27,12 +28,15 @@ espacio=[ \n,\t,\r]+
 %%
 (hex\"{H}{H}{H}{H}{H}{H}{H}{H}\")|(hex'{H}{H}{H}{H}{H}{H}{H}{H}') { lexeme=yytext(); return Literal;}
 
-
-
+"0"({D})+{FL} { return ERROR;} 
 /*
-(\"({L}|{D}|{espacio}|(\\u{H}{H}{H}{H})|(\\x{H}{H})|(\\n)|(\\t)|(\\r))*\")| ('({L}|{D}|{espacio}|(\\u{H}{H}{H}{H})|(\\x{H}{H})|(\\n)|(\\t)|(\\r))*') {lexeme=yytext(); return Literal;}
+
+\"([^(\n)])*\" { lexeme=yytext(); return Literal;}
+
+(\"({L}|{D}|{espacio}|(\\u{H}{H}{H}{H})|(\\x{H}{H})|(\\n)|(\\t)|(\\r)|[^(\n)])*\")| ('({L}|{D}|{espacio}|(\\u{H}{H}{H}{H})|(\\x{H}{H})|(\\n)|(\\t)|(\\r))*') {lexeme=yytext(); return Literal;}
+
 */
-('([^(\n)(\\n)(\\t)(\\r)]|(\\n)|(\\t)|(\\r))*')|(\"([^(\n)(\\n)(\\t)(\\r)]|(\\n)|(\\t)|(\\r))*\") { lexeme=yytext(); return Literal;}
+('([^(\n)(')]|(\\u{H}{H}{H}{H})|(\\x{H}{H}))*')|(\"([^(\n)(\\n)(\\t)(\\r)]|(\\n)|(\\t)|(\\r))*\") { lexeme=yytext(); return Literal;}
 
 {FL} { lexeme=yytext(); return Literal;}
 
