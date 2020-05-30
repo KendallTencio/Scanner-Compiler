@@ -36,14 +36,17 @@ FLE4 = [0][0-9]*
 %}
 
 %%
+"/*"|"*/" {return ERROR_Comentario;}
+{FLE} { lexeme=yytext(); return ERROR_LiteralCero;}
+{CientError} { lexeme=yytext(); return ERROR_NotacionCientifica;}
+{FL3}([^( )(\n)(\t)(\r)(!=)(&&)(==)(!)(|)(<=)(<<)(>=)(>>)(**)(/)(%)(*)(<)(>)(,)(;)(.)("(")(")")("[")("]")(?)(:)({)(})(+=)(-=)(*=)(/=)(&)("^")(~)(+)("-")(=)])* { lexeme=yytext(); return ERROR_Identificador;}
+
+
 (hex\"{H}{H}{H}{H}{H}{H}{H}{H}\")|(hex'{H}{H}{H}{H}{H}{H}{H}{H}') { lexeme=yytext(); return Literal;}
 
 ('([^(\n)(')])*')|(\"([^(\n)(\")])*\") { lexeme=yytext(); return Literal;}
 ("/*"([^])*"*/") {/*Ignore*/}
-"/*"|"*/" {return ERROR_Comentario;}
 
-{FLE} { lexeme=yytext(); return ERROR_LiteralCero;}
-{CientError} { lexeme=yytext(); return ERROR_NotacionCientifica;}
 
 {FL} { lexeme=yytext(); return Literal;}
 
@@ -88,5 +91,4 @@ days|ether|finney|hours|minutes|seconds|szabo|weeks|wei|years { lexeme=yytext();
 {L}({L}|{FL3})* { lexeme=yytext(); return Identificador;}
 
 
-{FL3}([^( )(\n)(\t)(\r)(!=)(&&)(==)(!)(|)(<=)(<<)(>=)(>>)(**)(/)(%)(*)(<)(>)(,)(;)(.)("(")(")")("[")("]")(?)(:)({)(})(+=)(-=)(*=)(/=)(&)("^")(~)(+)("-")(=)])* { lexeme=yytext(); return ERROR_Identificador;}
  . { return ERROR;}
