@@ -1,0 +1,20 @@
+package codigo;
+
+import java_cup.runtime.Symbol;
+
+parser code
+{:
+    private Symbol s;
+
+    public void syntax_error(Symbol e){
+        this.s = s;
+    }
+
+    public Symbol getS(){
+        reeturn this.s;
+    }
+:};
+
+terminal
+non terminal
+
