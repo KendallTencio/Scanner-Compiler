@@ -43,15 +43,10 @@ FLE4 = [0][0-9]*
 
 {FL3}([^( )(\n)(\t)(\r)(!=)(&&)(==)(!)(|)(<=)(<<)(>=)(>>)(**)(/)(%)(*)(<)(>)(,)(;)(.)("(")(")")("[")("]")(?)(:)({)(})(+=)(-=)(*=)(/=)(&)("^")(~)(+)("-")(=)])* { lexeme=yytext(); return ERROR_Identificador;}
 
-
 (hex\"{H}{H}{H}{H}{H}{H}{H}{H}\")|(hex'{H}{H}{H}{H}{H}{H}{H}{H}') { lexeme=yytext(); return Literal;}
 
 ('([^(\n)(')])*')|(\"([^(\n)(\")])*\") { lexeme=yytext(); return Literal;}
 ("/*"([^])*"*/") {/*Ignore*/}
-
-
-
-
 
 address|as|bool|break|byte|bytes|constructor|
 continue|contract|delete|do|else|enum|false|
