@@ -11,10 +11,23 @@ parser code
     }
 
     public Symbol getS(){
-        reeturn this.s;
+        return this.s;
     }
 :};
 
-terminal
-non terminal
+terminal Reservadas, Operador, Transac, Units, Identificador, Literal, Address, As, Bool, Break,
+         Byte, Bytes, Constructor, Continue, Contract, Delete, Do, Else, Enum, For, From, Function,
+         Hex, If, Import, Int, Internal, Mapping, Modifier, Payable, Pragma, Private, Public, Return,
+         Returns, Solidity, String, Struct, This, True, Ufixed, Uint, Var, View, While, Pipe, ShiftLeft,
+         ShiftRight, DobleAsterisco, Coma, PuntoComa, Punto, ParenCuadAbre, ParenCuadCierra, SignoPregunta,
+         DosPuntos, LlaveAbre, LlaveCierra, Ampersand, Elevar, Virgulilla, Suma, Resta, Mult, Div, Mod,
+         ParentAbre, ParentCierre, Op_Booleano, Op_relacional, Op_atribucion, IntValue, UintValue, BytesValue,
+         ERROR;
+non terminal INICIO, SENTENCIA;
 
+start with INICIO;
+
+//Forma de armar gramática:
+//INICIO ::= noterminal terminal ... etc.
+
+INICIO ::= Contract;
