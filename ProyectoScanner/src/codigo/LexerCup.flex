@@ -48,9 +48,8 @@ FLE4 = [0][0-9]*
 "/*"|"*/" {return ERROR_Comentario;}
 {FLE} { lexeme=yytext(); return ERROR_LiteralCero;}
 {CientError} { lexeme=yytext(); return ERROR_NotacionCientifica;}
-//"/*"( [^*] | (\*+[^*/]) )*\*+\/ {/*Ignore*/}
-*/
 
+*/
 
 //Reservadas
 ( address ) { return new Symbol(sym.Address, yychar, yyline, yytext());}
