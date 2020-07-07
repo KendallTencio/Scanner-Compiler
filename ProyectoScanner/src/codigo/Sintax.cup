@@ -30,4 +30,4 @@ start with INICIO;
 //Forma de armar gramática:
 //INICIO ::= noterminal terminal ... etc.
 
-INICIO ::= Contract;
+INICIO ::= Suma;
