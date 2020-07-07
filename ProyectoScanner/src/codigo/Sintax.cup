@@ -23,11 +23,13 @@ terminal Reservadas, Operador, Transac, Units, Identificador, Literal, Address, 
          DosPuntos, LlaveAbre, LlaveCierra, Ampersand, Elevar, Virgulilla, Suma, Resta, Mult, Div, Mod,
          ParentAbre, ParentCierre, Op_Booleano, Op_relacional, Op_atribucion, IntValue, UintValue, BytesValue,
          ERROR;
-non terminal INICIO, SENTENCIA;
+non terminal INICIO, SENTENCIA, SENTENCIA_IFELSE;
 
 start with INICIO;
 
-//Forma de armar gramática:
-//INICIO ::= noterminal terminal ... etc.
+INICIO ::= SENTENCIA;
 
-INICIO ::= If ParentAbre ParentCierre;
+SENTENCIA ::= SENTENCIA_IFELSE;
+
+SENTENCIA_IFELSE ::= if ParentAbre ParentCierre else LlaveAbre LlaveCierra;
+
