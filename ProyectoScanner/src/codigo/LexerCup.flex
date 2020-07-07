@@ -51,21 +51,6 @@ FLE4 = [0][0-9]*
 //"/*"( [^*] | (\*+[^*/]) )*\*+\/ {/*Ignore*/}
 */
 
-( "/*"([^])*"*/" ) {/*Ignore*/}
-{espacio} {/*Ignore*/}
-( "//".* ) {/*Ignore*/}
-
-//Identificadores
-( {FL3}([^( )(\n)(\t)(\r)(!=)(&&)(==)(!)(|)(<=)(<<)(>=)(>>)(**)(/)(%)(*)(<)(>)(,)(;)(.)("(")(")")("[")("]")(?)(:)({)(})(+=)(-=)(*=)(/=)(&)("^")(~)(+)("-")(=)])* ) { return new Symbol(sym.Identificador, yychar, yyline, yytext());}
-( {L}({L}|{FL3})* ) { return new Symbol(sym.Identificador, yychar, yyline, yytext());}
-
-//Valores Hex
-( (hex\"{H}{H}{H}{H}{H}{H}{H}{H}\")|(hex'{H}{H}{H}{H}{H}{H}{H}{H}') ) { return new Symbol(sym.Literal, yychar, yyline, yytext());}
-
-//Literales
-( {FL} ) { return new Symbol(sym.Literal, yychar, yyline, yytext());}
-( ('([^(\n)(')])*')|(\"([^(\n)(\")])*\") ) { return new Symbol(sym.Literal, yychar, yyline, yytext());}
-
 
 //Reservadas
 ( address ) { return new Symbol(sym.Address, yychar, yyline, yytext());}
@@ -88,7 +73,7 @@ FLE4 = [0][0-9]*
 ( if ) { return new Symbol(sym.If, yychar, yyline, yytext());}
 ( import ) { return new Symbol(sym.Import, yychar, yyline, yytext());}
 ( int ) { return new Symbol(sym.Int, yychar, yyline, yytext());}
-( internal ) { return new Symbol(sym.Intenal, yychar, yyline, yytext());}
+( internal ) { return new Symbol(sym.Internal, yychar, yyline, yytext());}
 ( mapping ) { return new Symbol(sym.Mapping, yychar, yyline, yytext());}
 ( modifier ) { return new Symbol(sym.Modifier, yychar, yyline, yytext());}
 ( payable ) { return new Symbol(sym.Payable, yychar, yyline, yytext());}
@@ -155,6 +140,21 @@ FLE4 = [0][0-9]*
 
 //Valores Bytes
 ( bytes|bytes1|bytes2|bytes3|bytes4|bytes5|bytes6|bytes7|bytes8|bytes9|bytes10|bytes11|bytes12|bytes13|bytes14|bytes15|bytes16|bytes17|bytes18|bytes19|bytes20|bytes21|bytes22|bytes23|bytes24|bytes25|bytes26|bytes27|bytes28|bytes29|bytes30|bytes31|bytes32 ) { return new Symbol(sym.BytesValue, yychar, yyline, yytext());}
+
+( "/*"([^])*"*/" ) {/*Ignore*/}
+{espacio} {/*Ignore*/}
+( "//".* ) {/*Ignore*/}
+
+//Identificadores
+( {FL3}([^( )(\n)(\t)(\r)(!=)(&&)(==)(!)(|)(<=)(<<)(>=)(>>)(**)(/)(%)(*)(<)(>)(,)(;)(.)("(")(")")("[")("]")(?)(:)({)(})(+=)(-=)(*=)(/=)(&)("^")(~)(+)("-")(=)])* ) { return new Symbol(sym.Identificador, yychar, yyline, yytext());}
+( {L}({L}|{FL3})* ) { return new Symbol(sym.Identificador, yychar, yyline, yytext());}
+
+//Valores Hex
+( (hex\"{H}{H}{H}{H}{H}{H}{H}{H}\")|(hex'{H}{H}{H}{H}{H}{H}{H}{H}') ) { return new Symbol(sym.Literal, yychar, yyline, yytext());}
+
+//Literales
+( {FL} ) { return new Symbol(sym.Literal, yychar, yyline, yytext());}
+( ('([^(\n)(')])*')|(\"([^(\n)(\")])*\") ) { return new Symbol(sym.Literal, yychar, yyline, yytext());}
 
 /* Error de analisis */
  . {return new Symbol(sym.ERROR, yychar, yyline, yytext());}
