@@ -7,7 +7,7 @@ parser code
     private Symbol s;
 
     public void syntax_error(Symbol s){
-        this.s = s;        
+        this.s = s;
     }
 
     public Symbol getS(){
@@ -23,25 +23,11 @@ terminal Reservadas, Operador, Transac, Units, Identificador, Literal, Address, 
          DosPuntos, LlaveAbre, LlaveCierra, Ampersand, Elevar, Virgulilla, Suma, Resta, Mult, Div, Mod,
          ParentAbre, ParentCierre, Op_Booleano, Op_relacional, Op_atribucion, IntValue, UintValue, BytesValue,
          ERROR;
-non terminal INICIO, SENTENCIA, LISTA_SENTENCIA, PARTE_SENTENCIA, SENTENCIA_IFELSE, SENTENCIA_WHILE, SENTENCIA_DOWHILE, SENTENCIA_FOR;
+non terminal INICIO, SENTENCIA;
 
 start with INICIO;
 
-INICIO ::= LISTA_SENTENCIA;
+//Forma de armar gramática:
+//INICIO ::= noterminal terminal ... etc.
 
-LISTA_SENTENCIA ::= LISTA_SENTENCIA PARTE_SENTENCIA | PARTE_SENTENCIA;
-PARTE_SENTENCIA ::= SENTENCIA PuntoComa;
-
-SENTENCIA ::= SENTENCIA_IFELSE 
-            | SENTENCIA_WHILE 
-            | SENTENCIA_DOWHILE 
-            | SENTENCIA_FOR;
-            
-
-SENTENCIA_IFELSE ::= If ParentAbre ParentCierre LlaveAbre LISTA_SENTENCIA LlaveCierra | If ParentAbre ParentCierre Else LlaveAbre LISTA_SENTENCIA LlaveCierra | If ParentAbre ParentCierre LlaveAbre LlaveCierra | If ParentAbre ParentCierre Else LlaveAbre LlaveCierra;
-SENTENCIA_WHILE ::= While ParentAbre ParentCierre LlaveAbre LISTA_SENTENCIA LlaveCierra | While ParentAbre ParentCierre LlaveAbre LlaveCierra;
-SENTENCIA_DOWHILE ::= Do LlaveAbre LISTA_SENTENCIA LlaveCierra While ParentAbre ParentCierre | Do LlaveAbre LlaveCierra While ParentAbre ParentCierre;
-SENTENCIA_FOR ::= For ParentAbre ParentCierre LlaveAbre LISTA_SENTENCIA LlaveCierra | For ParentAbre ParentCierre LlaveAbre LlaveCierra;
-
-SENTENCIA_BREAK ::= Break;
-SENTENCIA_CONTINUE ::= Continue;
+INICIO ::= If ParentAbre ParentCierre;
