@@ -246,8 +246,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         } catch (Exception ex){
             Symbol sym = s.getS();
             System.out.println("El sym de error es:" + sym);
-            //textResultadoParseo.setText("Error de sintaxis. Línea: " + (sym.right + 1) + "Columna: "+ (sym.left + 1) + "Texto: \"" + sym.value + "\"");
-            textResultadoParseo.setText("Error de sintaxis");
+            textResultadoParseo.setText("Error de sintaxis. Línea: " + (sym.right + 1) + "Columna: "+ (sym.left + 1) + "Texto: \"" + sym.value + "\"");
             textResultadoParseo.setForeground(Color.red);
         }
         
