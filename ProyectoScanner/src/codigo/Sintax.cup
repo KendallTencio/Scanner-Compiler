@@ -23,11 +23,27 @@ terminal Reservadas, Operador, Transac, Units, Identificador, Literal, Address, 
          DosPuntos, LlaveAbre, LlaveCierra, Ampersand, Elevar, Virgulilla, Suma, Resta, Mult, Div, Mod,
          ParentAbre, ParentCierre, Op_Booleano, Op_relacional, Op_atribucion, IntValue, UintValue, BytesValue,
          ERROR;
-non terminal INICIO, SENTENCIA;
+non terminal INICIO, SENTENCIA, STRUCTDEF, STRUCTCONTEN, DECLARVARIABLE;
+non terminal FUNCIONDEF, FUNCIONATRIB, MODIFICADORES, FUNCIONRETURNS,FUNCIONCONTEN;
+non terminal VARASIGNA, FUNCCALL, PARAMFUNC;
+non terminal TIPOS;
 
 start with INICIO;
 
-//Forma de armar gramática:
-//INICIO ::= noterminal terminal ... etc.
 
-INICIO ::= If ParentAbre ParentCierre;
+INICIO ::= STRUCTDEF | FUNCIONDEF | VARASIGNA | FUNCCALL;
+
+STRUCTDEF ::= Struct Identificador STRUCTCONTEN;
+STRUCTCONTEN ::= LlaveAbre DECLARVARIABLE LlaveCierra PuntoComa;
+DECLARVARIABLE ::= Identificador PuntoComa;
+
+FUNCIONDEF ::= Function Identificador FUNCIONATRIB MODIFICADORES FUNCIONRETURNS FUNCIONCONTEN;
+FUNCIONATRIB ::= ParentAbre TIPOS Identificador ParentCierre;
+MODIFICADORES ::= Identificador;
+FUNCIONRETURNS ::= Returns FUNCIONATRIB;
+FUNCIONCONTEN ::= LlaveAbre DECLARVARIABLE LlaveCierra PuntoComa;
+TIPOS ::= Int | String | Bool;
+
+VARASIGNA ::= Identificador Op_atribucion Literal;
+FUNCCALL  ::= Identificador ParentAbre PARAMFUNC ParentCierre PuntoComa;
+PARAMFUNC ::= TIPOS Identificador;
