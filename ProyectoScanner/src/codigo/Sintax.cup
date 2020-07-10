@@ -23,8 +23,9 @@ terminal Reservadas, Operador, Transac, Units, Identificador, Literal, Address, 
          DosPuntos, LlaveAbre, LlaveCierra, Ampersand, Elevar, Virgulilla, Suma, Resta, Mult, Div, Mod,
          ParentAbre, ParentCierre, Op_Booleano, Op_relacional, Op_atribucion, IntValue, UintValue, BytesValue,
          ERROR;
-non terminal INICIO, SENTENCIA, STRUCTDEF, STRUCTCONTEN, DECLARVARIABLE;
-non terminal FUNCIONDEF, FUNCIONATRIB, MODIFICADORES, FUNCIONRETURNS,FUNCIONCONTEN;
+non terminal INICIO;
+non terminal STRUCTDEF, STRUCTCONTEN, DECLARVARIABLE, DECLARVARDOS;
+non terminal FUNCIONDEF, FUNCIONATRIB, FUNATRIBDOS ,MODIFICADORES, FUNCIONRETURNS,FUNCIONCONTEN, FUNCIONCUERPO, FUNCIONRETURN;
 non terminal VARASIGNA, FUNCCALL, PARAMFUNC;
 non terminal TIPOS;
 
@@ -35,15 +36,23 @@ INICIO ::= STRUCTDEF | FUNCIONDEF | VARASIGNA | FUNCCALL;
 
 STRUCTDEF ::= Struct Identificador STRUCTCONTEN;
 STRUCTCONTEN ::= LlaveAbre DECLARVARIABLE LlaveCierra PuntoComa;
-DECLARVARIABLE ::= Identificador PuntoComa;
+
+DECLARVARIABLE ::= DECLARVARDOS;
+DECLARVARDOS ::= TIPOS Identificador PuntoComa DECLARVARDOS | {: RESULT = null; :};
 
 FUNCIONDEF ::= Function Identificador FUNCIONATRIB MODIFICADORES FUNCIONRETURNS FUNCIONCONTEN;
-FUNCIONATRIB ::= ParentAbre TIPOS Identificador ParentCierre;
-MODIFICADORES ::= Identificador;
-FUNCIONRETURNS ::= Returns FUNCIONATRIB;
-FUNCIONCONTEN ::= LlaveAbre DECLARVARIABLE LlaveCierra PuntoComa;
+
+FUNCIONATRIB ::= ParentAbre TIPOS Identificador FUNATRIBDOS;
+FUNATRIBDOS ::= Coma TIPOS Identificador FUNATRIBDOS | ParentCierre;
+
+MODIFICADORES ::= Payable | Private | Public | Internal | {: RESULT = null; :};
+FUNCIONRETURNS ::= Returns FUNCIONATRIB | {: RESULT = null; :};
+FUNCIONCONTEN ::= LlaveAbre DECLARVARIABLE FUNCIONCUERPO FUNCIONRETURN LlaveCierra;
+FUNCIONCUERPO ::= {: RESULT = null; :};
+FUNCIONRETURN ::= Return Identificador PuntoComa;
 TIPOS ::= Int | String | Bool;
 
 VARASIGNA ::= Identificador Op_atribucion Literal;
 FUNCCALL  ::= Identificador ParentAbre PARAMFUNC ParentCierre PuntoComa;
 PARAMFUNC ::= TIPOS Identificador;
+
