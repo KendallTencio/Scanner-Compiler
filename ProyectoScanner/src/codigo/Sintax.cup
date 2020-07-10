@@ -23,11 +23,15 @@ terminal Reservadas, Operador, Transac, Units, Identificador, Literal, Address, 
          DosPuntos, LlaveAbre, LlaveCierra, Ampersand, Elevar, Virgulilla, Suma, Resta, Mult, Div, Mod,
          ParentAbre, ParentCierre, Op_Booleano, Op_relacional, Op_atribucion, IntValue, UintValue, BytesValue,
          ERROR;
+
 non terminal INICIO;
 non terminal STRUCTDEF, STRUCTCONTEN, DECLARVARIABLE, DECLARVARDOS;
 non terminal FUNCIONDEF, FUNCIONATRIB, FUNATRIBDOS ,MODIFICADORES, FUNCIONRETURNS,FUNCIONCONTEN, FUNCIONCUERPO, FUNCIONRETURN;
 non terminal VARASIGNA, FUNCCALL, PARAMFUNC;
-non terminal TIPOS;
+non terminal TYPENAME, ELEMENTARYTYPENAME, ARRAYDECLAR, ACCESSMOD;
+non terminal ENUMDEF, ENUMCONTEN, ENUMLIST, ENUMVALUE;
+non terminal CONTRACTDEF, CONTRACTPART;
+
 
 start with INICIO;
 
@@ -37,22 +41,35 @@ INICIO ::= STRUCTDEF | FUNCIONDEF | VARASIGNA | FUNCCALL;
 STRUCTDEF ::= Struct Identificador STRUCTCONTEN;
 STRUCTCONTEN ::= LlaveAbre DECLARVARIABLE LlaveCierra PuntoComa;
 
-DECLARVARIABLE ::= DECLARVARDOS;
-DECLARVARDOS ::= TIPOS Identificador PuntoComa DECLARVARDOS | {: RESULT = null; :};
+DECLARVARIABLE ::= TYPENAME ACCESSMOD Identificador PuntoComa | TYPENAME ACCESSMOD Identificador Op_atribucion Literal PuntoComa | ARRAYDECLAR; 
+ARRAYDECLAR ::= TYPENAME ParenCuadAbre ParenCuadCierra Identificador PuntoComa | TYPENAME ParenCuadAbre ParenCuadCierra Identificador Op_atribucion Literal PuntoComa;
+
+ACCESSMOD ::= Private | Public | {: RESULT = null; :};
 
 FUNCIONDEF ::= Function Identificador FUNCIONATRIB MODIFICADORES FUNCIONRETURNS FUNCIONCONTEN;
 
-FUNCIONATRIB ::= ParentAbre TIPOS Identificador FUNATRIBDOS;
-FUNATRIBDOS ::= Coma TIPOS Identificador FUNATRIBDOS | ParentCierre;
+CONTRACTDEF ::= Contract Identificador LlaveAbre CONTRACTPART LlaveCierra PuntoComa;
+CONTRACTPART ::= ENUMDEF CONTRACTPART | DECLARVARIABLE CONTRACTPART | STRUCTDEF CONTRACTPART | FUNCIONDEF CONTRACTPART | {: RESULT = null; :};
+
+ENUMDEF ::= Enum Identificador ENUMCONTEN;
+ENUMCONTEN ::= LlaveAbre ENUMLIST LlaveCierra PuntoComa;
+ENUMLIST ::= ENUMVALUE | ENUMLIST Coma ENUMVALUE;
+ENUMVALUE ::= Identificador;
+
+FUNCIONATRIB ::= ParentAbre TYPENAME Identificador FUNATRIBDOS;
+FUNATRIBDOS ::= Coma TYPENAME Identificador FUNATRIBDOS | ParentCierre;
 
 MODIFICADORES ::= Payable | Private | Public | Internal | {: RESULT = null; :};
 FUNCIONRETURNS ::= Returns FUNCIONATRIB | {: RESULT = null; :};
 FUNCIONCONTEN ::= LlaveAbre DECLARVARIABLE FUNCIONCUERPO FUNCIONRETURN LlaveCierra;
 FUNCIONCUERPO ::= {: RESULT = null; :};
 FUNCIONRETURN ::= Return Identificador PuntoComa;
-TIPOS ::= Int | String | Bool;
+
+TYPENAME ::= ELEMENTARYTYPENAME;
+
+ELEMENTARYTYPENAME ::= Bool | Byte | Bytes | Address | Int | String | Ufixed | Uint;
 
 VARASIGNA ::= Identificador Op_atribucion Literal;
 FUNCCALL  ::= Identificador ParentAbre PARAMFUNC ParentCierre PuntoComa;
-PARAMFUNC ::= TIPOS Identificador;
+PARAMFUNC ::= TYPENAME Identificador;
 
