@@ -70,6 +70,7 @@ public enum Tokens {
     ParentCierre,
     Op_Booleano,
     Op_relacional,
+    Not,
     Op_atribucion,
     IntValue,
     UintValue,
