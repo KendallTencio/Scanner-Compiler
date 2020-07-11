@@ -46,8 +46,6 @@ ARRAYDECLAR ::= TYPENAME ParenCuadAbre ParenCuadCierra Identificador PuntoComa |
 
 ACCESSMOD ::= Private | Public | {: RESULT = null; :};
 
-FUNCIONDEF ::= Function Identificador FUNCIONATRIB MODIFICADORES FUNCIONRETURNS FUNCIONCONTEN;
-
 CONTRACTDEF ::= Contract Identificador LlaveAbre CONTRACTPART LlaveCierra PuntoComa;
 CONTRACTPART ::= ENUMDEF CONTRACTPART | DECLARVARIABLE CONTRACTPART | STRUCTDEF CONTRACTPART | FUNCIONDEF CONTRACTPART | {: RESULT = null; :};
 
@@ -55,6 +53,8 @@ ENUMDEF ::= Enum Identificador ENUMCONTEN;
 ENUMCONTEN ::= LlaveAbre Identificador ENUMLIST LlaveCierra PuntoComa;
 ENUMLIST ::= Coma ENUMVALUE | {: RESULT = null; :};
 ENUMVALUE ::= Identificador ENUMLIST;
+
+FUNCIONDEF ::= Function Identificador FUNCIONATRIB MODIFICADORES FUNCIONRETURNS FUNCIONCONTEN;
 
 FUNCIONATRIB ::= ParentAbre TYPENAME Identificador FUNATRIBDOS;
 FUNATRIBDOS ::= Coma TYPENAME Identificador FUNATRIBDOS | ParentCierre;
