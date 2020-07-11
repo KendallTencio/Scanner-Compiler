@@ -45,3 +45,53 @@ SENTENCIA_FOR ::= For ParentAbre ParentCierre LlaveAbre LISTA_SENTENCIA LlaveCie
 
 SENTENCIA_BREAK ::= Break;
 SENTENCIA_CONTINUE ::= Continue;
+
+non terminal INICIO;
+non terminal STRUCTDEF, STRUCTCONTEN, DECLARVARIABLE, DECLARVARDOS;
+non terminal FUNCIONDEF, FUNCIONATRIB, FUNATRIBDOS ,MODIFICADORES, FUNCIONRETURNS,FUNCIONCONTEN, FUNCIONCUERPO, FUNCIONRETURN;
+non terminal VARASIGNA, FUNCCALL, PARAMFUNC;
+non terminal TYPENAME, ELEMENTARYTYPENAME, ARRAYDECLAR, ACCESSMOD;
+non terminal ENUMDEF, ENUMCONTEN, ENUMLIST, ENUMVALUE;
+non terminal CONTRACTDEF, CONTRACTPART;
+
+
+start with INICIO;
+
+
+INICIO ::= STRUCTDEF | FUNCIONDEF | VARASIGNA | DECLARVARIABLE | FUNCCALL | CONTRACTDEF | ENUMDEF;
+
+STRUCTDEF ::= Struct Identificador STRUCTCONTEN;
+STRUCTCONTEN ::= LlaveAbre DECLARVARIABLE LlaveCierra PuntoComa;
+
+DECLARVARIABLE ::= TYPENAME ACCESSMOD Identificador PuntoComa | TYPENAME ACCESSMOD Identificador Op_atribucion Literal PuntoComa | ARRAYDECLAR; 
+ARRAYDECLAR ::= TYPENAME ParenCuadAbre ParenCuadCierra Identificador PuntoComa | TYPENAME ParenCuadAbre ParenCuadCierra Identificador Op_atribucion Literal PuntoComa;
+
+ACCESSMOD ::= Private | Public | {: RESULT = null; :};
+
+FUNCIONDEF ::= Function Identificador FUNCIONATRIB MODIFICADORES FUNCIONRETURNS FUNCIONCONTEN;
+
+CONTRACTDEF ::= Contract Identificador LlaveAbre CONTRACTPART LlaveCierra PuntoComa;
+CONTRACTPART ::= ENUMDEF CONTRACTPART | DECLARVARIABLE CONTRACTPART | STRUCTDEF CONTRACTPART | FUNCIONDEF CONTRACTPART | {: RESULT = null; :};
+
+ENUMDEF ::= Enum Identificador ENUMCONTEN;
+ENUMCONTEN ::= LlaveAbre Identificador ENUMLIST LlaveCierra PuntoComa;
+ENUMLIST ::= Coma ENUMVALUE | {: RESULT = null; :};
+ENUMVALUE ::= Identificador ENUMLIST;
+
+FUNCIONATRIB ::= ParentAbre TYPENAME Identificador FUNATRIBDOS;
+FUNATRIBDOS ::= Coma TYPENAME Identificador FUNATRIBDOS | ParentCierre;
+
+MODIFICADORES ::= Payable | Private | Public | Internal | {: RESULT = null; :};
+FUNCIONRETURNS ::= Returns FUNCIONATRIB | {: RESULT = null; :};
+FUNCIONCONTEN ::= LlaveAbre DECLARVARIABLE FUNCIONCUERPO FUNCIONRETURN LlaveCierra;
+FUNCIONCUERPO ::= {: RESULT = null; :};
+FUNCIONRETURN ::= Return Identificador PuntoComa;
+
+TYPENAME ::= ELEMENTARYTYPENAME;
+
+ELEMENTARYTYPENAME ::= Bool | Byte | Bytes | Address | Int | String | Ufixed | Uint;
+
+VARASIGNA ::= Identificador Op_atribucion Literal;
+FUNCCALL  ::= Identificador ParentAbre PARAMFUNC ParentCierre PuntoComa;
+PARAMFUNC ::= TYPENAME Identificador;
+
