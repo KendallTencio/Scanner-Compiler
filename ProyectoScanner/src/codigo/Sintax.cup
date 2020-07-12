@@ -24,29 +24,8 @@ terminal Reservadas, Operador, Transac, Units, Identificador, Literal, Address, 
          ParentAbre, ParentCierre, Op_Booleano, Op_relacional, Op_atribucion, IntValue, UintValue, BytesValue,
          ERROR;
 non terminal INICIO, SENTENCIA, LISTA_SENTENCIA, PARTE_SENTENCIA, SENTENCIA_IFELSE, SENTENCIA_WHILE, SENTENCIA_DOWHILE, SENTENCIA_FOR;
-
-start with INICIO;
-
-INICIO ::= LISTA_SENTENCIA;
-
-LISTA_SENTENCIA ::= LISTA_SENTENCIA PARTE_SENTENCIA | PARTE_SENTENCIA;
-PARTE_SENTENCIA ::= SENTENCIA PuntoComa;
-
-SENTENCIA ::= SENTENCIA_IFELSE 
-            | SENTENCIA_WHILE 
-            | SENTENCIA_DOWHILE 
-            | SENTENCIA_FOR;
-            
-
-SENTENCIA_IFELSE ::= If ParentAbre ParentCierre LlaveAbre LISTA_SENTENCIA LlaveCierra | If ParentAbre ParentCierre Else LlaveAbre LISTA_SENTENCIA LlaveCierra | If ParentAbre ParentCierre LlaveAbre LlaveCierra | If ParentAbre ParentCierre Else LlaveAbre LlaveCierra;
-SENTENCIA_WHILE ::= While ParentAbre ParentCierre LlaveAbre LISTA_SENTENCIA LlaveCierra | While ParentAbre ParentCierre LlaveAbre LlaveCierra;
-SENTENCIA_DOWHILE ::= Do LlaveAbre LISTA_SENTENCIA LlaveCierra While ParentAbre ParentCierre | Do LlaveAbre LlaveCierra While ParentAbre ParentCierre;
-SENTENCIA_FOR ::= For ParentAbre ParentCierre LlaveAbre LISTA_SENTENCIA LlaveCierra | For ParentAbre ParentCierre LlaveAbre LlaveCierra;
-
-SENTENCIA_BREAK ::= Break;
-SENTENCIA_CONTINUE ::= Continue;
-
-non terminal INICIO;
+non terminal EXPRESION_BOOLEANA, EXPRECION_ARITMETICA, EXPRESION_PRIMARIA, EXPRESION_ATRIBUCION;
+non terminal EXPRESION_TUPLA_PPARENTESIS, EXPRESION_TUPLA_PPARENTESIS_PRIMA;
 non terminal STRUCTDEF, STRUCTCONTEN, DECLARVARIABLE, DECLARVARDOS;
 non terminal FUNCIONDEF, FUNCIONATRIB, FUNATRIBDOS ,MODIFICADORES, FUNCIONRETURNS,FUNCIONCONTEN, FUNCIONCUERPO, FUNCIONRETURN;
 non terminal VARASIGNA, FUNCCALL, PARAMFUNC;
@@ -54,12 +33,53 @@ non terminal TYPENAME, ELEMENTARYTYPENAME, ARRAYDECLAR, ACCESSMOD;
 non terminal ENUMDEF, ENUMCONTEN, ENUMLIST, ENUMVALUE;
 non terminal CONTRACTDEF, CONTRACTPART;
 
+precedence left Suma, Resta;
+precedence left Mult, Div, Mod;
+
+
 
 start with INICIO;
 
+INICIO ::= LISTA_SENTENCIA | STRUCTDEF | FUNCIONDEF | VARASIGNA | DECLARVARIABLE | FUNCCALL | CONTRACTDEF | ENUMDEF;
 
-INICIO ::= STRUCTDEF | FUNCIONDEF | VARASIGNA | DECLARVARIABLE | FUNCCALL | CONTRACTDEF | ENUMDEF;
+LISTA_SENTENCIA ::= LISTA_SENTENCIA SENTENCIA | SENTENCIA;
+    
+SENTENCIA ::= SENTENCIA_IFELSE 
+            | SENTENCIA_WHILE 
+            | SENTENCIA_DOWHILE 
+            | SENTENCIA_FOR 
+            | Break PuntoComa
+            | Continue PuntoComa; //Posible error de puntos y comas(faltantes)
+            
 
+SENTENCIA_IFELSE ::= If ParentAbre EXPRESION_BOOLEANA ParentCierre LlaveAbre LISTA_SENTENCIA LlaveCierra | If ParentAbre EXPRESION_BOOLEANA ParentCierre LlaveAbre LISTA_SENTENCIA LlaveCierra Else LlaveAbre LISTA_SENTENCIA LlaveCierra;
+SENTENCIA_WHILE ::= While ParentAbre EXPRESION_BOOLEANA ParentCierre LlaveAbre LISTA_SENTENCIA LlaveCierra;
+SENTENCIA_DOWHILE ::= Do LlaveAbre LISTA_SENTENCIA LlaveCierra While ParentAbre EXPRESION_BOOLEANA ParentCierre;
+SENTENCIA_FOR ::= For ParentAbre EXPRESION_ATRIBUCION Coma EXPRESION_BOOLEANA Coma EXPRESION_ATRIBUCION ParentCierre LlaveAbre LISTA_SENTENCIA LlaveCierra | For ParentAbre ParentCierre LlaveAbre LlaveCierra;
+//SENTENCIA_TERNARIA ::= EXPRESION_BOOLEANA SignoPregunta EXPRESION_PRIMARIA DosPuntos EXPRESION_PRIMARIA PuntoComa;
+
+EXPRESION_BOOLEANA ::= Op_Booleano
+                    | Pipe EXPRESION_BOOLEANA
+                    | Pipe ParentAbre EXPRESION_BOOLEANA ParentCierre 
+                    | EXPRESION_PRIMARIA Op_relacional EXPRESION_PRIMARIA
+                    | EXPRESION_PRIMARIA Op_relacional ParentAbre EXPRESION_BOOLEANA ParentCierre
+                    | ParentAbre EXPRESION_BOOLEANA ParentCierre Op_relacional EXPRESION_PRIMARIA;
+
+EXPRESION_PRIMARIA ::= EXPRECION_ARITMETICA
+                    | Identificador;
+
+EXPRECION_ARITMETICA ::= EXPRECION_ARITMETICA Suma EXPRECION_ARITMETICA
+                    | EXPRECION_ARITMETICA Resta EXPRECION_ARITMETICA
+                    | EXPRECION_ARITMETICA Mult EXPRECION_ARITMETICA
+                    | EXPRECION_ARITMETICA Div EXPRECION_ARITMETICA
+                    | EXPRECION_ARITMETICA Mod EXPRECION_ARITMETICA
+                    | Resta EXPRECION_ARITMETICA
+                    | ParentAbre EXPRECION_ARITMETICA ParentCierre
+                    | Literal;
+
+EXPRESION_ATRIBUCION ::= Identificador Op_atribucion Literal;
+
+//////////////////////////////////////////////
 STRUCTDEF ::= Struct Identificador STRUCTCONTEN;
 STRUCTCONTEN ::= LlaveAbre DECLARVARIABLE LlaveCierra PuntoComa;
 
