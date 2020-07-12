@@ -21,7 +21,7 @@ terminal Reservadas, Operador, Transac, Units, Identificador, Literal, Address, 
          Returns, Solidity, String, Struct, This, True, Ufixed, Uint, Var, View, While, Pipe, ShiftLeft,
          ShiftRight, DobleAsterisco, Coma, PuntoComa, Punto, ParenCuadAbre, ParenCuadCierra, SignoPregunta,
          DosPuntos, LlaveAbre, LlaveCierra, Ampersand, Elevar, Virgulilla, Suma, Resta, Mult, Div, Mod,
-         ParentAbre, ParentCierre, Op_Booleano, Op_relacional, Op_atribucion, IntValue, UintValue, BytesValue,
+         ParentAbre, ParentCierre, Op_Booleano, Op_relacional, Not, Op_atribucion, IntValue, UintValue, BytesValue,
          ERROR;
 non terminal INICIO, SENTENCIA, LISTA_SENTENCIA, PARTE_SENTENCIA, SENTENCIA_IFELSE, SENTENCIA_WHILE, SENTENCIA_DOWHILE, SENTENCIA_FOR;
 non terminal EXPRESION_BOOLEANA, EXPRECION_ARITMETICA, EXPRESION_PRIMARIA, EXPRESION_ATRIBUCION;
@@ -31,7 +31,7 @@ non terminal FUNCIONDEF, FUNCIONATRIB, FUNATRIBDOS ,MODIFICADORES, FUNCIONRETURN
 non terminal VARASIGNA, FUNCCALL, PARAMFUNC;
 non terminal TYPENAME, ELEMENTARYTYPENAME, ARRAYDECLAR, ACCESSMOD;
 non terminal ENUMDEF, ENUMCONTEN, ENUMLIST, ENUMVALUE;
-non terminal CONTRACTDEF, CONTRACTPART;
+non terminal CONTRACTDEF, CONTRACTPART, CONTRACTPART1, CONTRACTPART2, CONTRACTPART3;
 
 precedence left Suma, Resta;
 precedence left Mult, Div, Mod;
@@ -88,15 +88,16 @@ ARRAYDECLAR ::= TYPENAME ParenCuadAbre ParenCuadCierra Identificador PuntoComa |
 
 ACCESSMOD ::= Private | Public | {: RESULT = null; :};
 
-FUNCIONDEF ::= Function Identificador FUNCIONATRIB MODIFICADORES FUNCIONRETURNS FUNCIONCONTEN;
-
 CONTRACTDEF ::= Contract Identificador LlaveAbre CONTRACTPART LlaveCierra PuntoComa;
 CONTRACTPART ::= ENUMDEF CONTRACTPART | DECLARVARIABLE CONTRACTPART | STRUCTDEF CONTRACTPART | FUNCIONDEF CONTRACTPART | {: RESULT = null; :};
+
 
 ENUMDEF ::= Enum Identificador ENUMCONTEN;
 ENUMCONTEN ::= LlaveAbre Identificador ENUMLIST LlaveCierra PuntoComa;
 ENUMLIST ::= Coma ENUMVALUE | {: RESULT = null; :};
 ENUMVALUE ::= Identificador ENUMLIST;
+
+FUNCIONDEF ::= Function Identificador FUNCIONATRIB MODIFICADORES FUNCIONRETURNS FUNCIONCONTEN;
 
 FUNCIONATRIB ::= ParentAbre TYPENAME Identificador FUNATRIBDOS;
 FUNATRIBDOS ::= Coma TYPENAME Identificador FUNATRIBDOS | ParentCierre;
