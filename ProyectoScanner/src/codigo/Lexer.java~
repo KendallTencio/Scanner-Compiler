@@ -57,22 +57,22 @@ class Lexer {
     "\1\0\1\1\3\2\1\3\1\4\1\5\1\6\1\7"+
     "\1\10\20\2\1\11\2\12\1\13\1\14\1\15\1\16"+
     "\1\17\1\20\1\21\1\22\1\23\1\24\1\25\1\26"+
-    "\1\27\1\30\1\31\1\32\1\12\2\1\5\2\2\33"+
-    "\1\32\1\6\1\5\2\34\1\35\1\2\1\36\2\2"+
-    "\1\37\22\2\1\40\21\2\1\12\1\41\1\42\1\0"+
-    "\1\33\1\0\4\2\2\0\1\2\1\6\2\0\25\2"+
-    "\1\43\6\2\1\44\2\2\1\45\4\2\1\46\2\2"+
-    "\1\47\1\2\1\50\1\2\1\51\1\52\1\33\1\52"+
-    "\1\0\1\6\1\5\4\2\1\53\6\2\1\54\1\55"+
-    "\1\2\1\56\1\57\1\53\2\2\1\60\3\2\1\61"+
-    "\11\2\1\62\2\2\2\0\4\2\1\63\1\2\1\52"+
-    "\1\0\11\2\1\64\1\65\6\2\1\66\7\2\1\61"+
-    "\6\2\2\0\4\2\1\67\1\2\1\70\1\2\1\71"+
-    "\1\2\1\72\1\73\1\2\3\74\5\2\1\66\1\75"+
-    "\1\2\1\76\3\2\2\0\1\2\1\77\1\2\1\100"+
-    "\1\101\1\102\6\2\1\103\2\2\2\0\1\104\1\105"+
-    "\1\106\1\2\1\107\1\110\1\111\1\112\1\113\2\0"+
-    "\1\2\2\0\1\2\2\0\1\114\4\0";
+    "\1\27\1\30\1\31\1\32\1\33\2\1\5\2\2\34"+
+    "\1\32\1\6\1\5\2\35\1\36\1\2\1\37\2\2"+
+    "\1\40\22\2\1\41\21\2\1\12\1\42\1\43\1\0"+
+    "\1\34\1\0\4\2\2\0\1\2\1\6\2\0\25\2"+
+    "\1\44\6\2\1\45\2\2\1\46\4\2\1\47\2\2"+
+    "\1\50\1\2\1\51\1\2\1\52\1\53\1\34\1\53"+
+    "\1\0\1\6\1\5\4\2\1\54\6\2\1\55\1\56"+
+    "\1\2\1\57\1\60\1\54\2\2\1\61\3\2\1\62"+
+    "\11\2\1\63\2\2\2\0\4\2\1\64\1\2\1\53"+
+    "\1\0\11\2\1\65\1\66\6\2\1\67\7\2\1\62"+
+    "\6\2\2\0\4\2\1\70\1\2\1\71\1\2\1\72"+
+    "\1\2\1\73\1\74\1\2\3\75\5\2\1\67\1\76"+
+    "\1\2\1\77\3\2\2\0\1\2\1\100\1\2\1\101"+
+    "\1\102\1\103\6\2\1\104\2\2\2\0\1\105\1\106"+
+    "\1\107\1\2\1\110\1\111\1\112\1\113\1\114\2\0"+
+    "\1\2\2\0\1\2\2\0\1\115\4\0";
 
   private static int [] zzUnpackAction() {
     int [] result = new int[318];
@@ -1013,310 +1013,314 @@ class Lexer {
       zzMarkedPos = zzMarkedPosL;
 
       switch (zzAction < 0 ? zzAction : ZZ_ACTION[zzAction]) {
-        case 55: 
+        case 56: 
           { lexeme=yytext(); return While;
           }
-        case 77: break;
+        case 78: break;
         case 2: 
           { lexeme=yytext(); return Identificador;
           }
-        case 78: break;
+        case 79: break;
         case 19: 
           { lexeme=yytext(); return Ampersand;
           }
-        case 79: break;
-        case 39: 
+        case 80: break;
+        case 40: 
           { lexeme=yytext(); return Units;
           }
-        case 80: break;
-        case 68: 
+        case 81: break;
+        case 69: 
           { lexeme=yytext(); return Payable;
           }
-        case 81: break;
-        case 54: 
+        case 82: break;
+        case 55: 
           { lexeme=yytext(); return UintValue;
           }
-        case 82: break;
-        case 29: 
+        case 83: break;
+        case 30: 
           { lexeme=yytext(); return DobleAsterisco;
           }
-        case 83: break;
+        case 84: break;
         case 9: 
           { lexeme=yytext(); return Pipe;
           }
-        case 84: break;
-        case 37: 
+        case 85: break;
+        case 38: 
           { lexeme=yytext(); return Hex;
           }
-        case 85: break;
-        case 52: 
+        case 86: break;
+        case 53: 
           { lexeme=yytext(); return Break;
           }
-        case 86: break;
-        case 40: 
+        case 87: break;
+        case 41: 
           { lexeme=yytext(); return Else;
           }
-        case 87: break;
+        case 88: break;
         case 16: 
           { lexeme=yytext(); return DosPuntos;
           }
-        case 88: break;
+        case 89: break;
         case 23: 
           { lexeme=yytext(); return Mod;
           }
-        case 89: break;
-        case 67: 
+        case 90: break;
+        case 68: 
           { lexeme=yytext(); return Mapping;
           }
-        case 90: break;
+        case 91: break;
         case 7: 
           { lexeme=yytext(); return Div;
           }
-        case 91: break;
+        case 92: break;
         case 25: 
           { lexeme=yytext(); return ParentCierre;
           }
-        case 92: break;
-        case 62: 
+        case 93: break;
+        case 63: 
           { lexeme=yytext(); return Import;
           }
-        case 93: break;
-        case 34: 
+        case 94: break;
+        case 35: 
           { lexeme=yytext(); return ShiftRight;
           }
-        case 94: break;
-        case 47: 
+        case 95: break;
+        case 48: 
           { lexeme=yytext(); return This;
           }
-        case 95: break;
+        case 96: break;
         case 5: 
           { /*Ignore*/
           }
-        case 96: break;
-        case 33: 
+        case 97: break;
+        case 34: 
           { lexeme=yytext(); return ShiftLeft;
           }
-        case 97: break;
-        case 59: 
+        case 98: break;
+        case 60: 
           { lexeme=yytext(); return String;
           }
-        case 98: break;
-        case 69: 
+        case 99: break;
+        case 70: 
           { lexeme=yytext(); return Private;
           }
-        case 99: break;
+        case 100: break;
         case 10: 
           { lexeme=yytext(); return Op_relacional;
           }
-        case 100: break;
-        case 51: 
+        case 101: break;
+        case 52: 
           { lexeme=yytext(); return View;
           }
-        case 101: break;
-        case 74: 
+        case 102: break;
+        case 75: 
           { lexeme=yytext(); return Modifier;
           }
-        case 102: break;
+        case 103: break;
         case 1: 
           { return ERROR;
           }
-        case 103: break;
-        case 73: 
+        case 104: break;
+        case 74: 
           { lexeme=yytext(); return Internal;
           }
-        case 104: break;
+        case 105: break;
         case 11: 
           { lexeme=yytext(); return Coma;
           }
-        case 105: break;
-        case 31: 
+        case 106: break;
+        case 32: 
           { lexeme=yytext(); return Do;
           }
-        case 106: break;
-        case 70: 
+        case 107: break;
+        case 71: 
           { lexeme=yytext(); return Solidity;
           }
-        case 107: break;
+        case 108: break;
         case 17: 
           { lexeme=yytext(); return LlaveAbre;
           }
-        case 108: break;
+        case 109: break;
         case 4: 
           { lexeme=yytext(); return Resta;
           }
-        case 109: break;
-        case 35: 
+        case 110: break;
+        case 36: 
           { lexeme=yytext(); return Int;
           }
-        case 110: break;
+        case 111: break;
         case 21: 
           { lexeme=yytext(); return Virgulilla;
           }
-        case 111: break;
-        case 61: 
+        case 112: break;
+        case 62: 
           { lexeme=yytext(); return Ufixed;
           }
-        case 112: break;
+        case 113: break;
         case 12: 
           { lexeme=yytext(); return PuntoComa;
           }
-        case 113: break;
+        case 114: break;
         case 26: 
           { lexeme=yytext(); return Op_atribucion;
           }
-        case 114: break;
-        case 46: 
+        case 115: break;
+        case 47: 
           { lexeme=yytext(); return Op_Booleano;
           }
-        case 115: break;
+        case 116: break;
         case 22: 
           { lexeme=yytext(); return Suma;
           }
-        case 116: break;
-        case 38: 
+        case 117: break;
+        case 39: 
           { lexeme=yytext(); return Var;
           }
-        case 117: break;
+        case 118: break;
         case 15: 
           { lexeme=yytext(); return SignoPregunta;
           }
-        case 118: break;
-        case 60: 
+        case 119: break;
+        case 61: 
           { lexeme=yytext(); return BytesValue;
           }
-        case 119: break;
-        case 63: 
-          { lexeme=yytext(); return Pragma;
-          }
         case 120: break;
-        case 65: 
-          { lexeme=yytext(); return Address;
+        case 27: 
+          { lexeme=yytext(); return Not;
           }
         case 121: break;
-        case 42: 
-          { lexeme=yytext(); return ERROR_NotacionCientifica;
+        case 64: 
+          { lexeme=yytext(); return Pragma;
           }
         case 122: break;
+        case 66: 
+          { lexeme=yytext(); return Address;
+          }
+        case 123: break;
+        case 43: 
+          { lexeme=yytext(); return ERROR_NotacionCientifica;
+          }
+        case 124: break;
         case 8: 
           { lexeme=yytext(); return Mult;
           }
-        case 123: break;
-        case 57: 
+        case 125: break;
+        case 58: 
           { lexeme=yytext(); return Return;
           }
-        case 124: break;
-        case 56: 
+        case 126: break;
+        case 57: 
           { lexeme=yytext(); return Delete;
           }
-        case 125: break;
-        case 36: 
+        case 127: break;
+        case 37: 
           { lexeme=yytext(); return For;
           }
-        case 126: break;
-        case 28: 
+        case 128: break;
+        case 29: 
           { return ERROR_Comentario;
           }
-        case 127: break;
-        case 76: 
+        case 129: break;
+        case 77: 
           { lexeme=yytext(); return Constructor;
           }
-        case 128: break;
+        case 130: break;
         case 3: 
           { lexeme=yytext(); return Punto;
           }
-        case 129: break;
-        case 32: 
+        case 131: break;
+        case 33: 
           { lexeme=yytext(); return If;
           }
-        case 130: break;
-        case 72: 
+        case 132: break;
+        case 73: 
           { lexeme=yytext(); return Continue;
           }
-        case 131: break;
-        case 48: 
+        case 133: break;
+        case 49: 
           { lexeme=yytext(); return Uint;
           }
-        case 132: break;
-        case 53: 
+        case 134: break;
+        case 54: 
           { lexeme=yytext(); return Bytes;
           }
-        case 133: break;
-        case 44: 
+        case 135: break;
+        case 45: 
           { lexeme=yytext(); return Bool;
           }
-        case 134: break;
+        case 136: break;
         case 13: 
           { lexeme=yytext(); return ParenCuadAbre;
           }
-        case 135: break;
-        case 58: 
+        case 137: break;
+        case 59: 
           { lexeme=yytext(); return Struct;
           }
-        case 136: break;
+        case 138: break;
         case 6: 
           { lexeme=yytext(); return ERROR_LiteralCero;
           }
-        case 137: break;
+        case 139: break;
         case 20: 
           { lexeme=yytext(); return Elevar;
           }
-        case 138: break;
-        case 64: 
+        case 140: break;
+        case 65: 
           { lexeme=yytext(); return Public;
           }
-        case 139: break;
-        case 43: 
+        case 141: break;
+        case 44: 
           { lexeme=yytext(); return Transac;
           }
-        case 140: break;
-        case 41: 
+        case 142: break;
+        case 42: 
           { lexeme=yytext(); return Enum;
           }
-        case 141: break;
-        case 49: 
+        case 143: break;
+        case 50: 
           { lexeme=yytext(); return IntValue;
           }
-        case 142: break;
-        case 66: 
+        case 144: break;
+        case 67: 
           { lexeme=yytext(); return Returns;
           }
-        case 143: break;
-        case 71: 
+        case 145: break;
+        case 72: 
           { lexeme=yytext(); return Contract;
           }
-        case 144: break;
-        case 75: 
+        case 146: break;
+        case 76: 
           { lexeme=yytext(); return Function;
           }
-        case 145: break;
+        case 147: break;
         case 14: 
           { lexeme=yytext(); return ParenCuadCierra;
           }
-        case 146: break;
-        case 27: 
+        case 148: break;
+        case 28: 
           { lexeme=yytext(); return Literal;
           }
-        case 147: break;
-        case 30: 
+        case 149: break;
+        case 31: 
           { lexeme=yytext(); return As;
           }
-        case 148: break;
-        case 50: 
+        case 150: break;
+        case 51: 
           { lexeme=yytext(); return From;
           }
-        case 149: break;
+        case 151: break;
         case 24: 
           { lexeme=yytext(); return ParentAbre;
           }
-        case 150: break;
+        case 152: break;
         case 18: 
           { lexeme=yytext(); return LlaveCierra;
           }
-        case 151: break;
-        case 45: 
+        case 153: break;
+        case 46: 
           { lexeme=yytext(); return Byte;
           }
-        case 152: break;
+        case 154: break;
         default: 
           if (zzInput == YYEOF && zzStartRead == zzCurrentPos) {
             zzAtEOF = true;

@@ -59,8 +59,8 @@ SENTENCIA_FOR ::= For ParentAbre EXPRESION_ATRIBUCION Coma EXPRESION_BOOLEANA Co
 //SENTENCIA_TERNARIA ::= EXPRESION_BOOLEANA SignoPregunta EXPRESION_PRIMARIA DosPuntos EXPRESION_PRIMARIA PuntoComa;
 
 EXPRESION_BOOLEANA ::= Op_Booleano
-                    | Pipe EXPRESION_BOOLEANA
-                    | Pipe ParentAbre EXPRESION_BOOLEANA ParentCierre 
+                    | Not EXPRESION_BOOLEANA
+                    | Not ParentAbre EXPRESION_BOOLEANA ParentCierre 
                     | EXPRESION_PRIMARIA Op_relacional EXPRESION_PRIMARIA
                     | EXPRESION_PRIMARIA Op_relacional ParentAbre EXPRESION_BOOLEANA ParentCierre
                     | ParentAbre EXPRESION_BOOLEANA ParentCierre Op_relacional EXPRESION_PRIMARIA;
