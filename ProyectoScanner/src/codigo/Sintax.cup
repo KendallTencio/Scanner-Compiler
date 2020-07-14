@@ -1,17 +1,18 @@
 package codigo;
 
 import java_cup.runtime.Symbol;
-import java.util.ArrayList;
 
 parser code
 {:
-
-    public static ArrayList<Symbol> errores = new ArrayList<Symbol>();
+    private Symbol s;
 
     public void syntax_error(Symbol s){
-      errores.add(s);
+        this.s = s;
     }
 
+    public Symbol getS(){
+        return this.s;
+    }
 :};
 
 terminal Reservadas, Operador, Transac, Units, Identificador, Literal, Address, As, Bool, Break,
@@ -48,9 +49,7 @@ SENTENCIA ::= SENTENCIA_IFELSE
             | SENTENCIA_DOWHILE 
             | SENTENCIA_FOR 
             | Break PuntoComa
-            | Continue PuntoComa
-            | error PuntoComa
-            | error LlaveCierra ; 
+            | Continue PuntoComa; //Posible error de puntos y comas(faltantes)
             
 
 SENTENCIA_IFELSE ::= If ParentAbre EXPRESION_BOOLEANA ParentCierre LlaveAbre LISTA_SENTENCIA LlaveCierra | If ParentAbre EXPRESION_BOOLEANA ParentCierre LlaveAbre LISTA_SENTENCIA LlaveCierra Else LlaveAbre LISTA_SENTENCIA LlaveCierra;
