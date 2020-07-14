@@ -1,17 +1,14 @@
 package codigo;
 
 import java_cup.runtime.Symbol;
+import java.util.ArrayList;
 
 parser code
 {:
-    private Symbol s;
+    public static ArrayList<Symbol> errores = new ArrayList<Symbol>();
 
     public void syntax_error(Symbol s){
-        this.s = s;
-    }
-
-    public Symbol getS(){
-        return this.s;
+        errores.add(s);
     }
 :};
 
@@ -49,7 +46,9 @@ SENTENCIA ::= SENTENCIA_IFELSE
             | SENTENCIA_DOWHILE 
             | SENTENCIA_FOR 
             | Break PuntoComa
-            | Continue PuntoComa; //Posible error de puntos y comas(faltantes)
+            | Continue PuntoComa
+            | error PuntoComa
+            | error LlaveCierra; 
             
 
 SENTENCIA_IFELSE ::= If ParentAbre EXPRESION_BOOLEANA ParentCierre LlaveAbre LISTA_SENTENCIA LlaveCierra | If ParentAbre EXPRESION_BOOLEANA ParentCierre LlaveAbre LISTA_SENTENCIA LlaveCierra Else LlaveAbre LISTA_SENTENCIA LlaveCierra;

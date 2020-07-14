@@ -14,6 +14,7 @@ import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.StringReader;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java_cup.runtime.Symbol;
@@ -240,14 +241,23 @@ public class FrmPrincipal extends javax.swing.JFrame {
         Sintax s = new Sintax(new codigo.LexerCup(new StringReader(ST)));
 
         try {
-            s.parse();
+            s.parse();            
+            
             textResultadoParseo.setText("Análisis completado correctamente");
             textResultadoParseo.setForeground(new Color(25, 111, 61));
+            
+            ArrayList<Symbol> listE = s.errores;
+            if(listE.size() > 0){
+                String mensaje = "";            
+                for(int i = 0;i < listE.size(); i++){                
+                    mensaje += "Error de sintaxis. Línea: " + (listE.get(i).right + 1) + "Columna: "+ (listE.get(i).left + 1) + " Texto: \"" + listE.get(i).value + "\"" + "\n";
+                }
+                textResultadoParseo.setText(mensaje);
+                textResultadoParseo.setForeground(Color.red);
+            }
+            
         } catch (Exception ex){
-            Symbol sym = s.getS();
-            System.out.println("El sym de error es:" + sym);
-            textResultadoParseo.setText("Error de sintaxis. Línea: " + (sym.right + 1) + "Columna: "+ (sym.left + 1) + " Texto: \"" + sym.value + "\"");
-            textResultadoParseo.setForeground(Color.red);
+            System.err.println(ex);        
         }
         
     }//GEN-LAST:event_btnAnalizarSintacticoActionPerformed
