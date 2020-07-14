@@ -18,12 +18,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java_cup.runtime.Symbol;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.text.Element;
 
 public class FrmPrincipal extends javax.swing.JFrame {
 
@@ -247,12 +241,8 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
         try {
             s.parse();
-            
             textResultadoParseo.setText("Análisis completado correctamente");
             textResultadoParseo.setForeground(new Color(25, 111, 61));
-            
-           
-            
         } catch (Exception ex){
             Symbol sym = s.getS();
             System.out.println("El sym de error es:" + sym);
