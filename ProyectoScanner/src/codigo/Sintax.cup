@@ -1,18 +1,17 @@
 package codigo;
 
 import java_cup.runtime.Symbol;
+import java.io.*;
+import java_cup.runtime.*;
 
 parser code
 {:
     private Symbol s;
-
+    
     public void syntax_error(Symbol s){
         this.s = s;
     }
 
-    public Symbol getS(){
-        return this.s;
-    }
 :};
 
 terminal Reservadas, Operador, Transac, Units, Identificador, Literal, Address, As, Bool, Break,
@@ -81,6 +80,7 @@ EXPRESION_ATRIBUCION ::= Identificador Op_atribucion Literal;
 
 //////////////////////////////////////////////
 STRUCTDEF ::= Struct Identificador STRUCTCONTEN;
+
 STRUCTCONTEN ::= LlaveAbre DECLARVARIABLE LlaveCierra PuntoComa;
 
 DECLARVARIABLE ::= TYPENAME ACCESSMOD Identificador PuntoComa | TYPENAME ACCESSMOD Identificador Op_atribucion Literal PuntoComa | ARRAYDECLAR; 
