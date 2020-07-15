@@ -247,11 +247,18 @@ public class FrmPrincipal extends javax.swing.JFrame {
             textResultadoParseo.setForeground(new Color(25, 111, 61));
             
             ArrayList<Symbol> listE = s.errores;
-            if(listE.size() > 0){
+            if(s.fatalError){
+                textResultadoParseo.setText("Error fatal capturado. Línea: " + (s.fatalErrorSym.right + 1) + " Columna: "+ (s.fatalErrorSym.left + 1));
+                textResultadoParseo.setForeground(Color.red);
+                s.fatalError = false;
+                s.errores.clear();
+            }
+            else if(listE.size() > 0){
                 String mensaje = "";            
                 for(int i = 0;i < listE.size(); i++){                
-                    mensaje += "Error de sintaxis. Línea: " + (listE.get(i).right + 1) + "Columna: "+ (listE.get(i).left + 1) + " Texto: \"" + listE.get(i).value + "\"" + "\n";
+                    mensaje += "Error de sintaxis. Línea: " + (listE.get(i).right + 1) + " Columna: "+ (listE.get(i).left + 1) + " Texto: \"" + listE.get(i).value + "\"" + "\n";
                 }
+                s.errores.clear();
                 textResultadoParseo.setText(mensaje);
                 textResultadoParseo.setForeground(Color.red);
             }
