@@ -18,6 +18,10 @@ parser code
         fatalError = true;
         fatalErrorSym = s;
     }
+
+    public void informar_Error_Especifico(String tipoError, Symbol s){
+        System.err.println("Error: "+tipoError+". Línea: "+s.right+". Columna: "+s.left);
+    }
 :};
 
 terminal Reservadas, Operador, Transac, Units, Identificador, Literal, Address, As, Bool, Break,
