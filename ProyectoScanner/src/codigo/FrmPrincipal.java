@@ -26,7 +26,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         initComponents();
 
         this.setLocationRelativeTo(null);
-        this.setTitle("Scanner: Analizador Léxico");
+        this.setTitle("Compilador: Analizador Léxico y Sintáctico");
     }
     
     private void analizarLexico() throws IOException{
@@ -280,7 +280,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
             
             ArrayList<Symbol> listE = s.errores;
             if(s.fatalError){
-                textResultadoParseo.setText("Error fatal capturado. Línea: " + (s.fatalErrorSym.right + 1) + " Columna: "+ (s.fatalErrorSym.left + 1));
+                textResultadoParseo.setText("Error FATAL capturado. Línea: " + (s.fatalErrorSym.right + 1) + " Columna: "+ (s.fatalErrorSym.left + 1));
                 textResultadoParseo.setForeground(Color.red);
                 s.fatalError = false;
                 s.errores.clear();
