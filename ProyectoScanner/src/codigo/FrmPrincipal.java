@@ -285,6 +285,12 @@ public class FrmPrincipal extends javax.swing.JFrame {
                 s.fatalError = false;
                 s.errores.clear();
             }
+            else if(s.specError){
+                textResultadoParseo.setText(s.specErrorDetail);
+                textResultadoParseo.setForeground(Color.red);
+                s.specError = false;
+                s.errores.clear();
+            }
             else if(listE.size() > 0){
                 String mensaje = "";            
                 for(int i = 0;i < listE.size(); i++){                
@@ -298,7 +304,6 @@ public class FrmPrincipal extends javax.swing.JFrame {
         } catch (Exception ex){
             System.err.println(ex);        
         }
-        
     }//GEN-LAST:event_btnAnalizarSintacticoActionPerformed
 
     /**

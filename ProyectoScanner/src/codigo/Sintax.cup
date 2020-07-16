@@ -7,7 +7,9 @@ parser code
 {:
     public static ArrayList<Symbol> errores = new ArrayList<Symbol>();
     public static boolean fatalError = false;
+    public static boolean specError = false;
     public static Symbol fatalErrorSym;
+    public static String specErrorDetail = "";
 
     public void syntax_error(Symbol s){
         errores.add(s);
@@ -19,8 +21,12 @@ parser code
         fatalErrorSym = s;
     }
 
-    public void informar_Error_Especifico(String tipoError, Symbol s){
-        System.err.println("Error: "+tipoError+". Línea: "+s.right+". Columna: "+s.left);
+    public static void informar_Error_Especifico(String tipoError){
+        String specErrorStr = "ERROR: "+tipoError;//+". Línea: "+specErrorSym.right+". Columna: "+specErrorSym.left;
+        specErrorDetail = specErrorStr;
+        specError = true;
+
+        System.err.println(specErrorStr);
     }
 :};
 
@@ -129,9 +135,9 @@ FUNATRIBDOS ::= Coma TYPENAME Identificador FUNATRIBDOS | ParentCierre;
 
 MODIFICADORES ::= Payable | Private | Public | Internal | {: RESULT = null; :};
 FUNCIONRETURNS ::= Returns FUNCIONATRIB | {: RESULT = null; :};
-FUNCIONCONTEN ::= LlaveAbre DECLARVARIABLE FUNCIONCUERPO FUNCIONRETURN LlaveCierra;
+FUNCIONCONTEN ::= LlaveAbre DECLARVARIABLE FUNCIONCUERPO FUNCIONRETURN LlaveCierra | error LlaveCierra;
 FUNCIONCUERPO ::= {: RESULT = null; :};
-FUNCIONRETURN ::= Return Identificador PuntoComa;
+FUNCIONRETURN ::= Return Identificador PuntoComa | Return Identificador {: Sintax.informar_Error_Especifico("Return de función sin punto y coma"); :};
 
 TYPENAME ::= ELEMENTARYTYPENAME;
 
