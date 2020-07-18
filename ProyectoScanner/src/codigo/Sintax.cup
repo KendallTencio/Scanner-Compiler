@@ -116,17 +116,17 @@ STRUCTCONTEN ::= LlaveAbre DECLARVARIABLE LlaveCierra PuntoComa;
 DECLARVARIABLE ::= TYPENAME ACCESSMOD Identificador PuntoComa | TYPENAME ACCESSMOD Identificador Op_atribucion Literal PuntoComa | ARRAYDECLAR; 
 ARRAYDECLAR ::= TYPENAME ParenCuadAbre ParenCuadCierra Identificador PuntoComa | TYPENAME ParenCuadAbre ParenCuadCierra Identificador Op_atribucion Literal PuntoComa;
 
-ACCESSMOD ::= Private | Public | {: RESULT = null; :};
+ACCESSMOD ::= Private | Public | error PuntoComa | {: RESULT = null; :};
 
 CONTRACTDEF ::= Contract Identificador LlaveAbre CONTRACTPART LlaveCierra PuntoComa;
-CONTRACTPART ::= ENUMDEF CONTRACTPART | CONTRACTPART1;
+CONTRACTPART ::= ENUMDEF CONTRACTPART | CONTRACTPART1 | error PuntoComa | error LlaveCierra;
 CONTRACTPART1 ::= DECLARVARIABLE CONTRACTPART1 | CONTRACTPART2; 
 CONTRACTPART2 ::= STRUCTDEF CONTRACTPART2 | CONTRACTPART3;
 CONTRACTPART3 ::= FUNCIONDEF CONTRACTPART3 | {: RESULT = null; :};
 
 ENUMDEF ::= Enum Identificador ENUMCONTEN;
 ENUMCONTEN ::= LlaveAbre Identificador ENUMLIST LlaveCierra PuntoComa;
-ENUMLIST ::= Coma ENUMVALUE | {: RESULT = null; :};
+ENUMLIST ::= Coma ENUMVALUE | error LlaveCierra | error PuntoComa | {: RESULT = null; :};
 ENUMVALUE ::= Identificador ENUMLIST;
 
 FUNCIONDEF ::= Function Identificador FUNCIONATRIB MODIFICADORES FUNCIONRETURNS FUNCIONCONTEN;
@@ -143,7 +143,7 @@ SENTENCIA_RETURN ::= Return Identificador PuntoComa | Return Identificador {: Si
 PARAMFUNC ::= TYPENAME Identificador;
 TYPENAME ::= ELEMENTARYTYPENAME;
 
-ELEMENTARYTYPENAME ::= Bool | Byte | Bytes | Address | Int | String | Ufixed | Uint;
+ELEMENTARYTYPENAME ::= Bool | Byte | Bytes | Address | Int | String | Ufixed | Uint | error Identificador;
 
 FUNCCALL  ::= Identificador ParentAbre PARAMFUNC ParentCierre PuntoComa;
 
