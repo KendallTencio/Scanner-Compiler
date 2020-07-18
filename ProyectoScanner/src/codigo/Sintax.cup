@@ -36,14 +36,15 @@ terminal Reservadas, Operador, Transac, Units, Identificador, Literal, Address, 
          Returns, Solidity, String, Struct, This, True, Ufixed, Uint, Var, View, While, Pipe, ShiftLeft,
          ShiftRight, DobleAsterisco, Coma, PuntoComa, Punto, ParenCuadAbre, ParenCuadCierra, SignoPregunta,
          DosPuntos, LlaveAbre, LlaveCierra, Ampersand, Elevar, Virgulilla, Suma, Resta, Mult, Div, Mod,
-         ParentAbre, ParentCierre, Op_Booleano, Op_relacional, Not, Op_atribucion, IntValue, UintValue, BytesValue,
+         ParentAbre, ParentCierre, Op_Booleano, Op_relacional, Not, Op_atribucion, Op_Incremental, IntValue, UintValue, BytesValue,
          ERROR;
-non terminal INICIO, SENTENCIA, LISTA_SENTENCIA, PARTE_SENTENCIA, SENTENCIA_IFELSE, SENTENCIA_WHILE, SENTENCIA_DOWHILE, SENTENCIA_FOR, SENTENCIA_TERNARIA;
-non terminal EXPRESION_BOOLEANA, EXPRECION_ARITMETICA, EXPRESION_PRIMARIA, EXPRESION_ATRIBUCION;
+non terminal INICIO, BLOQUE_SENTENCIA, SENTENCIA, LISTA_SENTENCIA, PARTE_SENTENCIA; 
+non terminal SENTENCIA_IF, SENTENCIA_ELSE, SENTENCIA_WHILE, SENTENCIA_DOWHILE, SENTENCIA_FOR, SENTENCIA_TERNARIA;
+non terminal EXPRESION_BOOLEANA, EXPRECION_ARITMETICA, EXPRESION_PRIMARIA, EXPRESION_INCREMENTAL;
 non terminal EXPRESION_TUPLA_PPARENTESIS, EXPRESION_TUPLA_PPARENTESIS_PRIMA;
 non terminal STRUCTDEF, STRUCTCONTEN, DECLARVARIABLE, DECLARVARDOS;
-non terminal FUNCIONDEF, FUNCIONATRIB, FUNATRIBDOS ,MODIFICADORES, FUNCIONRETURNS,FUNCIONCONTEN, FUNCIONCUERPO, FUNCIONRETURN;
-non terminal VARASIGNA, FUNCCALL, PARAMFUNC;
+non terminal FUNCIONDEF, FUNCIONATRIB, FUNATRIBDOS ,MODIFICADORES, FUNCIONRETURNS,FUNCIONCONTEN, FUNCIONCUERPO, SENTENCIA_RETURN;
+non terminal FUNCCALL, PARAMFUNC;
 non terminal TYPENAME, ELEMENTARYTYPENAME, ARRAYDECLAR, ACCESSMOD;
 non terminal ENUMDEF, ENUMCONTEN, ENUMLIST, ENUMVALUE;
 non terminal CONTRACTDEF, CONTRACTPART, CONTRACTPART1, CONTRACTPART2, CONTRACTPART3;
@@ -55,36 +56,35 @@ precedence left Mult, Div, Mod;
 
 start with INICIO;
 
-INICIO ::= SENTENCIA_TERNARIA INICIO
-            | LISTA_SENTENCIA
-            | STRUCTDEF INICIO
-            | FUNCIONDEF INICIO
-            | VARASIGNA INICIO 
-            | DECLARVARIABLE INICIO 
-            | FUNCCALL INICIO 
+INICIO ::= SENTENCIA_TERNARIA INICIO            
+            | STRUCTDEF INICIO                        
+            //| FUNCCALL INICIO 
             | CONTRACTDEF INICIO 
             | ENUMDEF INICIO
             | {: RESULT = null; :};
 
-LISTA_SENTENCIA ::= SENTENCIA LISTA_SENTENCIAPRIMA;
+//LISTA_SENTENCIA ::= SENTENCIA LISTA_SENTENCIAPRIMA;
 LISTA_SENTENCIAPRIMA ::= SENTENCIA LISTA_SENTENCIAPRIMA | {: RESULT = null; :};
 
-//LISTA_SENTENCIA ::= SENTENCIA LISTA_SENTENCIA | SENTENCIA;
-
-SENTENCIA ::= SENTENCIA_IFELSE 
+SENTENCIA ::= SENTENCIA_IF
             | SENTENCIA_WHILE 
-            | SENTENCIA_DOWHILE 
+            | SENTENCIA_DOWHILE PuntoComa
             | SENTENCIA_FOR 
+            | SENTENCIA_RETURN
+            | DECLARVARIABLE 
+            | FUNCCALL                       
             | Break PuntoComa
             | Continue PuntoComa
             | error PuntoComa
             | error LlaveCierra; 
 
-
-SENTENCIA_IFELSE ::= If ParentAbre EXPRESION_BOOLEANA ParentCierre LlaveAbre LISTA_SENTENCIA LlaveCierra | If ParentAbre EXPRESION_BOOLEANA ParentCierre LlaveAbre LISTA_SENTENCIA LlaveCierra Else LlaveAbre LISTA_SENTENCIA LlaveCierra;
-SENTENCIA_WHILE ::= While ParentAbre EXPRESION_BOOLEANA ParentCierre LlaveAbre LISTA_SENTENCIA LlaveCierra;
-SENTENCIA_DOWHILE ::= Do LlaveAbre LISTA_SENTENCIA LlaveCierra While ParentAbre EXPRESION_BOOLEANA ParentCierre;
-SENTENCIA_FOR ::= For ParentAbre EXPRESION_ATRIBUCION Coma EXPRESION_BOOLEANA Coma EXPRESION_ATRIBUCION ParentCierre LlaveAbre LISTA_SENTENCIA LlaveCierra | For ParentAbre ParentCierre LlaveAbre LlaveCierra;
+SENTENCIA_IF ::= If ParentAbre EXPRESION_BOOLEANA ParentCierre LlaveAbre LISTA_SENTENCIAPRIMA LlaveCierra
+               | If ParentAbre EXPRESION_BOOLEANA ParentCierre LlaveAbre LISTA_SENTENCIAPRIMA LlaveCierra SENTENCIA_ELSE;
+SENTENCIA_ELSE ::= Else LlaveAbre LISTA_SENTENCIAPRIMA LlaveCierra;
+    
+SENTENCIA_WHILE ::= While ParentAbre EXPRESION_BOOLEANA ParentCierre LlaveAbre LISTA_SENTENCIAPRIMA LlaveCierra;
+SENTENCIA_DOWHILE ::= Do LlaveAbre LISTA_SENTENCIAPRIMA LlaveCierra While ParentAbre EXPRESION_BOOLEANA ParentCierre;
+SENTENCIA_FOR ::= For ParentAbre DECLARVARIABLE EXPRESION_BOOLEANA PuntoComa EXPRESION_INCREMENTAL ParentCierre LlaveAbre LISTA_SENTENCIAPRIMA LlaveCierra;
 SENTENCIA_TERNARIA ::= EXPRESION_BOOLEANA SignoPregunta EXPRESION_PRIMARIA DosPuntos EXPRESION_PRIMARIA PuntoComa;
 
 EXPRESION_BOOLEANA ::= Op_Booleano
@@ -92,7 +92,8 @@ EXPRESION_BOOLEANA ::= Op_Booleano
                     | Not ParentAbre EXPRESION_BOOLEANA ParentCierre 
                     | EXPRESION_PRIMARIA Op_relacional EXPRESION_PRIMARIA
                     | EXPRESION_PRIMARIA Op_relacional ParentAbre EXPRESION_BOOLEANA ParentCierre
-                    | ParentAbre EXPRESION_BOOLEANA ParentCierre Op_relacional EXPRESION_PRIMARIA;
+                    | ParentAbre EXPRESION_BOOLEANA ParentCierre Op_relacional EXPRESION_PRIMARIA
+                    | Identificador;
 
 EXPRESION_PRIMARIA ::= EXPRECION_ARITMETICA
                     | Identificador;
@@ -106,9 +107,9 @@ EXPRECION_ARITMETICA ::= EXPRECION_ARITMETICA Suma EXPRECION_ARITMETICA
                     | ParentAbre EXPRECION_ARITMETICA ParentCierre
                     | Literal;
 
-EXPRESION_ATRIBUCION ::= Identificador Op_atribucion Literal | TYPENAME Identificador Op_atribucion Literal;
+EXPRESION_INCREMENTAL ::= Op_Incremental Identificador
+                        | Identificador Op_Incremental;
 
-//////////////////////////////////////////////
 STRUCTDEF ::= Struct Identificador STRUCTCONTEN;
 STRUCTCONTEN ::= LlaveAbre DECLARVARIABLE LlaveCierra PuntoComa;
 
@@ -135,15 +136,14 @@ FUNATRIBDOS ::= Coma TYPENAME Identificador FUNATRIBDOS | ParentCierre;
 
 MODIFICADORES ::= Payable | Private | Public | Internal | {: RESULT = null; :};
 FUNCIONRETURNS ::= Returns FUNCIONATRIB | {: RESULT = null; :};
-FUNCIONCONTEN ::= LlaveAbre DECLARVARIABLE FUNCIONCUERPO FUNCIONRETURN LlaveCierra | error LlaveCierra;
-FUNCIONCUERPO ::= {: RESULT = null; :};
-FUNCIONRETURN ::= Return Identificador PuntoComa | Return Identificador {: Sintax.informar_Error_Especifico("Return de función sin punto y coma"); :};
+FUNCIONCONTEN ::= LlaveAbre LISTA_SENTENCIAPRIMA LlaveCierra | error LlaveCierra;
 
+SENTENCIA_RETURN ::= Return Identificador PuntoComa | Return Identificador {: Sintax.informar_Error_Especifico("Return de función sin punto y coma"); :};
+
+PARAMFUNC ::= TYPENAME Identificador;
 TYPENAME ::= ELEMENTARYTYPENAME;
 
 ELEMENTARYTYPENAME ::= Bool | Byte | Bytes | Address | Int | String | Ufixed | Uint;
 
-VARASIGNA ::= Identificador Op_atribucion Literal;
 FUNCCALL  ::= Identificador ParentAbre PARAMFUNC ParentCierre PuntoComa;
-PARAMFUNC ::= TYPENAME Identificador;
 

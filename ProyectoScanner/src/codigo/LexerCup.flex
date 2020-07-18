@@ -128,6 +128,9 @@ FLE4 = [0][0-9]*
 // Operadores Atribucion 
 ( "+=" | "-="  | "*=" | "/=" | "=" ) {return new Symbol(sym.Op_atribucion, yychar, yyline, yytext());}
 
+// Operadores Incrementales
+( "++" | "--" ) {return new Symbol(sym.Op_Incremental, yychar, yyline, yytext());}
+
 //Operadores relacional
 ( ">" | "<" | "==" | "!=" | ">=" | "<=" | "<<" | ">>" | "||" | "&&" ) {return new Symbol(sym.Op_relacional, yychar, yyline, yytext());}
  ( "!" ) {return new Symbol(sym.Not, yychar, yyline, yytext());}

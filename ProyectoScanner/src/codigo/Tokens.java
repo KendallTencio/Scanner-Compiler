@@ -69,6 +69,7 @@ public enum Tokens {
     ParentAbre,
     ParentCierre,
     Op_Booleano,
+    Op_Incremental,
     Op_relacional,
     Not,
     Op_atribucion,

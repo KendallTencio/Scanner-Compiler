@@ -28,7 +28,7 @@ CientE6 = [0][0-9]+ \. [0-9]+ [eE] [+-]? [0-9]+
 FLE = ({FLE1}|{FLE2}|{FLE4})
 FLE1 = [0][0-9]+ \. [0-9]*
 FLE2 = [0][0] \. [0-9]+
-FLE4 = [0][0-9]*
+FLE4 = [0][0-9]+
 
 %{
     public String lexeme;
@@ -119,6 +119,9 @@ FLE4 = [0][0-9]*
 
 // Operadores Atribucion 
 ( "+=" | "-="  | "*=" | "/=" | "=" ) { lexeme=yytext(); return Op_atribucion;}
+
+// Operadores Incrementales
+( "++" | "--" ) { lexeme=yytext(); return Op_Incremental;}
 
 //Operadores relacional
 ( ">" | "<" | "==" | "!=" | ">=" | "<=" | "<<" | ">>" | "||" | "&&") { lexeme=yytext(); return Op_relacional;}
