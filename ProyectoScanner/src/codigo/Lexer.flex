@@ -140,9 +140,6 @@ FLE4 = [0][0-9]+
 {espacio} {/*Ignore*/}
 ( "//".* ) {/*Ignore*/}
 
-//Identificadores
-( {FL3}([^( )(\n)(\t)(\r)(!=)(&&)(==)(!)(|)(<=)(<<)(>=)(>>)(**)(/)(%)(*)(<)(>)(,)(;)(.)("(")(")")("[")("]")(?)(:)({)(})(+=)(-=)(*=)(/=)(&)("^")(~)(+)("-")(=)])* ) { lexeme=yytext(); return Identificador;}
-( {L}({L}|{FL3})* ) { lexeme=yytext(); return Identificador;}
 
 //Valores Hex
 ( (hex\"{H}{H}{H}{H}{H}{H}{H}{H}\")|(hex'{H}{H}{H}{H}{H}{H}{H}{H}') ) { lexeme=yytext(); return Literal;}
@@ -150,6 +147,10 @@ FLE4 = [0][0-9]+
 //Literales
 ( {FL} ) { lexeme=yytext(); return Literal;}
 ( ('([^(\n)(')])*')|(\"([^(\n)(\")])*\") ) { lexeme=yytext(); return Literal;}
+
+//Identificadores
+( {FL3}([^( )(\n)(\t)(\r)(!=)(&&)(==)(!)(|)(<=)(<<)(>=)(>>)(**)(/)(%)(*)(<)(>)(,)(;)(.)("(")(")")("[")("]")(?)(:)({)(})(+=)(-=)(*=)(/=)(&)("^")(~)(+)("-")(=)])* ) { lexeme=yytext(); return ERROR_Identificador;}
+( {L}({L}|{FL3})* ) { lexeme=yytext(); return Identificador;}
 
 /* Error de analisis */
  . { return ERROR;}

@@ -44,12 +44,10 @@ FLE4 = [0][0-9]*
 
 %%
 
-/*
-"/*"|"*/" {return ERROR_Comentario;}
-{FLE} { lexeme=yytext(); return ERROR_LiteralCero;}
-{CientError} { lexeme=yytext(); return ERROR_NotacionCientifica;}
+"/*"|"*/" { return new Symbol(sym.ERROR_Comentario, yychar, yyline, yytext());}
+{FLE} { return new Symbol(sym.ERROR_LiteralCero, yychar, yyline, yytext());}
+{CientError} { return new Symbol(sym.ERROR_NotacionCientifica, yychar, yyline, yytext());}
 
-*/
 
 //Reservadas
 ( address ) { return new Symbol(sym.Address, yychar, yyline, yytext());}
@@ -148,16 +146,16 @@ FLE4 = [0][0-9]*
 {espacio} {/*Ignore*/}
 ( "//".* ) {/*Ignore*/}
 
-//Identificadores
-( {FL3}([^( )(\n)(\t)(\r)(!=)(&&)(==)(!)(|)(<=)(<<)(>=)(>>)(**)(/)(%)(*)(<)(>)(,)(;)(.)("(")(")")("[")("]")(?)(:)({)(})(+=)(-=)(*=)(/=)(&)("^")(~)(+)("-")(=)])* ) { return new Symbol(sym.Identificador, yychar, yyline, yytext());}
-( {L}({L}|{FL3})* ) { return new Symbol(sym.Identificador, yychar, yyline, yytext());}
-
 //Valores Hex
 ( (hex\"{H}{H}{H}{H}{H}{H}{H}{H}\")|(hex'{H}{H}{H}{H}{H}{H}{H}{H}') ) { return new Symbol(sym.Literal, yychar, yyline, yytext());}
 
 //Literales
 ( {FL} ) { return new Symbol(sym.Literal, yychar, yyline, yytext());}
 ( ('([^(\n)(')])*')|(\"([^(\n)(\")])*\") ) { return new Symbol(sym.Literal, yychar, yyline, yytext());}
+
+//Identificadores
+( {FL3}([^( )(\n)(\t)(\r)(!=)(&&)(==)(!)(|)(<=)(<<)(>=)(>>)(**)(/)(%)(*)(<)(>)(,)(;)(.)("(")(")")("[")("]")(?)(:)({)(})(+=)(-=)(*=)(/=)(&)("^")(~)(+)("-")(=)])* ) { return new Symbol(sym.ERROR_Identificador, yychar, yyline, yytext());}
+( {L}({L}|{FL3})* ) { return new Symbol(sym.Identificador, yychar, yyline, yytext());}
 
 /* Error de analisis */
  . {return new Symbol(sym.ERROR, yychar, yyline, yytext());}

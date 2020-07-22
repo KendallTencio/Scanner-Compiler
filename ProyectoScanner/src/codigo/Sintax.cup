@@ -37,8 +37,8 @@ terminal Reservadas, Operador, Transac, Units, Identificador, Literal, Address, 
          ShiftRight, DobleAsterisco, Coma, PuntoComa, Punto, ParenCuadAbre, ParenCuadCierra, SignoPregunta,
          DosPuntos, LlaveAbre, LlaveCierra, Ampersand, Elevar, Virgulilla, Suma, Resta, Mult, Div, Mod,
          ParentAbre, ParentCierre, Op_Booleano, Op_relacional, Not, Op_atribucion, Op_Incremental, IntValue, UintValue, BytesValue,
-         ERROR;
-non terminal INICIO, BLOQUE_SENTENCIA, SENTENCIA, LISTA_SENTENCIA, PARTE_SENTENCIA; 
+         ERROR_NotacionCientifica, ERROR_Identificador, ERROR_Comentario, ERROR_LiteralCero,ERROR;
+non terminal INICIO, INICIODOS, BLOQUE_SENTENCIA, SENTENCIA, LISTA_SENTENCIA, PARTE_SENTENCIA; 
 non terminal SENTENCIA_IF, SENTENCIA_ELSE, SENTENCIA_WHILE, SENTENCIA_DOWHILE, SENTENCIA_FOR, SENTENCIA_TERNARIA;
 non terminal EXPRESION_BOOLEANA, EXPRECION_ARITMETICA, EXPRESION_PRIMARIA, EXPRESION_INCREMENTAL;
 non terminal EXPRESION_TUPLA_PPARENTESIS, EXPRESION_TUPLA_PPARENTESIS_PRIMA;
@@ -56,11 +56,44 @@ precedence left Mult, Div, Mod;
 
 start with INICIO;
 
-INICIO ::= SENTENCIA_TERNARIA INICIO            
-            | STRUCTDEF INICIO                        
-            //| FUNCCALL INICIO 
-            | CONTRACTDEF INICIO 
-            | ENUMDEF INICIO
+/*
+contract hola{
+ function ccc(string y){
+   int x = 3;
+   return e;
+ }
+};
+
+contract hola{
+ function ccc(string y){
+   int x = 3;
+
+  while(true){
+        string yy = "hola";
+         for(int x = 2; x < 10 ; --x){
+             int x = x;
+             if(Marco){
+                 break;
+             }
+            else{
+                string Gilgamesh = "Are u winning son?";
+             }
+             break;
+         }
+       continue;
+   }
+   return x;
+ }
+};
+
+*/
+
+INICIO ::= Pragma Solidity PuntoComa INICIODOS;
+
+INICIODOS ::= STRUCTDEF INICIODOS                        
+            //| FUNCCALL INICIODOS
+            | CONTRACTDEF INICIODOS 
+            | ENUMDEF INICIODOS
             | {: RESULT = null; :};
 
 //LISTA_SENTENCIA ::= SENTENCIA LISTA_SENTENCIAPRIMA;
@@ -71,7 +104,8 @@ SENTENCIA ::= SENTENCIA_IF
             | SENTENCIA_DOWHILE PuntoComa
             | SENTENCIA_FOR 
             | SENTENCIA_RETURN
-            | DECLARVARIABLE 
+            | SENTENCIA_TERNARIA
+            | DECLARVARIABLE
             | FUNCCALL                       
             | Break PuntoComa
             | Continue PuntoComa
@@ -79,7 +113,7 @@ SENTENCIA ::= SENTENCIA_IF
             | error LlaveCierra; 
 
 SENTENCIA_IF ::= If ParentAbre EXPRESION_BOOLEANA ParentCierre LlaveAbre LISTA_SENTENCIAPRIMA LlaveCierra
-               | If ParentAbre EXPRESION_BOOLEANA ParentCierre LlaveAbre LISTA_SENTENCIAPRIMA LlaveCierra SENTENCIA_ELSE;
+               | If ParentAbre EXPRESION_BOOLEANA ParentCierre LlaveAbre LISTA_SENTENCIAPRIMA LlaveCierra SENTENCIA_ELSE | If LlaveAbre EXPRESION_BOOLEANA LlaveCierra LlaveAbre LISTA_SENTENCIAPRIMA LlaveCierra {:Sintax.informar_Error_Especifico("ERROR: If con llaves");:};
 SENTENCIA_ELSE ::= Else LlaveAbre LISTA_SENTENCIAPRIMA LlaveCierra;
     
 SENTENCIA_WHILE ::= While ParentAbre EXPRESION_BOOLEANA ParentCierre LlaveAbre LISTA_SENTENCIAPRIMA LlaveCierra;
@@ -113,8 +147,8 @@ EXPRESION_INCREMENTAL ::= Op_Incremental Identificador
 STRUCTDEF ::= Struct Identificador STRUCTCONTEN;
 STRUCTCONTEN ::= LlaveAbre DECLARVARIABLE LlaveCierra PuntoComa;
 
-DECLARVARIABLE ::= TYPENAME ACCESSMOD Identificador PuntoComa | TYPENAME ACCESSMOD Identificador Op_atribucion Literal PuntoComa | ARRAYDECLAR; 
-ARRAYDECLAR ::= TYPENAME ParenCuadAbre ParenCuadCierra Identificador PuntoComa | TYPENAME ParenCuadAbre ParenCuadCierra Identificador Op_atribucion Literal PuntoComa;
+DECLARVARIABLE ::= TYPENAME ACCESSMOD Identificador PuntoComa | TYPENAME ACCESSMOD Identificador Op_atribucion Literal PuntoComa | TYPENAME ACCESSMOD Identificador Op_atribucion Identificador PuntoComa | ARRAYDECLAR;
+ARRAYDECLAR ::= TYPENAME ParenCuadAbre ParenCuadCierra Identificador PuntoComa | TYPENAME ParenCuadAbre ParenCuadCierra Identificador Op_atribucion Literal PuntoComa | TYPENAME ParenCuadAbre ParenCuadCierra Identificador Op_atribucion Identificador PuntoComa;
 
 ACCESSMOD ::= Private | Public | error PuntoComa | {: RESULT = null; :};
 
@@ -143,7 +177,7 @@ SENTENCIA_RETURN ::= Return Identificador PuntoComa | Return Identificador {: Si
 PARAMFUNC ::= TYPENAME Identificador;
 TYPENAME ::= ELEMENTARYTYPENAME;
 
-ELEMENTARYTYPENAME ::= Bool | Byte | Bytes | Address | Int | String | Ufixed | Uint | error Identificador;
+ELEMENTARYTYPENAME ::= Bool | Byte | Bytes | Address | Int | String | Ufixed | Uint;
 
 FUNCCALL  ::= Identificador ParentAbre PARAMFUNC ParentCierre PuntoComa;
 
