@@ -30,7 +30,7 @@ parser code
     }
 :};
 
-terminal Reservadas, Operador, Transac, Units, Identificador, Literal, Address, As, Bool, Break,    
+terminal Reservadas, Operador, Transac, Units, Identificador, Literal, Address, As, Bool, Break,
          Byte, Bytes, Constructor, Continue, Contract, Delete, Do, Else, Enum, For, From, Function,
          Hex, If, Import, Int, Internal, Mapping, Modifier, Payable, Pragma, Private, Public, Return,
          Returns, Solidity, String, Struct, This, True, Ufixed, Uint, Var, View, While, Pipe, ShiftLeft,
@@ -48,7 +48,7 @@ non terminal FUNCCALL, PARAMFUNC;
 non terminal TYPENAME, ELEMENTARYTYPENAME, ARRAYDECLAR, ACCESSMOD;
 non terminal ENUMDEF, ENUMCONTEN, ENUMLIST, ENUMVALUE;
 non terminal CONTRACTDEF, CONTRACTPART, CONTRACTPART1, CONTRACTPART2, CONTRACTPART3;
-non terminal LISTA_SENTENCIAPRIMA, VARSIGNAL;
+non terminal LISTA_SENTENCIAPRIMA;
 
 precedence left Suma, Resta;
 precedence left Mult, Div, Mod;
@@ -113,10 +113,7 @@ EXPRESION_INCREMENTAL ::= Op_Incremental Identificador
 STRUCTDEF ::= Struct Identificador STRUCTCONTEN;
 STRUCTCONTEN ::= LlaveAbre DECLARVARIABLE LlaveCierra PuntoComa;
 
-DECLARVARIABLE ::= TYPENAME ACCESSMOD Identificador PuntoComa 
-                 | TYPENAME ACCESSMOD Identificador Op_atribucion Literal PuntoComa 
-                 | Identificador Op_atribucion Literal PuntoComa
-                 | ARRAYDECLAR; 
+DECLARVARIABLE ::= TYPENAME ACCESSMOD Identificador PuntoComa | TYPENAME ACCESSMOD Identificador Op_atribucion Literal PuntoComa | ARRAYDECLAR; 
 ARRAYDECLAR ::= TYPENAME ParenCuadAbre ParenCuadCierra Identificador PuntoComa | TYPENAME ParenCuadAbre ParenCuadCierra Identificador Op_atribucion Literal PuntoComa;
 
 ACCESSMOD ::= Private | Public | error PuntoComa | {: RESULT = null; :};
