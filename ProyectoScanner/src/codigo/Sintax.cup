@@ -40,11 +40,11 @@ terminal Version, Reservadas, Operador, Transac, Units, Identificador, Literal, 
          ERROR_NotacionCientifica, ERROR_Identificador, ERROR_Comentario, ERROR_LiteralCero,ERROR;
 non terminal INICIO, INICIODOS, BLOQUE_SENTENCIA, SENTENCIA, LISTA_SENTENCIA, PARTE_SENTENCIA; 
 non terminal SENTENCIA_IF, SENTENCIA_ELSE, SENTENCIA_WHILE, SENTENCIA_DOWHILE, SENTENCIA_FOR, SENTENCIA_TERNARIA;
-non terminal EXPRESION_BOOLEANA, EXPRECION_ARITMETICA, EXPRESION_PRIMARIA, EXPRESION_INCREMENTAL;
+non terminal EXPRESION_BOOLEANA, EXPRECION_ARITMETICA, EXPRESION_INCREMENTAL;
 non terminal EXPRESION_TUPLA_PPARENTESIS, EXPRESION_TUPLA_PPARENTESIS_PRIMA;
-non terminal STRUCTDEF, STRUCTCONTEN, DECLARVARIABLE, DECLARVARDOS;
+non terminal STRUCTDEF, STRUCTCONTEN, DECLARVARIABLE, DECLARVARDOS, PARAMFUNCFILA;
 non terminal FUNCIONDEF, FUNCIONATRIB, FUNATRIBDOS ,MODIFICADORES, FUNCIONRETURNS,FUNCIONCONTEN, FUNCIONCUERPO, SENTENCIA_RETURN;
-non terminal FUNCCALL, PARAMFUNC, ASIGVARIABLE;
+non terminal FUNCCALL, PARAMFUNC, ASIGVARIABLE, DECLARVARIABLEFILA, ARRAYDECLARFILA;
 non terminal TYPENAME, ELEMENTARYTYPENAME, ARRAYDECLAR, ACCESSMOD;
 non terminal ENUMDEF, ENUMCONTEN, ENUMLIST, ENUMVALUE;
 non terminal CONTRACTDEF, CONTRACTPART, CONTRACTPART1, CONTRACTPART2, CONTRACTPART3;
@@ -94,9 +94,9 @@ INICIODOS ::= STRUCTDEF INICIODOS
             //| FUNCCALL INICIODOS
             | CONTRACTDEF INICIODOS 
             | ENUMDEF INICIODOS
+            | DECLARVARIABLE INICIODOS {: Sintax.informar_Error_Especifico("Declaración fuera de función"); :}
             | {: RESULT = null; :};
 
-//LISTA_SENTENCIA ::= SENTENCIA LISTA_SENTENCIAPRIMA;
 LISTA_SENTENCIAPRIMA ::= SENTENCIA LISTA_SENTENCIAPRIMA | {: RESULT = null; :};
 
 SENTENCIA ::= SENTENCIA_IF
@@ -106,7 +106,7 @@ SENTENCIA ::= SENTENCIA_IF
             | SENTENCIA_RETURN
             | SENTENCIA_TERNARIA
             | DECLARVARIABLE
-            | ASIGVARIABLE
+            | ASIGVARIABLE PuntoComa
             | FUNCCALL                       
             | Break PuntoComa
             | Continue PuntoComa
@@ -120,18 +120,16 @@ SENTENCIA_ELSE ::= Else LlaveAbre LISTA_SENTENCIAPRIMA LlaveCierra;
 SENTENCIA_WHILE ::= While ParentAbre EXPRESION_BOOLEANA ParentCierre LlaveAbre LISTA_SENTENCIAPRIMA LlaveCierra;
 SENTENCIA_DOWHILE ::= Do LlaveAbre LISTA_SENTENCIAPRIMA LlaveCierra While ParentAbre EXPRESION_BOOLEANA ParentCierre;
 SENTENCIA_FOR ::= For ParentAbre DECLARVARIABLE EXPRESION_BOOLEANA PuntoComa EXPRESION_INCREMENTAL ParentCierre LlaveAbre LISTA_SENTENCIAPRIMA LlaveCierra;
-SENTENCIA_TERNARIA ::= EXPRESION_BOOLEANA SignoPregunta EXPRESION_PRIMARIA DosPuntos EXPRESION_PRIMARIA PuntoComa;
+SENTENCIA_TERNARIA ::= EXPRESION_BOOLEANA SignoPregunta EXPRECION_ARITMETICA DosPuntos EXPRECION_ARITMETICA PuntoComa;
 
 EXPRESION_BOOLEANA ::= Op_Booleano
                     | Not EXPRESION_BOOLEANA
                     | Not ParentAbre EXPRESION_BOOLEANA ParentCierre 
-                    | EXPRESION_PRIMARIA Op_relacional EXPRESION_PRIMARIA
-                    | EXPRESION_PRIMARIA Op_relacional ParentAbre EXPRESION_BOOLEANA ParentCierre
-                    | ParentAbre EXPRESION_BOOLEANA ParentCierre Op_relacional EXPRESION_PRIMARIA
+                    | EXPRECION_ARITMETICA Op_relacional EXPRECION_ARITMETICA
+                    | EXPRECION_ARITMETICA Op_relacional ParentAbre EXPRESION_BOOLEANA ParentCierre
+                    | ParentAbre EXPRESION_BOOLEANA ParentCierre Op_relacional EXPRECION_ARITMETICA
                     | Identificador;
-
-EXPRESION_PRIMARIA ::= EXPRECION_ARITMETICA
-                    | Identificador;
+      
 
 EXPRECION_ARITMETICA ::= EXPRECION_ARITMETICA Suma EXPRECION_ARITMETICA
                     | EXPRECION_ARITMETICA Resta EXPRECION_ARITMETICA
@@ -148,22 +146,25 @@ EXPRESION_INCREMENTAL ::= Op_Incremental Identificador
 STRUCTDEF ::= Struct Identificador STRUCTCONTEN;
 STRUCTCONTEN ::= LlaveAbre DECLARVARIABLE LlaveCierra PuntoComa;
 
-DECLARVARIABLE ::= TYPENAME ACCESSMOD Identificador PuntoComa | TYPENAME ACCESSMOD Identificador Op_atribucion Literal PuntoComa | TYPENAME ACCESSMOD Identificador Op_atribucion Identificador PuntoComa | ARRAYDECLAR;
-ARRAYDECLAR ::= TYPENAME ParenCuadAbre ParenCuadCierra Identificador PuntoComa | TYPENAME ParenCuadAbre ParenCuadCierra Identificador Op_atribucion Literal PuntoComa | TYPENAME ParenCuadAbre ParenCuadCierra Identificador Op_atribucion Identificador PuntoComa;
+DECLARVARIABLE ::= TYPENAME ACCESSMOD Identificador DECLARVARIABLEFILA PuntoComa | TYPENAME ACCESSMOD Identificador Op_atribucion EXPRECION_ARITMETICA PuntoComa | TYPENAME ACCESSMOD Identificador Op_atribucion Identificador PuntoComa | ARRAYDECLAR;
+DECLARVARIABLEFILA ::= Coma Identificador DECLARVARIABLEFILA | {: RESULT = null; :};
+ARRAYDECLAR ::= TYPENAME ParenCuadAbre ParenCuadCierra Identificador ARRAYDECLARFILA PuntoComa | TYPENAME ParenCuadAbre ParenCuadCierra Identificador Op_atribucion EXPRECION_ARITMETICA PuntoComa | TYPENAME ParenCuadAbre ParenCuadCierra Identificador Op_atribucion Identificador PuntoComa;
+ARRAYDECLARFILA ::= Coma Identificador ARRAYDECLARFILA |{: RESULT = null; :};
 
-ASIGVARIABLE ::= Identificador Op_atribucion Literal PuntoComa | Identificador Op_atribucion Identificador PuntoComa;
+ASIGVARIABLE ::= Identificador Op_atribucion EXPRECION_ARITMETICA | Identificador Op_atribucion Identificador;
+
 
 ACCESSMOD ::= Private | Public | error PuntoComa | {: RESULT = null; :};
 
-CONTRACTDEF ::= Contract Identificador LlaveAbre CONTRACTPART LlaveCierra PuntoComa;
-CONTRACTPART ::= ENUMDEF CONTRACTPART | CONTRACTPART1 | error PuntoComa | error LlaveCierra;
-CONTRACTPART1 ::= DECLARVARIABLE CONTRACTPART1 | CONTRACTPART2; 
+CONTRACTDEF ::= Contract Identificador LlaveAbre CONTRACTPART LlaveCierra | error LlaveCierra;
+CONTRACTPART ::= ENUMDEF CONTRACTPART | CONTRACTPART1;
+CONTRACTPART1 ::= DECLARVARIABLE CONTRACTPART1 | ASIGVARIABLE CONTRACTPART1 |CONTRACTPART2; 
 CONTRACTPART2 ::= STRUCTDEF CONTRACTPART2 | CONTRACTPART3;
 CONTRACTPART3 ::= FUNCIONDEF CONTRACTPART3 | {: RESULT = null; :};
 
 ENUMDEF ::= Enum Identificador ENUMCONTEN;
-ENUMCONTEN ::= LlaveAbre Identificador ENUMLIST LlaveCierra;
-ENUMLIST ::= Coma ENUMVALUE | error LlaveCierra | error PuntoComa | {: RESULT = null; :};
+ENUMCONTEN ::= LlaveAbre Identificador ENUMLIST LlaveCierra | error LlaveCierra;
+ENUMLIST ::= Coma ENUMVALUE | {: RESULT = null; :};
 ENUMVALUE ::= Identificador ENUMLIST;
 
 FUNCIONDEF ::= Function Identificador FUNCIONATRIB MODIFICADORES FUNCIONRETURNS FUNCIONCONTEN;
@@ -177,7 +178,8 @@ FUNCIONCONTEN ::= LlaveAbre LISTA_SENTENCIAPRIMA LlaveCierra | error LlaveCierra
 
 SENTENCIA_RETURN ::= Return Identificador PuntoComa | Return Identificador {: Sintax.informar_Error_Especifico("Return de función sin punto y coma"); :};
 
-PARAMFUNC ::= TYPENAME Identificador;
+PARAMFUNC ::= Identificador PARAMFUNCFILA | EXPRECION_ARITMETICA PARAMFUNCFILA | ASIGVARIABLE PARAMFUNCFILA | {: RESULT = null; :};
+PARAMFUNCFILA ::= Coma Identificador PARAMFUNCFILA | Coma EXPRECION_ARITMETICA PARAMFUNCFILA | ASIGVARIABLE PARAMFUNCFILA  | {: RESULT = null; :};
 TYPENAME ::= ELEMENTARYTYPENAME;
 
 ELEMENTARYTYPENAME ::= Bool | Byte | Bytes | Address | Int | String | Ufixed | Uint;
