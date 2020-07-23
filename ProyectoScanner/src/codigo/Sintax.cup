@@ -6,6 +6,7 @@ import java.util.ArrayList;
 parser code
 {:
     public static ArrayList<Symbol> errores = new ArrayList<Symbol>();
+    public static ArrayList<String> erroresEspec = new ArrayList<String>();
     public static boolean fatalError = false;
     public static boolean specError = false;
     public static Symbol fatalErrorSym;
@@ -22,8 +23,9 @@ parser code
     }
 
     public static void informar_Error_Especifico(String tipoError){
-        String specErrorStr = "ERROR: "+tipoError;//+". Línea: "+specErrorSym.right+". Columna: "+specErrorSym.left;
+        String specErrorStr = "ERROR: "+tipoError;
         specErrorDetail = specErrorStr;
+        erroresEspec.add(specErrorStr);
         specError = true;
 
         System.err.println(specErrorStr);

@@ -305,26 +305,32 @@ public class FrmPrincipal extends javax.swing.JFrame {
             textResultadoParseo.setForeground(new Color(25, 111, 61));
             
             ArrayList<Symbol> listE = s.errores;
+            ArrayList<String> listEspec = s.erroresEspec;
+            String mensaje = "";  
+            
             if(s.fatalError){
-                textResultadoParseo.setText("Error FATAL capturado. Línea: " + (s.fatalErrorSym.right + 1) + " Columna: "+ (s.fatalErrorSym.left + 1));
+                textResultadoParseo.setText("Error FATAL capturado. Línea: " + (s.fatalErrorSym.right + 1));
                 textResultadoParseo.setForeground(Color.red);
                 s.fatalError = false;
                 s.errores.clear();
             }
-            else if(s.specError){
+            else if(s.erroresEspec.size() > 0 || listE.size() > 0){
                 textResultadoParseo.setText(s.specErrorDetail);
                 textResultadoParseo.setForeground(Color.red);
                 s.specError = false;
-                s.errores.clear();
-            }
-            else if(listE.size() > 0){
-                String mensaje = "";            
+                
+                for(int i = 0;i < listEspec.size(); i++){                
+                    mensaje += listEspec.get(i)+"\n";
+                }
+                
                 for(int i = 0;i < listE.size(); i++){                
-                    mensaje += "Error de sintaxis. Línea: " + (listE.get(i).right + 1) + " Columna: "+ (listE.get(i).left + 1) + " Texto: \"" + listE.get(i).value + "\"" + "\n";
+                    mensaje += "Error de sintaxis. Línea: " + (listE.get(i).right + 1) + " Texto: \"" + listE.get(i).value + "\"" + "\n";
                 }
                 s.errores.clear();
+                s.erroresEspec.clear();
                 textResultadoParseo.setText(mensaje);
                 textResultadoParseo.setForeground(Color.red);
+               
             }
             
         } catch (Exception ex){
