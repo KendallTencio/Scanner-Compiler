@@ -30,7 +30,7 @@ parser code
     }
 :};
 
-terminal Reservadas, Operador, Transac, Units, Identificador, Literal, Address, As, Bool, Break,
+terminal Version, Reservadas, Operador, Transac, Units, Identificador, Literal, Address, As, Bool, Break,
          Byte, Bytes, Constructor, Continue, Contract, Delete, Do, Else, Enum, For, From, Function,
          Hex, If, Import, Int, Internal, Mapping, Modifier, Payable, Pragma, Private, Public, Return,
          Returns, Solidity, String, Struct, This, True, Ufixed, Uint, Var, View, While, Pipe, ShiftLeft,
@@ -44,7 +44,7 @@ non terminal EXPRESION_BOOLEANA, EXPRECION_ARITMETICA, EXPRESION_PRIMARIA, EXPRE
 non terminal EXPRESION_TUPLA_PPARENTESIS, EXPRESION_TUPLA_PPARENTESIS_PRIMA;
 non terminal STRUCTDEF, STRUCTCONTEN, DECLARVARIABLE, DECLARVARDOS;
 non terminal FUNCIONDEF, FUNCIONATRIB, FUNATRIBDOS ,MODIFICADORES, FUNCIONRETURNS,FUNCIONCONTEN, FUNCIONCUERPO, SENTENCIA_RETURN;
-non terminal FUNCCALL, PARAMFUNC;
+non terminal FUNCCALL, PARAMFUNC, ASIGVARIABLE;
 non terminal TYPENAME, ELEMENTARYTYPENAME, ARRAYDECLAR, ACCESSMOD;
 non terminal ENUMDEF, ENUMCONTEN, ENUMLIST, ENUMVALUE;
 non terminal CONTRACTDEF, CONTRACTPART, CONTRACTPART1, CONTRACTPART2, CONTRACTPART3;
@@ -88,7 +88,7 @@ contract hola{
 
 */
 
-INICIO ::= Pragma Solidity PuntoComa INICIODOS;
+INICIO ::= Pragma Solidity Version PuntoComa INICIODOS;
 
 INICIODOS ::= STRUCTDEF INICIODOS                        
             //| FUNCCALL INICIODOS
@@ -106,6 +106,7 @@ SENTENCIA ::= SENTENCIA_IF
             | SENTENCIA_RETURN
             | SENTENCIA_TERNARIA
             | DECLARVARIABLE
+            | ASIGVARIABLE
             | FUNCCALL                       
             | Break PuntoComa
             | Continue PuntoComa
@@ -150,6 +151,8 @@ STRUCTCONTEN ::= LlaveAbre DECLARVARIABLE LlaveCierra PuntoComa;
 DECLARVARIABLE ::= TYPENAME ACCESSMOD Identificador PuntoComa | TYPENAME ACCESSMOD Identificador Op_atribucion Literal PuntoComa | TYPENAME ACCESSMOD Identificador Op_atribucion Identificador PuntoComa | ARRAYDECLAR;
 ARRAYDECLAR ::= TYPENAME ParenCuadAbre ParenCuadCierra Identificador PuntoComa | TYPENAME ParenCuadAbre ParenCuadCierra Identificador Op_atribucion Literal PuntoComa | TYPENAME ParenCuadAbre ParenCuadCierra Identificador Op_atribucion Identificador PuntoComa;
 
+ASIGVARIABLE ::= Identificador Op_atribucion Literal PuntoComa | Identificador Op_atribucion Identificador PuntoComa;
+
 ACCESSMOD ::= Private | Public | error PuntoComa | {: RESULT = null; :};
 
 CONTRACTDEF ::= Contract Identificador LlaveAbre CONTRACTPART LlaveCierra PuntoComa;
@@ -159,7 +162,7 @@ CONTRACTPART2 ::= STRUCTDEF CONTRACTPART2 | CONTRACTPART3;
 CONTRACTPART3 ::= FUNCIONDEF CONTRACTPART3 | {: RESULT = null; :};
 
 ENUMDEF ::= Enum Identificador ENUMCONTEN;
-ENUMCONTEN ::= LlaveAbre Identificador ENUMLIST LlaveCierra PuntoComa;
+ENUMCONTEN ::= LlaveAbre Identificador ENUMLIST LlaveCierra;
 ENUMLIST ::= Coma ENUMVALUE | error LlaveCierra | error PuntoComa | {: RESULT = null; :};
 ENUMVALUE ::= Identificador ENUMLIST;
 

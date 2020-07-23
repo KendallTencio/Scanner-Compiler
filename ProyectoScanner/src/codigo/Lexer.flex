@@ -152,5 +152,8 @@ FLE4 = [0][0-9]+
 ( {FL3}([^( )(\n)(\t)(\r)(!=)(&&)(==)(!)(|)(<=)(<<)(>=)(>>)(**)(/)(%)(*)(<)(>)(,)(;)(.)("(")(")")("[")("]")(?)(:)({)(})(+=)(-=)(*=)(/=)(&)("^")(~)(+)("-")(=)])* ) { lexeme=yytext(); return ERROR_Identificador;}
 ( {L}({L}|{FL3})* ) { lexeme=yytext(); return Identificador;}
 
+//Versión
+( "^0.4.0" ) { lexeme=yytext(); return Version;}
+
 /* Error de analisis */
  . { return ERROR;}

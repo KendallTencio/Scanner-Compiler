@@ -76,6 +76,7 @@ public enum Tokens {
     IntValue,
     UintValue,
     BytesValue,
+    Version,
     ERROR_Identificador,
     ERROR_NotacionCientifica,
     ERROR_Simbolo,

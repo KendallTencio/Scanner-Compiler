@@ -157,5 +157,9 @@ FLE4 = [0][0-9]*
 ( {FL3}([^( )(\n)(\t)(\r)(!=)(&&)(==)(!)(|)(<=)(<<)(>=)(>>)(**)(/)(%)(*)(<)(>)(,)(;)(.)("(")(")")("[")("]")(?)(:)({)(})(+=)(-=)(*=)(/=)(&)("^")(~)(+)("-")(=)])* ) { return new Symbol(sym.ERROR_Identificador, yychar, yyline, yytext());}
 ( {L}({L}|{FL3})* ) { return new Symbol(sym.Identificador, yychar, yyline, yytext());}
 
+
+//Versión
+( "^0.4.0" ) { return new Symbol(sym.Version, yychar, yyline, yytext());}
+
 /* Error de analisis */
  . {return new Symbol(sym.ERROR, yychar, yyline, yytext());}
