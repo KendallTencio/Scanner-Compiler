@@ -324,7 +324,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
                 }
                 
                 for(int i = 0;i < listE.size(); i++){                
-                    mensaje += "Error de sintaxis. Línea: " + (listE.get(i).right + 1) + " Texto: \"" + listE.get(i).value + "\"" + "\n";
+                    mensaje += "Error de sintaxis. Línea: " + (listE.get(i).right + 1) + " Capturado en: \"" + listE.get(i).value + "\"" + "\n";
                 }
                 s.errores.clear();
                 s.erroresEspec.clear();

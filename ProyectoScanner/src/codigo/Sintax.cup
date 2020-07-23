@@ -108,7 +108,7 @@ SENTENCIA ::= SENTENCIA_IF
             | SENTENCIA_DOWHILE PuntoComa
             | SENTENCIA_FOR 
             | SENTENCIA_RETURN
-            | SENTENCIA_TERNARIA
+            | SENTENCIA_TERNARIA PuntoComa
             | DECLARVARIABLE PuntoComa
             | ASIGVARIABLE PuntoComa
             | FUNCCALL PuntoComa
@@ -121,12 +121,10 @@ SENTENCIA_IF ::= If ParentAbre EXPRESION ParentCierre LlaveAbre LISTA_SENTENCIAP
                | If ParentAbre EXPRESION ParentCierre LlaveAbre LISTA_SENTENCIAPRIMA LlaveCierra SENTENCIA_ELSE; 
 SENTENCIA_ELSE ::= Else LlaveAbre LISTA_SENTENCIAPRIMA LlaveCierra;
     
-SENTENCIA_WHILE ::= While ParentAbre EXPRESION_BOOLEANA ParentCierre LlaveAbre LISTA_SENTENCIAPRIMA LlaveCierra;
-SENTENCIA_DOWHILE ::= Do LlaveAbre LISTA_SENTENCIAPRIMA LlaveCierra While ParentAbre EXPRESION_BOOLEANA ParentCierre;
+SENTENCIA_WHILE ::= While ParentAbre EXPRESION ParentCierre LlaveAbre LISTA_SENTENCIAPRIMA LlaveCierra;
+SENTENCIA_DOWHILE ::= Do LlaveAbre LISTA_SENTENCIAPRIMA LlaveCierra While ParentAbre EXPRESION ParentCierre;
 SENTENCIA_FOR ::= For ParentAbre DECLARVARIABLE EXPRESION_BOOLEANA PuntoComa EXPRESION_INCREMENTAL ParentCierre LlaveAbre LISTA_SENTENCIAPRIMA LlaveCierra;
-SENTENCIA_TERNARIA ::= EXPRESION_BOOLEANA SignoPregunta EXPRESION_ARITMETICA DosPuntos EXPRESION_ARITMETICA PuntoComa;
-
-//EXPRESION ::= EXPRESION_BOOLEANA | EXPRESION_ARITMETICA | EXPRESION_INCREMENTAL;
+SENTENCIA_TERNARIA ::= EXPRESION SignoPregunta EXPRESION DosPuntos EXPRESION;
 
 EXPRESION ::=         EXPRESION Op_relacional EXPRESION
                     | ParentAbre EXPRESION ParentCierre
@@ -143,7 +141,9 @@ EXPRESION ::=         EXPRESION Op_relacional EXPRESION
                     | FUNCCALL
                     | This Punto EXPRESION
                     | EXPRESION Punto EXPRESION
-                    | Literal;
+                    | Literal
+                    | Op_Incremental Identificador
+                    | Identificador Op_Incremental;
 
 
 /*
@@ -164,9 +164,9 @@ EXPRESION_ARITMETICA ::= EXPRESION_ARITMETICA Suma EXPRESION_ARITMETICA
                     | ParentAbre EXPRESION_ARITMETICA ParentCierre
                     | EXPRESION_INCREMENTAL
                     | Literal;
-*/
+
 EXPRESION_INCREMENTAL ::= Op_Incremental Identificador
-                        | Identificador Op_Incremental;
+                        | Identificador Op_Incremental;*/
 
 STRUCTDEF ::= Struct Identificador STRUCTCONTEN;
 STRUCTCONTEN ::= LlaveAbre DECLARVARIABLE LlaveCierra PuntoComa;
