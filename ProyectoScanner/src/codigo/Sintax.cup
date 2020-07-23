@@ -40,7 +40,7 @@ terminal Version, Reservadas, Operador, Transac, Units, Identificador, Literal, 
          ERROR_NotacionCientifica, ERROR_Identificador, ERROR_Comentario, ERROR_LiteralCero,ERROR;
 non terminal INICIO, INICIODOS, BLOQUE_SENTENCIA, SENTENCIA, LISTA_SENTENCIA, PARTE_SENTENCIA; 
 non terminal SENTENCIA_IF, SENTENCIA_ELSE, SENTENCIA_WHILE, SENTENCIA_DOWHILE, SENTENCIA_FOR, SENTENCIA_TERNARIA;
-non terminal EXPRESION_BOOLEANA, EXPRECION_ARITMETICA, EXPRESION_INCREMENTAL;
+non terminal EXPRESION_BOOLEANA, EXPRESION_ARITMETICA, EXPRESION_INCREMENTAL, EXPRESION;
 non terminal EXPRESION_TUPLA_PPARENTESIS, EXPRESION_TUPLA_PPARENTESIS_PRIMA;
 non terminal STRUCTDEF, STRUCTCONTEN, DECLARVARIABLE, DECLARVARDOS, PARAMFUNCFILA;
 non terminal FUNCIONDEF, FUNCIONATRIB, FUNATRIBDOS ,MODIFICADORES, FUNCIONRETURNS,FUNCIONCONTEN, FUNCIONCUERPO, SENTENCIA_RETURN;
@@ -120,24 +120,26 @@ SENTENCIA_ELSE ::= Else LlaveAbre LISTA_SENTENCIAPRIMA LlaveCierra;
 SENTENCIA_WHILE ::= While ParentAbre EXPRESION_BOOLEANA ParentCierre LlaveAbre LISTA_SENTENCIAPRIMA LlaveCierra;
 SENTENCIA_DOWHILE ::= Do LlaveAbre LISTA_SENTENCIAPRIMA LlaveCierra While ParentAbre EXPRESION_BOOLEANA ParentCierre;
 SENTENCIA_FOR ::= For ParentAbre DECLARVARIABLE EXPRESION_BOOLEANA PuntoComa EXPRESION_INCREMENTAL ParentCierre LlaveAbre LISTA_SENTENCIAPRIMA LlaveCierra;
-SENTENCIA_TERNARIA ::= EXPRESION_BOOLEANA SignoPregunta EXPRECION_ARITMETICA DosPuntos EXPRECION_ARITMETICA PuntoComa;
+SENTENCIA_TERNARIA ::= EXPRESION_BOOLEANA SignoPregunta EXPRESION_ARITMETICA DosPuntos EXPRESION_ARITMETICA PuntoComa;
+
+EXPRESION ::= EXPRESION_BOOLEANA | EXPRESION_ARITMETICA | EXPRESION_INCREMENTAL;
 
 EXPRESION_BOOLEANA ::= Op_Booleano
                     | Not EXPRESION_BOOLEANA
                     | Not ParentAbre EXPRESION_BOOLEANA ParentCierre 
-                    | EXPRECION_ARITMETICA Op_relacional EXPRECION_ARITMETICA
-                    | EXPRECION_ARITMETICA Op_relacional ParentAbre EXPRESION_BOOLEANA ParentCierre
-                    | ParentAbre EXPRESION_BOOLEANA ParentCierre Op_relacional EXPRECION_ARITMETICA
+                    | EXPRESION_ARITMETICA Op_relacional EXPRESION_ARITMETICA
+                    | EXPRESION_ARITMETICA Op_relacional ParentAbre EXPRESION_BOOLEANA ParentCierre
+                    | ParentAbre EXPRESION_BOOLEANA ParentCierre Op_relacional EXPRESION_ARITMETICA
                     | Identificador;
-      
 
-EXPRECION_ARITMETICA ::= EXPRECION_ARITMETICA Suma EXPRECION_ARITMETICA
-                    | EXPRECION_ARITMETICA Resta EXPRECION_ARITMETICA
-                    | EXPRECION_ARITMETICA Mult EXPRECION_ARITMETICA
-                    | EXPRECION_ARITMETICA Div EXPRECION_ARITMETICA
-                    | EXPRECION_ARITMETICA Mod EXPRECION_ARITMETICA
-                    | Resta EXPRECION_ARITMETICA
-                    | ParentAbre EXPRECION_ARITMETICA ParentCierre
+EXPRESION_ARITMETICA ::= EXPRESION_ARITMETICA Suma EXPRESION_ARITMETICA
+                    | EXPRESION_ARITMETICA Resta EXPRESION_ARITMETICA
+                    | EXPRESION_ARITMETICA Mult EXPRESION_ARITMETICA
+                    | EXPRESION_ARITMETICA Div EXPRESION_ARITMETICA
+                    | EXPRESION_ARITMETICA Mod EXPRESION_ARITMETICA
+                    | Resta EXPRESION_ARITMETICA
+                    | ParentAbre EXPRESION_ARITMETICA ParentCierre
+                    | EXPRESION_INCREMENTAL
                     | Literal;
 
 EXPRESION_INCREMENTAL ::= Op_Incremental Identificador
@@ -146,12 +148,12 @@ EXPRESION_INCREMENTAL ::= Op_Incremental Identificador
 STRUCTDEF ::= Struct Identificador STRUCTCONTEN;
 STRUCTCONTEN ::= LlaveAbre DECLARVARIABLE LlaveCierra PuntoComa;
 
-DECLARVARIABLE ::= TYPENAME ACCESSMOD Identificador DECLARVARIABLEFILA PuntoComa | TYPENAME ACCESSMOD Identificador Op_atribucion EXPRECION_ARITMETICA PuntoComa | TYPENAME ACCESSMOD Identificador Op_atribucion Identificador PuntoComa | ARRAYDECLAR;
+DECLARVARIABLE ::= TYPENAME ACCESSMOD Identificador DECLARVARIABLEFILA PuntoComa | TYPENAME ACCESSMOD Identificador Op_atribucion EXPRESION_ARITMETICA PuntoComa | TYPENAME ACCESSMOD Identificador Op_atribucion Identificador PuntoComa | ARRAYDECLAR;
 DECLARVARIABLEFILA ::= Coma Identificador DECLARVARIABLEFILA | {: RESULT = null; :};
-ARRAYDECLAR ::= TYPENAME ParenCuadAbre ParenCuadCierra Identificador ARRAYDECLARFILA PuntoComa | TYPENAME ParenCuadAbre ParenCuadCierra Identificador Op_atribucion EXPRECION_ARITMETICA PuntoComa | TYPENAME ParenCuadAbre ParenCuadCierra Identificador Op_atribucion Identificador PuntoComa;
+ARRAYDECLAR ::= TYPENAME ParenCuadAbre ParenCuadCierra Identificador ARRAYDECLARFILA PuntoComa | TYPENAME ParenCuadAbre ParenCuadCierra Identificador Op_atribucion EXPRESION_ARITMETICA PuntoComa | TYPENAME ParenCuadAbre ParenCuadCierra Identificador Op_atribucion Identificador PuntoComa;
 ARRAYDECLARFILA ::= Coma Identificador ARRAYDECLARFILA |{: RESULT = null; :};
 
-ASIGVARIABLE ::= Identificador Op_atribucion EXPRECION_ARITMETICA | Identificador Op_atribucion Identificador;
+ASIGVARIABLE ::= Identificador Op_atribucion EXPRESION_ARITMETICA | Identificador Op_atribucion Identificador;
 
 
 ACCESSMOD ::= Private | Public | error PuntoComa | {: RESULT = null; :};
@@ -178,8 +180,8 @@ FUNCIONCONTEN ::= LlaveAbre LISTA_SENTENCIAPRIMA LlaveCierra | error LlaveCierra
 
 SENTENCIA_RETURN ::= Return Identificador PuntoComa | Return Identificador {: Sintax.informar_Error_Especifico("Return de función sin punto y coma"); :};
 
-PARAMFUNC ::= Identificador PARAMFUNCFILA | EXPRECION_ARITMETICA PARAMFUNCFILA | ASIGVARIABLE PARAMFUNCFILA | {: RESULT = null; :};
-PARAMFUNCFILA ::= Coma Identificador PARAMFUNCFILA | Coma EXPRECION_ARITMETICA PARAMFUNCFILA | ASIGVARIABLE PARAMFUNCFILA  | {: RESULT = null; :};
+PARAMFUNC ::= Identificador PARAMFUNCFILA | EXPRESION_ARITMETICA PARAMFUNCFILA | ASIGVARIABLE PARAMFUNCFILA | {: RESULT = null; :};
+PARAMFUNCFILA ::= Coma Identificador PARAMFUNCFILA | Coma EXPRESION_ARITMETICA PARAMFUNCFILA | ASIGVARIABLE PARAMFUNCFILA  | {: RESULT = null; :};
 TYPENAME ::= ELEMENTARYTYPENAME;
 
 ELEMENTARYTYPENAME ::= Bool | Byte | Bytes | Address | Int | String | Ufixed | Uint;
