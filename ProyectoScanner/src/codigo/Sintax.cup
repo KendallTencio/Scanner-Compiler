@@ -57,6 +57,8 @@ precedence left Mult, Div, Mod;
 
 precedence left Op_relacional;
 precedence left Punto;
+precedence left SignoPregunta;
+precedence left DosPuntos;
 
 start with INICIO;
 
@@ -98,7 +100,7 @@ INICIODOS ::= STRUCTDEF INICIODOS
             //| FUNCCALL INICIODOS
             | CONTRACTDEF INICIODOS 
             | ENUMDEF INICIODOS
-            | DECLARVARIABLE INICIODOS {: Sintax.informar_Error_Especifico("Declaración fuera de función"); :}
+            | DECLARVARIABLE PuntoComa INICIODOS {: Sintax.informar_Error_Especifico("Declaración fuera de función"); :}
             | {: RESULT = null; :};
 
 LISTA_SENTENCIAPRIMA ::= SENTENCIA LISTA_SENTENCIAPRIMA | {: RESULT = null; :};
@@ -115,7 +117,8 @@ SENTENCIA ::= SENTENCIA_IF
             | Break PuntoComa
             | Continue PuntoComa
             | error PuntoComa
-            | error LlaveCierra; 
+            | error LlaveCierra
+            | error ParentCierre; 
 
 SENTENCIA_IF ::= If ParentAbre EXPRESION ParentCierre LlaveAbre LISTA_SENTENCIAPRIMA LlaveCierra
                | If ParentAbre EXPRESION ParentCierre LlaveAbre LISTA_SENTENCIAPRIMA LlaveCierra SENTENCIA_ELSE; 
@@ -123,8 +126,11 @@ SENTENCIA_ELSE ::= Else LlaveAbre LISTA_SENTENCIAPRIMA LlaveCierra;
     
 SENTENCIA_WHILE ::= While ParentAbre EXPRESION ParentCierre LlaveAbre LISTA_SENTENCIAPRIMA LlaveCierra;
 SENTENCIA_DOWHILE ::= Do LlaveAbre LISTA_SENTENCIAPRIMA LlaveCierra While ParentAbre EXPRESION ParentCierre;
-SENTENCIA_FOR ::= For ParentAbre DECLARVARIABLE EXPRESION_BOOLEANA PuntoComa EXPRESION_INCREMENTAL ParentCierre LlaveAbre LISTA_SENTENCIAPRIMA LlaveCierra;
+SENTENCIA_FOR ::= For ParentAbre DECLARVARIABLE PuntoComa EXPRESION PuntoComa EXPRESION ParentCierre LlaveAbre LISTA_SENTENCIAPRIMA LlaveCierra
+                | For ParentAbre ASIGVARIABLE PuntoComa EXPRESION PuntoComa EXPRESION ParentCierre LlaveAbre LISTA_SENTENCIAPRIMA LlaveCierra;
+
 SENTENCIA_TERNARIA ::= EXPRESION SignoPregunta EXPRESION DosPuntos EXPRESION;
+
 
 EXPRESION ::=         EXPRESION Op_relacional EXPRESION
                     | ParentAbre EXPRESION ParentCierre
@@ -143,8 +149,9 @@ EXPRESION ::=         EXPRESION Op_relacional EXPRESION
                     | EXPRESION Punto EXPRESION
                     | Literal
                     | Op_Incremental Identificador
-                    | Identificador Op_Incremental;
-
+                    | Identificador Op_Incremental
+                    | SENTENCIA_TERNARIA;
+                   
 
 /*
 EXPRESION_BOOLEANA ::= Op_Booleano
@@ -166,10 +173,11 @@ EXPRESION_ARITMETICA ::= EXPRESION_ARITMETICA Suma EXPRESION_ARITMETICA
                     | Literal;
 
 EXPRESION_INCREMENTAL ::= Op_Incremental Identificador
-                        | Identificador Op_Incremental;*/
+                        | Identificador Op_Incremental;
+*/
 
-STRUCTDEF ::= Struct Identificador STRUCTCONTEN;
-STRUCTCONTEN ::= LlaveAbre DECLARVARIABLE LlaveCierra PuntoComa;
+STRUCTDEF ::= Struct Identificador LlaveAbre STRUCTCONTEN LlaveCierra;
+STRUCTCONTEN ::= DECLARVARIABLE PuntoComa STRUCTCONTEN | ASIGVARIABLE PuntoComa STRUCTCONTEN | {: RESULT = null; :};
 
 DECLARVARIABLE ::= TYPENAME ACCESSMOD Identificador DECLARVARIABLEFILA | TYPENAME ACCESSMOD Identificador Op_atribucion EXPRESION | ARRAYDECLAR;
 DECLARVARIABLEFILA ::= Coma Identificador DECLARVARIABLEFILA | {: RESULT = null; :};
@@ -195,7 +203,7 @@ ENUMVALUE ::= Identificador ENUMLIST;
 FUNCIONDEF ::= Function Identificador FUNCIONATRIB MODIFICADORES FUNCIONRETURNS FUNCIONCONTEN;
 
 FUNCIONATRIB ::= ParentAbre TYPENAME Identificador FUNATRIBDOS;
-FUNATRIBDOS ::= Coma TYPENAME Identificador FUNATRIBDOS | ParentCierre;
+FUNATRIBDOS ::= Coma TYPENAME Identificador FUNATRIBDOS | ParentCierre | error ParentCierre;
 
 MODIFICADORES ::= Payable | Private | Public | Internal | {: RESULT = null; :};
 FUNCIONRETURNS ::= Returns FUNCIONATRIB | {: RESULT = null; :};

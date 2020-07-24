@@ -18,7 +18,8 @@ FL3 = [0-9]+
 Cient1 = \. [0-9]+ [eE] [+-]? [0-9]+
 Cient2 = [0-9]+ [eE] [+-]? [0-9]+
 Cient3 = [0-9]+ \. [0-9]+ [eE] [+-]? [0-9]+
-espacio=[ \n,\t,\r]+
+//espacio=[ \n,\t,\r]+
+espacio=[ \t\r\n\f]+
 
 CientError = ({CientE1}|{CientE2}|{CientE3}|{CientE4}|{CientE5}|{CientE6})
 CientE1 = \. [0-9]+ [eE] [+-]? [0-9]+ \. [0-9]*?
@@ -31,7 +32,7 @@ CientE6 = [0][0-9]+ \. [0-9]+ [eE] [+-]? [0-9]+
 FLE = ({FLE1}|{FLE2}|{FLE4})
 FLE1 = [0][0-9]+ \. [0-9]*
 FLE2 = [0][0] \. [0-9]+
-FLE4 = [0][0-9]*
+FLE4 = [0][0-9]+
 
 %{
     private Symbol symbol(int type, Object value){

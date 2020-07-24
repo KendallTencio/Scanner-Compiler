@@ -313,14 +313,14 @@ public class FrmPrincipal extends javax.swing.JFrame {
                 textResultadoParseo.setForeground(Color.red);
                 s.fatalError = false;
                 s.errores.clear();
+                s.erroresEspec.clear();
             }
             else if(s.erroresEspec.size() > 0 || listE.size() > 0){
-                textResultadoParseo.setText(s.specErrorDetail);
-                textResultadoParseo.setForeground(Color.red);
                 s.specError = false;
                 
                 for(int i = 0;i < listEspec.size(); i++){                
                     mensaje += listEspec.get(i)+"\n";
+                    System.out.println(listEspec.get(i));
                 }
                 
                 for(int i = 0;i < listE.size(); i++){                
@@ -330,7 +330,6 @@ public class FrmPrincipal extends javax.swing.JFrame {
                 s.erroresEspec.clear();
                 textResultadoParseo.setText(mensaje);
                 textResultadoParseo.setForeground(Color.red);
-               
             }
             
         } catch (Exception ex){
