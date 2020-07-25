@@ -50,7 +50,7 @@ non terminal FUNCCALL, PARAMFUNC, ASIGVARIABLE, ASIGVARIABLEFUN , DECLARVARIABLE
 non terminal TYPENAME, ELEMENTARYTYPENAME, ARRAYDECLAR, ACCESSMOD;
 non terminal ENUMDEF, ENUMCONTEN, ENUMLIST, ENUMVALUE;
 non terminal CONTRACTDEF, CONTRACTPART, CONTRACTPART1, CONTRACTPART2, CONTRACTPART3;
-non terminal LISTA_SENTENCIAPRIMA;
+non terminal LISTA_SENTENCIAPRIMA, LISTA_SENTENCIAPRIMAFUN, SENTENCIAFUN, FUNCIONCONTENVARLIS;
 
 precedence left Suma, Resta;
 precedence left Mult, Div, Mod;
@@ -120,6 +120,22 @@ SENTENCIA ::= SENTENCIA_IF
             | error LlaveCierra
             | error ParentCierre; 
 
+LISTA_SENTENCIAPRIMAFUN ::= SENTENCIAFUN LISTA_SENTENCIAPRIMAFUN | {: RESULT = null; :};
+
+SENTENCIAFUN ::= SENTENCIA_IF
+            | SENTENCIA_WHILE 
+            | SENTENCIA_DOWHILE PuntoComa
+            | SENTENCIA_FOR 
+            | SENTENCIA_RETURN
+            | SENTENCIA_TERNARIA PuntoComa            
+            | ASIGVARIABLE PuntoComa
+            | FUNCCALL PuntoComa
+            | Break PuntoComa
+            | Continue PuntoComa
+            | error PuntoComa
+            | error LlaveCierra
+            | error ParentCierre; 
+
 SENTENCIA_IF ::= If ParentAbre EXPRESION ParentCierre LlaveAbre LISTA_SENTENCIAPRIMA LlaveCierra
                | If ParentAbre EXPRESION ParentCierre LlaveAbre LISTA_SENTENCIAPRIMA LlaveCierra SENTENCIA_ELSE; 
 SENTENCIA_ELSE ::= Else LlaveAbre LISTA_SENTENCIAPRIMA LlaveCierra;
@@ -151,30 +167,6 @@ EXPRESION ::=         EXPRESION Op_relacional EXPRESION
                     | Op_Incremental Identificador
                     | Identificador Op_Incremental
                     | SENTENCIA_TERNARIA;
-                   
-
-/*
-EXPRESION_BOOLEANA ::= Op_Booleano
-                    | Not EXPRESION_BOOLEANA
-                    | Not ParentAbre EXPRESION_BOOLEANA ParentCierre 
-                    | EXPRESION_ARITMETICA Op_relacional EXPRESION_ARITMETICA
-                    | EXPRESION_ARITMETICA Op_relacional ParentAbre EXPRESION_BOOLEANA ParentCierre
-                    | ParentAbre EXPRESION_BOOLEANA ParentCierre Op_relacional EXPRESION_ARITMETICA
-                    | Identificador;
-
-EXPRESION_ARITMETICA ::= EXPRESION_ARITMETICA Suma EXPRESION_ARITMETICA
-                    | EXPRESION_ARITMETICA Resta EXPRESION_ARITMETICA
-                    | EXPRESION_ARITMETICA Mult EXPRESION_ARITMETICA
-                    | EXPRESION_ARITMETICA Div EXPRESION_ARITMETICA
-                    | EXPRESION_ARITMETICA Mod EXPRESION_ARITMETICA
-                    | Resta EXPRESION_ARITMETICA
-                    | ParentAbre EXPRESION_ARITMETICA ParentCierre
-                    | EXPRESION_INCREMENTAL
-                    | Literal;
-
-EXPRESION_INCREMENTAL ::= Op_Incremental Identificador
-                        | Identificador Op_Incremental;
-*/
 
 STRUCTDEF ::= Struct Identificador LlaveAbre STRUCTCONTEN LlaveCierra;
 STRUCTCONTEN ::= DECLARVARIABLE PuntoComa STRUCTCONTEN | ASIGVARIABLE PuntoComa STRUCTCONTEN | {: RESULT = null; :};
@@ -207,7 +199,8 @@ FUNATRIBDOS ::= Coma TYPENAME Identificador FUNATRIBDOS | {: RESULT = null; :};
 
 MODIFICADORES ::= Payable | Private | Public | Internal | {: RESULT = null; :};
 FUNCIONRETURNS ::= Returns FUNCIONATRIB | {: RESULT = null; :};
-FUNCIONCONTEN ::= LlaveAbre LISTA_SENTENCIAPRIMA LlaveCierra | error LlaveCierra;
+FUNCIONCONTEN ::= LlaveAbre FUNCIONCONTENVARLIS LlaveCierra | error LlaveCierra | error PuntoComa;
+FUNCIONCONTENVARLIS ::= DECLARVARIABLE PuntoComa FUNCIONCONTENVARLIS | LISTA_SENTENCIAPRIMAFUN;
 
 SENTENCIA_RETURN ::= Return Identificador PuntoComa | Return Identificador {: Sintax.informar_Error_Especifico("Return de función sin punto y coma"); :};
 
