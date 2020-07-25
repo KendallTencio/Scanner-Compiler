@@ -100,7 +100,7 @@ INICIODOS ::= STRUCTDEF INICIODOS
             //| FUNCCALL INICIODOS
             | CONTRACTDEF INICIODOS 
             | ENUMDEF INICIODOS
-            | DECLARVARIABLE PuntoComa INICIODOS {: Sintax.informar_Error_Especifico("Declaración fuera de función"); :}
+            | DECLARVARIABLE PuntoComa:p INICIODOS {: Sintax.informar_Error_Especifico("Declaración fuera de función. En línea: "+pright); :}
             | {: RESULT = null; :};
 
 LISTA_SENTENCIAPRIMA ::= SENTENCIA LISTA_SENTENCIAPRIMA | {: RESULT = null; :};
