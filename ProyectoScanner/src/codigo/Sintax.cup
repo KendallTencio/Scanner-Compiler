@@ -94,7 +94,7 @@ contract hola{
 
 */
 
-INICIO ::= Pragma Solidity Version PuntoComa INICIODOS;
+INICIO ::= Pragma Solidity Version PuntoComa INICIODOS {: SymbolTable.limpiarListaSimbolos();  :};
 
 INICIODOS ::= STRUCTDEF INICIODOS                        
             //| FUNCCALL INICIODOS
@@ -151,7 +151,7 @@ SENTENCIA_TERNARIA ::= EXPRESION SignoPregunta EXPRESION DosPuntos EXPRESION;
 EXPRESION ::=         EXPRESION Op_relacional EXPRESION
                     | ParentAbre EXPRESION ParentCierre
                     | Not EXPRESION
-                    | Identificador
+                    | Identificador:atrib {: SymbolTable.agregarAsignaNueva(atrib); :}
                     | Op_Booleano
                     | EXPRESION Suma EXPRESION
                     | EXPRESION Resta EXPRESION
@@ -163,7 +163,7 @@ EXPRESION ::=         EXPRESION Op_relacional EXPRESION
                     | FUNCCALL
                     | This Punto EXPRESION
                     | EXPRESION Punto EXPRESION
-                    | Literal
+                    | Literal:atrib {: SymbolTable.agregarAsignaNueva(atrib); :}
                     | Op_Incremental Identificador
                     | Identificador Op_Incremental
                     | SENTENCIA_TERNARIA;
@@ -171,8 +171,8 @@ EXPRESION ::=         EXPRESION Op_relacional EXPRESION
 STRUCTDEF ::= Struct Identificador LlaveAbre STRUCTCONTEN LlaveCierra;
 STRUCTCONTEN ::= DECLARVARIABLE PuntoComa STRUCTCONTEN | ASIGVARIABLE PuntoComa STRUCTCONTEN | {: RESULT = null; :};
 
-DECLARVARIABLE ::= TYPENAME ACCESSMOD Identificador DECLARVARIABLEFILA | TYPENAME ACCESSMOD Identificador Op_atribucion EXPRESION | ARRAYDECLAR | TYPENAME error EXPRESION;
-DECLARVARIABLEFILA ::= Coma Identificador DECLARVARIABLEFILA | {: RESULT = null; :};
+DECLARVARIABLE ::= TYPENAME ACCESSMOD Identificador:id {: SymbolTable.agregarSimboloNuevo(id); :} DECLARVARIABLEFILA | TYPENAME ACCESSMOD Identificador:id {: SymbolTable.agregarSimboloNuevo(id); :} Op_atribucion EXPRESION | ARRAYDECLAR | TYPENAME error EXPRESION;
+DECLARVARIABLEFILA ::= Coma Identificador:id {: SymbolTable.sincronizarVariablesComa(id.toString()); :} DECLARVARIABLEFILA | {: RESULT = null; :};
 ARRAYDECLAR ::= TYPENAME ParenCuadAbre ParenCuadCierra Identificador ARRAYDECLARFILA | TYPENAME ParenCuadAbre ParenCuadCierra Identificador Op_atribucion EXPRESION;
 ARRAYDECLARFILA ::= Coma Identificador ARRAYDECLARFILA |{: RESULT = null; :};
 
@@ -188,11 +188,11 @@ CONTRACTPART2 ::= STRUCTDEF CONTRACTPART2 | CONTRACTPART3;
 CONTRACTPART3 ::= FUNCIONDEF CONTRACTPART3 | {: RESULT = null; :};
 
 ENUMDEF ::= Enum Identificador ENUMCONTEN;
-ENUMCONTEN ::= LlaveAbre Identificador ENUMLIST LlaveCierra | error LlaveCierra;
+ENUMCONTEN ::= LlaveAbre Identificador ENUMLIST LlaveCierra | error LlaveCierra;2
 ENUMLIST ::= Coma ENUMVALUE | {: RESULT = null; :};
 ENUMVALUE ::= Identificador ENUMLIST;
 
-FUNCIONDEF ::= Function Identificador FUNCIONATRIB MODIFICADORES FUNCIONRETURNS FUNCIONCONTEN;
+FUNCIONDEF ::= Function Identificador:idfun {: SymbolTable.agregarFuncNuevo(idfun); :} FUNCIONATRIB MODIFICADORES FUNCIONRETURNS FUNCIONCONTEN;
 
 FUNCIONATRIB ::= ParentAbre TYPENAME Identificador FUNATRIBDOS ParentCierre | error ParentCierre;
 FUNATRIBDOS ::= Coma TYPENAME Identificador FUNATRIBDOS | {: RESULT = null; :};
@@ -208,7 +208,7 @@ PARAMFUNC ::= EXPRESION PARAMFUNCFILA | ASIGVARIABLEFUN PARAMFUNCFILA | {: RESUL
 PARAMFUNCFILA ::= Coma EXPRESION PARAMFUNCFILA | Coma ASIGVARIABLEFUN PARAMFUNCFILA  | {: RESULT = null; :};
 TYPENAME ::= ELEMENTARYTYPENAME;
 
-ELEMENTARYTYPENAME ::= Bool | Byte | Bytes | Address | Int | String | Ufixed | Uint;
+ELEMENTARYTYPENAME ::= Bool:type {: SymbolTable.agregarTypeNuevo(type); :} | Byte:type {: SymbolTable.agregarTypeNuevo(type); :} | Bytes:type {: SymbolTable.agregarTypeNuevo(type); :} | Address:type {: SymbolTable.agregarTypeNuevo(type); :} | Int:type {: SymbolTable.agregarTypeNuevo(type); :} | String:type {: SymbolTable.agregarTypeNuevo(type); :} | Ufixed:type {: SymbolTable.agregarTypeNuevo(type); :} | Uint:type {: SymbolTable.agregarTypeNuevo(type); :};
 
 FUNCCALL  ::= Identificador ParentAbre PARAMFUNC ParentCierre | This ParentAbre PARAMFUNC ParentCierre;
 
