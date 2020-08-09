@@ -193,10 +193,12 @@ public class FrmPrincipal extends javax.swing.JFrame {
         jScrollPane6.setViewportView(jTextArea2);
 
         jLabel6.setFont(new java.awt.Font("Consolas", 1, 14)); // NOI18N
-        jLabel6.setText("Tabla de símbolos");
+        jLabel6.setText("Symbol Table");
+        jLabel6.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
 
         jLabel7.setFont(new java.awt.Font("Consolas", 1, 14)); // NOI18N
-        jLabel7.setText("Errores semánticos");
+        jLabel7.setText("Semantic errors");
+        jLabel7.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
