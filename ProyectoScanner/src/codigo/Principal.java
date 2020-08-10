@@ -6,7 +6,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+
 public class Principal {
+    
+    static TablaSimbolos tabla = new TablaSimbolos();
+    
     public static void main(String[] args) throws Exception {
         String currentDirectory = System.getProperty("user.dir");
         String ruta1 = currentDirectory+"/src/codigo/Lexer.flex";
@@ -14,7 +18,7 @@ public class Principal {
         String[] rutaSin = {"-parser", "Sintax", currentDirectory+"/src/codigo/Sintax.cup"};
         generar(ruta1, ruta2, rutaSin);
     }
- 
+    
     public static void generar(String ruta1, String ruta2, String[] rutaSin) throws IOException, Exception{
         String currentDirectory = System.getProperty("user.dir");
         

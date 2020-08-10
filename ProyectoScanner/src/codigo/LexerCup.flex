@@ -1,6 +1,14 @@
 package codigo;
 import java_cup.runtime.Symbol;
+import java.io.*;
 %%
+%{
+private TablaSimbolos tabla = new TablaSimbolos();
+    public LexerCup(Reader in, TablaSimbolos t){
+        this(in);
+        this.tabla = t;
+    }
+%}
 %class LexerCup
 %type java_cup.runtime.Symbol
 %cup
@@ -48,7 +56,6 @@ FLE4 = [0][0-9]+
 "/*"|"*/" { return new Symbol(sym.ERROR_Comentario, yychar, yyline, yytext());}
 {FLE} { return new Symbol(sym.ERROR_LiteralCero, yychar, yyline, yytext());}
 {CientError} { return new Symbol(sym.ERROR_NotacionCientifica, yychar, yyline, yytext());}
-
 
 //Reservadas
 ( address ) { return new Symbol(sym.Address, yychar, yyline, yytext());}
@@ -155,8 +162,27 @@ FLE4 = [0][0-9]+
 ( ('([^(\n)(')])*')|(\"([^(\n)(\")])*\") ) { return new Symbol(sym.Literal, yychar, yyline, yytext());}
 
 //Identificadores
-( {FL3}([^( )(\n)(\t)(\r)(!=)(&&)(==)(!)(|)(<=)(<<)(>=)(>>)(**)(/)(%)(*)(<)(>)(,)(;)(.)("(")(")")("[")("]")(?)(:)({)(})(+=)(-=)(*=)(/=)(&)("^")(~)(+)("-")(=)])* ) { return new Symbol(sym.ERROR_Identificador, yychar, yyline, yytext());}
-( {L}({L}|{FL3})* ) { return new Symbol(sym.Identificador, yychar, yyline, yytext());}
+( {FL3}([^( )(\n)(\t)(\r)(!=)(&&)(==)(!)(|)(<=)(<<)(>=)(>>)(**)(/)(%)(*)(<)(>)(,)(;)(.)("(")(")")("[")("]")(?)(:)({)(})(+=)(-=)(*=)(/=)(&)("^")(~)(+)("-")(=)])* ) { 
+    Simbolo s;
+    if ((s = tabla.buscar(yytext())) == null){
+        s = tabla.insertar(yytext());
+    }else{
+        System.out.println("Identificador repetido"+ yytext());
+        tabla.erroresLex += "Identificador repetido: "+ yytext()+"\n";
+    }
+    return new Symbol(sym.Identificador, yychar, yyline, yytext());
+}
+
+( {L}({L}|{FL3})* ) { 
+    Simbolo s;
+    if ((s = tabla.buscar(yytext())) == null){
+        s = tabla.insertar(yytext());
+    }else{
+        System.out.println("Identificador repetido: "+ yytext());
+        tabla.erroresLex += "Identificador repetido: "+ yytext()+"\n";
+    }
+    return new Symbol(sym.Identificador, yychar, yyline, yytext());
+}
 
 
 //Versión

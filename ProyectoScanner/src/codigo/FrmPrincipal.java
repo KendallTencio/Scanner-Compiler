@@ -6,17 +6,22 @@ import java.awt.Image;
 import java.awt.image.ImageObserver;
 import java.awt.image.ImageProducer;
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.StringReader;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java_cup.parser;
 import java_cup.runtime.Symbol;
 import javax.swing.JFileChooser;
 import javax.swing.JScrollPane;
@@ -24,6 +29,8 @@ import javax.swing.JTextPane;
 
 public class FrmPrincipal extends javax.swing.JFrame {
 
+    static TablaSimbolos tabla = new TablaSimbolos();
+    
     public FrmPrincipal() {
         initComponents();
         this.setLocationRelativeTo(null);
@@ -45,6 +52,27 @@ public class FrmPrincipal extends javax.swing.JFrame {
         txtErrores.setEnabled(rootPaneCheckingEnabled);
         txtResultado.setText(resultado);
         txtErrores.setText(errores);
+    }
+    
+    private void analizarCupListaSimbolos(){
+        String ST = txtEntrada.getText();
+      
+        InputStream inputStream = new ByteArrayInputStream(ST.getBytes(Charset.forName("UTF-8")));
+                
+        parser parserObj = new parser();
+        LexerCup miAnalizadorLexico = new LexerCup(new InputStreamReader(inputStream), tabla);
+        
+        //Sintax s = new Sintax(new codigo.LexerCup(new StringReader(ST)));
+        Sintax s = new Sintax(miAnalizadorLexico);
+        
+        parserObj.setScanner(miAnalizadorLexico);
+        try{
+            s.parse();
+            //tabla.imprimir();
+        }catch(Exception x){
+            x.printStackTrace();
+            System.out.println("Error fatal.\n");
+        }
     }
     
     @SuppressWarnings("unchecked")
@@ -71,9 +99,9 @@ public class FrmPrincipal extends javax.swing.JFrame {
         jScrollPane5 = new javax.swing.JScrollPane();
         txtEntrada = new javax.swing.JTextPane();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        semanticErrorsText = new javax.swing.JTextArea();
         jScrollPane6 = new javax.swing.JScrollPane();
-        jTextArea2 = new javax.swing.JTextArea();
+        symbolTableText = new javax.swing.JTextArea();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
 
@@ -158,11 +186,13 @@ public class FrmPrincipal extends javax.swing.JFrame {
         jLabel4.setText("Output");
         jLabel4.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
 
+        txtResultado.setEditable(false);
         txtResultado.setColumns(20);
         txtResultado.setRows(5);
         txtResultado.setEnabled(false);
         jScrollPane2.setViewportView(txtResultado);
 
+        txtErrores.setEditable(false);
         txtErrores.setColumns(20);
         txtErrores.setRows(5);
         txtErrores.setEnabled(false);
@@ -180,17 +210,17 @@ public class FrmPrincipal extends javax.swing.JFrame {
 
         jScrollPane5.setViewportView(txtEntrada);
 
-        jTextArea1.setEditable(false);
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jTextArea1.setEnabled(false);
-        jScrollPane3.setViewportView(jTextArea1);
+        semanticErrorsText.setEditable(false);
+        semanticErrorsText.setColumns(20);
+        semanticErrorsText.setRows(5);
+        semanticErrorsText.setEnabled(false);
+        jScrollPane3.setViewportView(semanticErrorsText);
 
-        jTextArea2.setEditable(false);
-        jTextArea2.setColumns(20);
-        jTextArea2.setRows(5);
-        jTextArea2.setEnabled(false);
-        jScrollPane6.setViewportView(jTextArea2);
+        symbolTableText.setEditable(false);
+        symbolTableText.setColumns(20);
+        symbolTableText.setRows(5);
+        symbolTableText.setEnabled(false);
+        jScrollPane6.setViewportView(symbolTableText);
 
         jLabel6.setFont(new java.awt.Font("Consolas", 1, 14)); // NOI18N
         jLabel6.setText("Symbol Table");
@@ -325,10 +355,20 @@ public class FrmPrincipal extends javax.swing.JFrame {
             Logger.getLogger(FrmPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
         
+        analizarCupListaSimbolos();
+        System.out.println("TABLA A IMPRIMIR");
+        tabla.imprimir();
+        
+        symbolTableText.setEnabled(true);
+        symbolTableText.setText(tabla.generarString());
+        
+        String erroresSemanticos;
+        erroresSemanticos = tabla.getErroresDeLex();
+        semanticErrorsText.setEnabled(true);
+        semanticErrorsText.setForeground(Color.red);
+        semanticErrorsText.setText(erroresSemanticos);
         
         String ST = txtEntrada.getText();
-        
-        //Esto que sigue se podrá usar una vez que hayamos terminado el LexerCup
         
         Sintax s = new Sintax(new codigo.LexerCup(new StringReader(ST)));
         
@@ -429,8 +469,8 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
-    private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextArea jTextArea2;
+    private javax.swing.JTextArea semanticErrorsText;
+    private javax.swing.JTextArea symbolTableText;
     private javax.swing.JTextArea textResultadoParseo;
     private javax.swing.JTextPane txtEntrada;
     private javax.swing.JTextArea txtErrores;
