@@ -158,14 +158,20 @@ FLE4 = [0][0-9]+
 ( (hex\"{H}{H}{H}{H}{H}{H}{H}{H}\")|(hex'{H}{H}{H}{H}{H}{H}{H}{H}') ) { return new Symbol(sym.Literal, yychar, yyline, yytext());}
 
 //Literales
-( {FL} ) { return new Symbol(sym.Literal, yychar, yyline, yytext());}
-( ('([^(\n)(')])*')|(\"([^(\n)(\")])*\") ) { return new Symbol(sym.Literal, yychar, yyline, yytext());}
+( {FL} ) { 
+    tabla.insertarValorVariable(yytext());
+    return new Symbol(sym.Literal, yychar, yyline, yytext());
+}
+( ('([^(\n)(')])*')|(\"([^(\n)(\")])*\") ) { 
+    tabla.insertarValorVariable(yytext());
+    return new Symbol(sym.Literal, yychar, yyline, yytext());
+}
 
 //Identificadores
 ( {FL3}([^( )(\n)(\t)(\r)(!=)(&&)(==)(!)(|)(<=)(<<)(>=)(>>)(**)(/)(%)(*)(<)(>)(,)(;)(.)("(")(")")("[")("]")(?)(:)({)(})(+=)(-=)(*=)(/=)(&)("^")(~)(+)("-")(=)])* ) { 
     Simbolo s;
     if ((s = tabla.buscar(yytext())) == null){
-        s = tabla.insertar(yytext());
+        s = tabla.insertar(yytext(), "Identificador");
     }else{
         System.out.println("Identificador repetido"+ yytext());
         tabla.erroresLex += "Identificador repetido: "+ yytext()+"\n";
@@ -176,7 +182,7 @@ FLE4 = [0][0-9]+
 ( {L}({L}|{FL3})* ) { 
     Simbolo s;
     if ((s = tabla.buscar(yytext())) == null){
-        s = tabla.insertar(yytext());
+        s = tabla.insertar(yytext(), "Identificador");
     }else{
         System.out.println("Identificador repetido: "+ yytext());
         tabla.erroresLex += "Identificador repetido: "+ yytext()+"\n";

@@ -199,7 +199,7 @@ ENUMVALUE ::= Identificador ENUMLIST;
 
 FUNCIONDEF ::= Function Identificador FUNCIONATRIB MODIFICADORES FUNCIONRETURNS FUNCIONCONTEN;
 
-FUNCIONATRIB ::= ParentAbre TYPENAME Identificador FUNATRIBDOS ParentCierre | error ParentCierre;
+FUNCIONATRIB ::= ParentAbre TYPENAME Identificador FUNATRIBDOS ParentCierre |  ParentAbre ParentCierre | error ParentCierre;
 FUNATRIBDOS ::= Coma TYPENAME Identificador FUNATRIBDOS | {: RESULT = null; :};
 
 MODIFICADORES ::= Payable | Private | Public | Internal | {: RESULT = null; :};

@@ -356,7 +356,6 @@ public class FrmPrincipal extends javax.swing.JFrame {
         }
         
         analizarCupListaSimbolos();
-        System.out.println("TABLA A IMPRIMIR");
         tabla.imprimir();
         
         symbolTableText.setEnabled(true);
@@ -411,6 +410,8 @@ public class FrmPrincipal extends javax.swing.JFrame {
         } catch (Exception ex){
             System.err.println(ex);        
         }
+        //Limpiar la tabla de símbolos
+        tabla.limpiar();
     }//GEN-LAST:event_btnAnalizarSintacticoActionPerformed
 
     /**
