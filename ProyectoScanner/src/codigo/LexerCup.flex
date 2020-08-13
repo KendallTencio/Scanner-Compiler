@@ -3,6 +3,7 @@ import java_cup.runtime.Symbol;
 import java.io.*;
 %%
 %{
+
 private TablaSimbolos tabla = new TablaSimbolos();
     public LexerCup(Reader in, TablaSimbolos t){
         this(in);

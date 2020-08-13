@@ -13,7 +13,9 @@ parser code
     public static boolean specError = false;
     public static Symbol fatalErrorSym;
     public static String specErrorDetail = "";
-    
+
+    static EscritorASM escASM = new EscritorASM();
+
     static TablaSimbolos tabla = new TablaSimbolos();
 
 
@@ -35,6 +37,7 @@ parser code
 
         System.err.println(specErrorStr);
     }
+
 :};
 
 terminal Version, Reservadas, Operador, Transac, Units, Identificador, Literal, Address, As, Bool, Break,
