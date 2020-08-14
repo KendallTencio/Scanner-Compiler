@@ -6,13 +6,23 @@
 package codigo;
 
 class Simbolo{
-    String nombre;
-    Integer valor;
-    String tipo;
-    public Simbolo(String nombre, Integer valor, String tipo){
+    String idSim = "";
+    String nombre = "";
+    Integer valor = 0;
+    String tipo = "";
+    public Simbolo(String idSim, String nombre, Integer valor, String tipo){
+        this.idSim = idSim;
         this.nombre = nombre;
         this.valor = valor;
         this.tipo = tipo;
+    }
+
+    public String getIdSim() {
+        return idSim;
+    }
+
+    public void setIdSim(String idSim) {
+        this.idSim = idSim;
     }
 
     public String getTipo() {
