@@ -6,13 +6,33 @@
 package codigo;
 
 class Simbolo{
-    String nombre;
-    Integer valor;
-    String tipo;
-    public Simbolo(String nombre, Integer valor, String tipo){
+    String idSim = "";
+    String nombre = "";
+    String valor = "";
+    String tipo = "";
+    String scope = "";
+    public Simbolo(String idSim, String nombre, String valor, String tipo, String scope){
+        this.idSim = idSim;
         this.nombre = nombre;
         this.valor = valor;
         this.tipo = tipo;
+        this.scope = scope;
+    }
+
+    public String getScope() {
+        return scope;
+    }
+
+    public void setScope(String scope) {
+        this.scope = scope;
+    }
+
+    public String getIdSim() {
+        return idSim;
+    }
+
+    public void setIdSim(String idSim) {
+        this.idSim = idSim;
     }
 
     public String getTipo() {
@@ -31,11 +51,11 @@ class Simbolo{
         this.nombre = nombre;
     }
 
-    public Integer getValor() {
+    public String getValor() {
         return valor;
     }
 
-    public void setValor(Integer valor) {
+    public void setValor(String valor) {
         this.valor = valor;
     }
     

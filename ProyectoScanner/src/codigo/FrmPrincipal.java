@@ -68,7 +68,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         parserObj.setScanner(miAnalizadorLexico);
         try{
             s.parse();
-            //tabla.imprimir();
+
         }catch(Exception x){
             x.printStackTrace();
             System.out.println("Error fatal.\n");
@@ -355,21 +355,23 @@ public class FrmPrincipal extends javax.swing.JFrame {
             Logger.getLogger(FrmPrincipal.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        analizarCupListaSimbolos();
-        tabla.imprimir();
+        // analizarCupListaSimbolos(); Esta era la función que llamaba para hacer análisis semántico
+        // tabla.imprimir();
         
-        symbolTableText.setEnabled(true);
-        symbolTableText.setText(tabla.generarString());
+           //A este punto la tabla de símbolos está lista
         
-        String erroresSemanticos;
-        erroresSemanticos = tabla.getErroresDeLex();
-        semanticErrorsText.setEnabled(true);
-        semanticErrorsText.setForeground(Color.red);
-        semanticErrorsText.setText(erroresSemanticos);
-        
+
         String ST = txtEntrada.getText();
+       
         
-        Sintax s = new Sintax(new codigo.LexerCup(new StringReader(ST)));
+        InputStream inputStream = new ByteArrayInputStream(ST.getBytes(Charset.forName("UTF-8")));
+                
+        parser parserObj = new parser();
+        LexerCup miAnalizadorLexico = new LexerCup(new InputStreamReader(inputStream), tabla);
+        
+        //Sintax s = new Sintax(new codigo.LexerCup(new StringReader(ST)));
+        Sintax s = new Sintax(miAnalizadorLexico);
+        
         
         textResultadoParseo.setEnabled(true);
         
@@ -406,7 +408,15 @@ public class FrmPrincipal extends javax.swing.JFrame {
                 textResultadoParseo.setText(mensaje);
                 textResultadoParseo.setForeground(Color.red);
             }
-            
+            symbolTableText.setEnabled(true);
+            symbolTableText.setText(tabla.generarString());
+
+            String erroresSemanticos;
+            erroresSemanticos = tabla.getErroresDeLex();
+            semanticErrorsText.setEnabled(true);
+            semanticErrorsText.setForeground(Color.red);
+            semanticErrorsText.setText(erroresSemanticos);
+        
         } catch (Exception ex){
             System.err.println(ex);        
         }

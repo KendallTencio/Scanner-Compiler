@@ -128,7 +128,7 @@ SENTENCIA ::= SENTENCIA_IF
             | error LlaveCierra
             | error ParentCierre; 
 
-LISTA_SENTENCIAPRIMAFUN ::= SENTENCIAFUN LISTA_SENTENCIAPRIMAFUN | {: RESULT = null; :};
+LISTA_SENTENCIAPRIMAFUN ::= SENTENCIAFUN LISTA_SENTENCIAPRIMAFUN | {: FrmPrincipal.tabla.validarReturnFuncion(); RESULT = null; :};
 
 SENTENCIAFUN ::= SENTENCIA_IF
             | SENTENCIA_WHILE 
@@ -140,8 +140,8 @@ SENTENCIAFUN ::= SENTENCIA_IF
             | FUNCCALL PuntoComa
             | Break PuntoComa
             | Continue PuntoComa
-            | error PuntoComa
-            | error LlaveCierra
+            | error PuntoComa 
+            | error LlaveCierra 
             | error ParentCierre; 
 
 SENTENCIA_IF ::= If ParentAbre EXPRESION ParentCierre LlaveAbre LISTA_SENTENCIAPRIMA LlaveCierra {:
@@ -179,7 +179,7 @@ EXPRESION ::=         EXPRESION:ex1 Op_relacional:op EXPRESION:ex2 {:String t = 
                                                                     :}
                     | ParentAbre EXPRESION ParentCierre
                     | Not EXPRESION
-                    | Identificador:id {: RESULT = id; :}
+                    | Identificador:id {: FrmPrincipal.tabla.insertarIdValorVariable(id.toString()); RESULT = id; :}
                     | Op_Booleano:op {: RESULT = op; :}
                     | EXPRESION:ex1 Suma:op EXPRESION:ex2 {:
                                                             String t = EscritorASM.temp();
@@ -199,7 +199,7 @@ EXPRESION ::=         EXPRESION:ex1 Op_relacional:op EXPRESION:ex2 {:String t = 
                     | FUNCCALL
                     | This Punto EXPRESION
                     | EXPRESION Punto EXPRESION
-                    | Literal:li {: RESULT = li; :}
+                    | Literal:valor {: FrmPrincipal.tabla.insertarValorVariable(valor.toString());RESULT = valor; :}
                     | Op_Incremental Identificador
                     | Identificador Op_Incremental
                     | SENTENCIA_TERNARIA;
@@ -207,21 +207,21 @@ EXPRESION ::=         EXPRESION:ex1 Op_relacional:op EXPRESION:ex2 {:String t = 
 STRUCTDEF ::= Struct Identificador LlaveAbre STRUCTCONTEN LlaveCierra;
 STRUCTCONTEN ::= DECLARVARIABLE PuntoComa STRUCTCONTEN | ASIGVARIABLE PuntoComa STRUCTCONTEN | {: RESULT = null; :};
 
-DECLARVARIABLE ::= TYPENAME ACCESSMOD Identificador:i {:EscritorASM.escribeVariable(i.toString());:} DECLARVARIABLEFILA | TYPENAME ACCESSMOD Identificador:i Op_atribucion:op EXPRESION:ex {:
-                                                                                                                                                                                            EscritorASM.escribeExp(i.toString(),op.toString(),ex.toString());
+DECLARVARIABLE ::= TYPENAME ACCESSMOD Identificador:id {: FrmPrincipal.tabla.insertarValorScope(id.toString()); EscritorASM.escribeVariable(id.toString());:} DECLARVARIABLEFILA | TYPENAME ACCESSMOD Identificador:id {: FrmPrincipal.tabla.ultimoIdentificadorIngresado = id.toString(); FrmPrincipal.tabla.insertarValorScope(id.toString()); :} Op_atribucion:op EXPRESION:ex {:
+                                                                                                                                                                                            EscritorASM.escribeExp(id.toString(),op.toString(),ex.toString());
                                                                                                                                                                                             :} | ARRAYDECLAR | TYPENAME error EXPRESION;
-DECLARVARIABLEFILA ::= Coma Identificador:i {:EscritorASM.escribeVariable(i.toString());:} DECLARVARIABLEFILA | {: RESULT = null; :};
+DECLARVARIABLEFILA ::= Coma Identificador:id {:EscritorASM.escribeVariable(id.toString()); FrmPrincipal.tabla.insertarValorScope(id.toString()); :} DECLARVARIABLEFILA | {: RESULT = null; :};
 ARRAYDECLAR ::= TYPENAME ParenCuadAbre ParenCuadCierra Identificador ARRAYDECLARFILA | TYPENAME ParenCuadAbre ParenCuadCierra Identificador Op_atribucion EXPRESION;
 ARRAYDECLARFILA ::= Coma Identificador ARRAYDECLARFILA |{: RESULT = null; :};
 
-ASIGVARIABLE ::= Identificador:i Op_atribucion:op EXPRESION:ex {:EscritorASM.escribeExp(i.toString(),op.toString(),ex.toString());:};
+ASIGVARIABLE ::= Identificador:id {: FrmPrincipal.tabla.ultimoIdentificadorIngresado = id.toString(); FrmPrincipal.tabla.insertarValorScope(id.toString()); :} Op_atribucion:op EXPRESION:ex {:EscritorASM.escribeExp(id.toString(),op.toString(),ex.toString());:};
 ASIGVARIABLEFUN ::= EXPRESION Op_atribucion EXPRESION;
 
 ACCESSMOD ::= Private | Public | error PuntoComa | {: RESULT = null; :};
 
 CONTRACTDEF ::= Contract Identificador LlaveAbre CONTRACTPART LlaveCierra | error LlaveCierra;
 CONTRACTPART ::= ENUMDEF CONTRACTPART | CONTRACTPART1;
-CONTRACTPART1 ::= DECLARVARIABLE PuntoComa CONTRACTPART1 | ASIGVARIABLE PuntoComa CONTRACTPART1 | CONTRACTPART2; 
+CONTRACTPART1 ::= {: FrmPrincipal.tabla.varGlobal = true; :} DECLARVARIABLE PuntoComa CONTRACTPART1 | ASIGVARIABLE PuntoComa CONTRACTPART1 | {: FrmPrincipal.tabla.varGlobal = false; :} CONTRACTPART2; 
 CONTRACTPART2 ::= STRUCTDEF CONTRACTPART2 | CONTRACTPART3;
 CONTRACTPART3 ::= FUNCIONDEF CONTRACTPART3 | {: RESULT = null; :};
 
@@ -232,15 +232,15 @@ ENUMVALUE ::= Identificador ENUMLIST;
 
 FUNCIONDEF ::= Function Identificador FUNCIONATRIB MODIFICADORES FUNCIONRETURNS FUNCIONCONTEN;
 
-FUNCIONATRIB ::= ParentAbre TYPENAME Identificador FUNATRIBDOS ParentCierre |  ParentAbre ParentCierre | error ParentCierre;
-FUNATRIBDOS ::= Coma TYPENAME Identificador FUNATRIBDOS | {: RESULT = null; :};
+FUNCIONATRIB ::= ParentAbre {: FrmPrincipal.tabla.varParamet = true; :} TYPENAME Identificador FUNATRIBDOS {: FrmPrincipal.tabla.varParamet = false; :} ParentCierre |  ParentAbre ParentCierre | error ParentCierre;
+FUNATRIBDOS ::= Coma TYPENAME Identificador:id {: FrmPrincipal.tabla.insertarValorScope(id.toString()); :} FUNATRIBDOS | {: RESULT = null; :};
 
 MODIFICADORES ::= Payable | Private | Public | Internal | {: RESULT = null; :};
-FUNCIONRETURNS ::= Returns FUNCIONATRIB | {: RESULT = null; :};
-FUNCIONCONTEN ::= LlaveAbre FUNCIONCONTENVARLIS LlaveCierra | error LlaveCierra | error PuntoComa;
+FUNCIONRETURNS ::= Returns {: FrmPrincipal.tabla.returnsEnFuncion(); :} FUNCIONATRIB | {: RESULT = null; :};
+FUNCIONCONTEN ::= LlaveAbre {: FrmPrincipal.tabla.varLocal = true; :} FUNCIONCONTENVARLIS {: FrmPrincipal.tabla.varLocal = false; :} LlaveCierra | error LlaveCierra | error PuntoComa;
 FUNCIONCONTENVARLIS ::= DECLARVARIABLE PuntoComa FUNCIONCONTENVARLIS | LISTA_SENTENCIAPRIMAFUN;
 
-SENTENCIA_RETURN ::= Return Identificador PuntoComa | Return Identificador {: Sintax.informar_Error_Especifico("Return de función sin punto y coma"); :};
+SENTENCIA_RETURN ::= Return Identificador:id {: FrmPrincipal.tabla.returnEnFuncionIngresado(); :} PuntoComa | Return Identificador {: Sintax.informar_Error_Especifico("Return de función sin punto y coma"); :};
 
 PARAMFUNC ::= EXPRESION PARAMFUNCFILA | ASIGVARIABLEFUN PARAMFUNCFILA | {: RESULT = null; :};
 PARAMFUNCFILA ::= Coma EXPRESION PARAMFUNCFILA | Coma ASIGVARIABLEFUN PARAMFUNCFILA  | {: RESULT = null; :};
