@@ -7,6 +7,8 @@ public class TablaSimbolos{
     String erroresLex = "";
     public String ultimoTipoIngresado = "";
     Simbolo ultimoSimboloIngresado;
+    public String ultimoIdentificadorIngresado = "";
+    public boolean returnEnFuncion = false;
     
     
     public TablaSimbolos(){
@@ -24,28 +26,32 @@ public class TablaSimbolos{
         ultimoSimboloIngresado = s;
         
         t.put(idSim, s);
+        if(ultimoTipoIngresado.equals("function")){
+            reiniciarTipo();
+        }
         return s;
     }
     
     public void insertarValorVariable(String valorStr){
         int valor = Integer.parseInt(valorStr);
-        buscar(ultimoSimboloIngresado.getNombre()).setValor(valor);
-    }
-    
-    public void indicarTipoIdentificador(String tipoStr){
-        
+
+        Simbolo simTest;
+        String idSimInd = "";
+        //System.err.println("Tamaño Tabla: "+t.size());
+        for (int i = 0; i < t.size(); i++) {
+            idSimInd = Integer.toString(i);
+            simTest = (Simbolo)(t.get(idSimInd));
+            //System.err.println("simTestNombre "+simTest.getNombre()+" Ultimo nombre: "+ultimoNombreIngresado);
+            if(simTest.getNombre().equals(ultimoIdentificadorIngresado)){
+                if(simTest.getTipo().equals("int") || simTest.getTipo().equals("string") || simTest.getTipo().equals("uint")){
+                    simTest.setValor(valor);
+                }
+            }       
+        }
     }
     
     public void asignarComoUltimoTipo(String tipo){
         ultimoTipoIngresado = tipo;
-    }
-    
-    public Simbolo buscar(String nombre){
-        return (Simbolo)(t.get(nombre));
-        /*if(simTest != null && ultimoTipoIngresado != simTest.tipo){
-            return null;
-        }
-        return simTest;*/
     }
     
     public Boolean buscarBool(String ultimoNombreIngresado){
@@ -74,7 +80,6 @@ public class TablaSimbolos{
         for (int i = 0; i < t.size(); i++) {
             idSimInd = Integer.toString(i);
             simTest = (Simbolo)(t.get(idSimInd));
-            System.out.println("Entre 1");
             if(simTest.getNombre().equals(ultimoNombreIngresado)){
                 if(simTest.getTipo().equals("int") || simTest.getTipo().equals("string") || simTest.getTipo().equals("uint")){
                     System.out.println("Declarada");

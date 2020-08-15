@@ -168,7 +168,7 @@ EXPRESION ::=         EXPRESION Op_relacional EXPRESION
                     | FUNCCALL
                     | This Punto EXPRESION
                     | EXPRESION Punto EXPRESION
-                    | Literal
+                    | Literal:valor {: FrmPrincipal.tabla.insertarValorVariable(valor.toString()); :}
                     | Op_Incremental Identificador
                     | Identificador Op_Incremental
                     | SENTENCIA_TERNARIA;
@@ -176,12 +176,12 @@ EXPRESION ::=         EXPRESION Op_relacional EXPRESION
 STRUCTDEF ::= Struct Identificador LlaveAbre STRUCTCONTEN LlaveCierra;
 STRUCTCONTEN ::= DECLARVARIABLE PuntoComa STRUCTCONTEN | ASIGVARIABLE PuntoComa STRUCTCONTEN | {: RESULT = null; :};
 
-DECLARVARIABLE ::= TYPENAME ACCESSMOD Identificador DECLARVARIABLEFILA | TYPENAME ACCESSMOD Identificador Op_atribucion EXPRESION | ARRAYDECLAR | TYPENAME error EXPRESION;
+DECLARVARIABLE ::= TYPENAME ACCESSMOD Identificador DECLARVARIABLEFILA | TYPENAME ACCESSMOD Identificador:id {: FrmPrincipal.tabla.ultimoIdentificadorIngresado = id.toString(); :} Op_atribucion EXPRESION | ARRAYDECLAR | TYPENAME error EXPRESION;
 DECLARVARIABLEFILA ::= Coma Identificador DECLARVARIABLEFILA | {: RESULT = null; :};
 ARRAYDECLAR ::= TYPENAME ParenCuadAbre ParenCuadCierra Identificador ARRAYDECLARFILA | TYPENAME ParenCuadAbre ParenCuadCierra Identificador Op_atribucion EXPRESION;
 ARRAYDECLARFILA ::= Coma Identificador ARRAYDECLARFILA |{: RESULT = null; :};
 
-ASIGVARIABLE ::= Identificador Op_atribucion EXPRESION;
+ASIGVARIABLE ::= Identificador:id {: FrmPrincipal.tabla.ultimoIdentificadorIngresado = id.toString(); :} Op_atribucion EXPRESION;
 ASIGVARIABLEFUN ::= EXPRESION Op_atribucion EXPRESION;
 
 ACCESSMOD ::= Private | Public | error PuntoComa | {: RESULT = null; :};
