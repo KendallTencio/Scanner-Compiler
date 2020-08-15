@@ -358,6 +358,8 @@ public class FrmPrincipal extends javax.swing.JFrame {
         analizarCupListaSimbolos();
         tabla.imprimir();
         
+           //A este punto la tabla de símbolos está lista
+        
         symbolTableText.setEnabled(true);
         symbolTableText.setText(tabla.generarString());
         
