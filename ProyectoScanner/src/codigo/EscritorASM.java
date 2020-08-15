@@ -47,7 +47,7 @@ public class EscritorASM {
                     + ".DATA\n"
                     +";dataFinal\n\n"                    
                     + ".CODE\n"
-                    + "\t.STARUP\n"
+                    + "\t.STARTUP\n"
                     + "mov ax,@data\n"
                     + "mov ds,ax\n"
                     + "mov es,ax\n"
