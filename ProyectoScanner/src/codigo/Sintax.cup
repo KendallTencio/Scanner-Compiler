@@ -14,7 +14,7 @@ parser code
     public static Symbol fatalErrorSym;
     public static String specErrorDetail = "";
 
-    static EscritorASM escASM = new EscritorASM();
+    
 
     static TablaSimbolos tabla = new TablaSimbolos();
 
@@ -144,9 +144,17 @@ SENTENCIAFUN ::= SENTENCIA_IF
             | error LlaveCierra
             | error ParentCierre; 
 
-SENTENCIA_IF ::= If ParentAbre EXPRESION ParentCierre LlaveAbre LISTA_SENTENCIAPRIMA LlaveCierra
-               | If ParentAbre EXPRESION ParentCierre LlaveAbre LISTA_SENTENCIAPRIMA LlaveCierra SENTENCIA_ELSE; 
-SENTENCIA_ELSE ::= Else LlaveAbre LISTA_SENTENCIAPRIMA LlaveCierra;
+SENTENCIA_IF ::= If ParentAbre EXPRESION ParentCierre LlaveAbre LISTA_SENTENCIAPRIMA LlaveCierra {:
+                                                                                                    EscritorASM.escribeExp(null,"ifExit",null);                                                                                                    
+                                                                                                  :}
+               | If ParentAbre EXPRESION ParentCierre LlaveAbre LISTA_SENTENCIAPRIMA LlaveCierra 
+                                                                                                 {:
+                                                                                                    EscritorASM.escribeExp(null,"ifEnd",null);
+                                                                                                    String t = EscritorASM.etiq();
+                                                                                                  :} SENTENCIA_ELSE; 
+SENTENCIA_ELSE ::= Else LlaveAbre LISTA_SENTENCIAPRIMA LlaveCierra{:
+                                                                    EscritorASM.escribeExp(null,"elseEnd",null);                                                                                                    
+                                                                   :};
     
 SENTENCIA_WHILE ::= While ParentAbre EXPRESION ParentCierre LlaveAbre LISTA_SENTENCIAPRIMA LlaveCierra;
 SENTENCIA_DOWHILE ::= Do LlaveAbre LISTA_SENTENCIAPRIMA LlaveCierra While ParentAbre EXPRESION ParentCierre;
@@ -156,13 +164,24 @@ SENTENCIA_FOR ::= For ParentAbre DECLARVARIABLE PuntoComa EXPRESION PuntoComa EX
 SENTENCIA_TERNARIA ::= EXPRESION SignoPregunta EXPRESION DosPuntos EXPRESION;
 
 
-EXPRESION ::=         EXPRESION Op_relacional EXPRESION
+EXPRESION ::=         EXPRESION:ex1 Op_relacional:op EXPRESION:ex2 {:String t = EscritorASM.etiq();
+                                                                    EscritorASM.escribeExp(ex1.toString(),op.toString(),ex2.toString());
+                                                                    RESULT = t;
+                                                                    :}
                     | ParentAbre EXPRESION ParentCierre
                     | Not EXPRESION
                     | Identificador:id {: RESULT = id; :}
-                    | Op_Booleano
-                    | EXPRESION Suma EXPRESION
-                    | EXPRESION Resta EXPRESION
+                    | Op_Booleano:op {: RESULT = op; :}
+                    | EXPRESION:ex1 Suma:op EXPRESION:ex2 {:
+                                                            String t = EscritorASM.temp();
+                                                            EscritorASM.escribeExp(ex1.toString(),op.toString(),ex2.toString());
+                                                            RESULT = t;
+                                                           :}
+                    | EXPRESION:ex1 Resta:op EXPRESION:ex2 {:
+                                                            String t = EscritorASM.temp();
+                                                            EscritorASM.escribeExp(ex1.toString(),op.toString(),ex2.toString());
+                                                            RESULT = t;
+                                                        :}
                     | EXPRESION Mult EXPRESION
                     | EXPRESION Div EXPRESION
                     | EXPRESION Mod EXPRESION
@@ -171,7 +190,7 @@ EXPRESION ::=         EXPRESION Op_relacional EXPRESION
                     | FUNCCALL
                     | This Punto EXPRESION
                     | EXPRESION Punto EXPRESION
-                    | Literal
+                    | Literal:li {: RESULT = li; :}
                     | Op_Incremental Identificador
                     | Identificador Op_Incremental
                     | SENTENCIA_TERNARIA;
@@ -179,8 +198,10 @@ EXPRESION ::=         EXPRESION Op_relacional EXPRESION
 STRUCTDEF ::= Struct Identificador LlaveAbre STRUCTCONTEN LlaveCierra;
 STRUCTCONTEN ::= DECLARVARIABLE PuntoComa STRUCTCONTEN | ASIGVARIABLE PuntoComa STRUCTCONTEN | {: RESULT = null; :};
 
-DECLARVARIABLE ::= TYPENAME ACCESSMOD Identificador DECLARVARIABLEFILA | TYPENAME ACCESSMOD Identificador Op_atribucion EXPRESION | ARRAYDECLAR | TYPENAME error EXPRESION;
-DECLARVARIABLEFILA ::= Coma Identificador DECLARVARIABLEFILA | {: RESULT = null; :};
+DECLARVARIABLE ::= TYPENAME ACCESSMOD Identificador:i {:EscritorASM.escribeVariable(i.toString());:} DECLARVARIABLEFILA | TYPENAME ACCESSMOD Identificador:i Op_atribucion:op EXPRESION:ex {:
+                                                                                                                                                                                            EscritorASM.escribeExp(i.toString(),op.toString(),ex.toString());
+                                                                                                                                                                                            :} | ARRAYDECLAR | TYPENAME error EXPRESION;
+DECLARVARIABLEFILA ::= Coma Identificador:i {:EscritorASM.escribeVariable(i.toString());:} DECLARVARIABLEFILA | {: RESULT = null; :};
 ARRAYDECLAR ::= TYPENAME ParenCuadAbre ParenCuadCierra Identificador ARRAYDECLARFILA | TYPENAME ParenCuadAbre ParenCuadCierra Identificador Op_atribucion EXPRESION;
 ARRAYDECLARFILA ::= Coma Identificador ARRAYDECLARFILA |{: RESULT = null; :};
 
