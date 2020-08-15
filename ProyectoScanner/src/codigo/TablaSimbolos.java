@@ -11,6 +11,8 @@ public class TablaSimbolos{
     public String ultimoTipoIngresado = "";
     public String ultimoIdentificadorIngresado = "";
     
+    public boolean posibleIdSiendoAsignado = false;
+    
     //Bandera de return en función ingresada
     public boolean returnsEnFuncion = false;
     public boolean returnIngresado = false;
@@ -31,20 +33,23 @@ public class TablaSimbolos{
     }
     
     public Simbolo insertar(String nombre){
-        String idSim = Integer.toString(t.size());
-        Simbolo s = new Simbolo(idSim ,nombre, 0, ultimoTipoIngresado, "");
-        
-        ultimoSimboloIngresado = s;
-        
-        t.put(idSim, s);
-        if(ultimoTipoIngresado.equals("function")){
-            reiniciarTipo();
+        if(!posibleIdSiendoAsignado){
+            String idSim = Integer.toString(t.size());
+            Simbolo s = new Simbolo(idSim ,nombre, "", ultimoTipoIngresado, "");
+
+            ultimoSimboloIngresado = s;
+
+            t.put(idSim, s);
+            if(ultimoTipoIngresado.equals("function")){
+                reiniciarTipo();
+            }
+            return s;
         }
-        return s;
+        posibleIdSiendoAsignado = false;
+        return null;
     }
     
-    public void insertarValorVariable(String valorStr){
-        int valor = Integer.parseInt(valorStr);
+    public void insertarValorVariable(String valor){
 
         Simbolo simTest;
         String idSimInd = "";
@@ -67,6 +72,10 @@ public class TablaSimbolos{
         String idSimInd = "";
         
         System.out.println("Insertar Scope:");
+        System.out.println("varGScope: "+varGlobal + " ID: "+nombreId);
+        System.out.println("varLScope: "+varLocal + " ID: "+nombreId);
+        System.out.println("varPScope: "+varParamet + " ID: "+nombreId);
+        System.out.println("FunScope: "+funcion + " ID: "+nombreId);
         
         if(varGlobal){
            scope = "Var. Global"; 
@@ -85,9 +94,15 @@ public class TablaSimbolos{
             idSimInd = Integer.toString(i);
             simTest = (Simbolo)(t.get(idSimInd));
 
-            if(simTest.getNombre().equals(ultimoIdentificadorIngresado)){
+            if(simTest.getNombre().equals(nombreId)){
                     simTest.setScope(scope);
             }       
+        }
+    }
+    
+    public void insertarIdValorVariable(String id){
+        if(buscarBool(id)){
+            this.erroresLex += "Identificador " + id + " usado pero no declarado\n";
         }
     }
     
@@ -172,7 +187,7 @@ public class TablaSimbolos{
         Iterator it = t.values().iterator();
         while(it.hasNext()){
             Simbolo s = (Simbolo)it.next();
-            strTabla += s.nombre + ": "+ s.valor + ". Tipo: "+s.tipo+". Scope: "+s.scope+"\n";
+            strTabla += "Elmt: "+s.nombre + ". Valor: "+ s.valor + ". Tipo: "+s.tipo+". Scope: "+s.scope+"\n";
         }
         return strTabla;
     }

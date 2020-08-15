@@ -8,10 +8,10 @@ package codigo;
 class Simbolo{
     String idSim = "";
     String nombre = "";
-    Integer valor = 0;
+    String valor = "";
     String tipo = "";
     String scope = "";
-    public Simbolo(String idSim, String nombre, Integer valor, String tipo, String scope){
+    public Simbolo(String idSim, String nombre, String valor, String tipo, String scope){
         this.idSim = idSim;
         this.nombre = nombre;
         this.valor = valor;
@@ -51,11 +51,11 @@ class Simbolo{
         this.nombre = nombre;
     }
 
-    public Integer getValor() {
+    public String getValor() {
         return valor;
     }
 
-    public void setValor(Integer valor) {
+    public void setValor(String valor) {
         this.valor = valor;
     }
     
