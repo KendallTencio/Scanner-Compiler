@@ -129,7 +129,7 @@ FLE4 = [0][0-9]+
 ( "/" ) { return new Symbol(sym.Div, yychar, yyline, yytext());}
 ( "%" ) { return new Symbol(sym.Mod, yychar, yyline, yytext());}
 ( "(" ) { return new Symbol(sym.ParentAbre, yychar, yyline, yytext());}
-( ")" ) { return new Symbol(sym.ParentCierre, yychar, yyline, yytext());}
+( ")" ) { tabla.reiniciarTipo(); return new Symbol(sym.ParentCierre, yychar, yyline, yytext());}
 
 // Operadores Atribucion 
 ( "+=" | "-="  | "*=" | "/=" | "=" ) {return new Symbol(sym.Op_atribucion, yychar, yyline, yytext());}

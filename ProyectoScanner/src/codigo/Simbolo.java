@@ -10,11 +10,21 @@ class Simbolo{
     String nombre = "";
     Integer valor = 0;
     String tipo = "";
-    public Simbolo(String idSim, String nombre, Integer valor, String tipo){
+    String scope = "";
+    public Simbolo(String idSim, String nombre, Integer valor, String tipo, String scope){
         this.idSim = idSim;
         this.nombre = nombre;
         this.valor = valor;
         this.tipo = tipo;
+        this.scope = scope;
+    }
+
+    public String getScope() {
+        return scope;
+    }
+
+    public void setScope(String scope) {
+        this.scope = scope;
     }
 
     public String getIdSim() {
