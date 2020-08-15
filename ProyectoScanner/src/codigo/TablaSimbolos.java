@@ -187,7 +187,7 @@ public class TablaSimbolos{
         Iterator it = t.values().iterator();
         while(it.hasNext()){
             Simbolo s = (Simbolo)it.next();
-            strTabla += "Elmt: "+s.nombre + ". Valor: "+ s.valor + ". Tipo: "+s.tipo+". Scope: "+s.scope+"\n";
+            strTabla += s.nombre + "-----> Valor: "+ s.valor + "----Tipo: "+s.tipo+"----Scope: "+s.scope+"\n";
         }
         return strTabla;
     }
