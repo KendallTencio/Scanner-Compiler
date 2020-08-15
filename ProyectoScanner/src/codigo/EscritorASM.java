@@ -21,12 +21,16 @@ public class EscritorASM {
     public static int contadorEtq = 0;
     public static int contadorTemp = 0;
     public static int varCont = 0;
-        
-    
+
+    public void reiniciar(){    
+        contadorEtq = 0;    
+        contadorTemp = 0;    
+    }
     public EscritorASM(){
         String currentDirectory = System.getProperty("user.dir");
         ruta = currentDirectory+"/src/codigo/codigo.asm";
-        archivoASM = new File(ruta);
+        archivoASM = new File(ruta); 
+        reiniciar();
         try
         {         
             if (archivoASM.exists()){                
@@ -172,6 +176,16 @@ public class EscritorASM {
                 , "code" );
                 break;
             case "elseEnd":
+                agregaCodigo(""
+                + "label" + contadorEtq + ":"
+                , "code" );
+                break;
+            case "whileInit":
+                agregaCodigo(""
+                + "label" + contadorEtq + ":"
+                , "code" );
+                break;
+            case "whileEnd":
                 agregaCodigo(""
                 + "label" + contadorEtq + ":"
                 , "code" );

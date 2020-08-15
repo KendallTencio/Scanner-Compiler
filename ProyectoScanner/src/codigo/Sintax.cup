@@ -156,7 +156,16 @@ SENTENCIA_ELSE ::= Else LlaveAbre LISTA_SENTENCIAPRIMA LlaveCierra{:
                                                                     EscritorASM.escribeExp(null,"elseEnd",null);                                                                                                    
                                                                    :};
     
-SENTENCIA_WHILE ::= While ParentAbre EXPRESION ParentCierre LlaveAbre LISTA_SENTENCIAPRIMA LlaveCierra;
+SENTENCIA_WHILE ::= While 
+                        {:
+                        String t = EscritorASM.etiq();  
+                        EscritorASM.escribeExp(null,"whileInit",null);
+                        :}
+                    ParentAbre EXPRESION ParentCierre LlaveAbre LISTA_SENTENCIAPRIMA LlaveCierra
+                        {:
+                        String t = EscritorASM.etiq();  
+                        EscritorASM.escribeExp(null,"whileInit",null);
+                        :};
 SENTENCIA_DOWHILE ::= Do LlaveAbre LISTA_SENTENCIAPRIMA LlaveCierra While ParentAbre EXPRESION ParentCierre;
 SENTENCIA_FOR ::= For ParentAbre DECLARVARIABLE PuntoComa EXPRESION PuntoComa EXPRESION ParentCierre LlaveAbre LISTA_SENTENCIAPRIMA LlaveCierra
                 | For ParentAbre ASIGVARIABLE PuntoComa EXPRESION PuntoComa EXPRESION ParentCierre LlaveAbre LISTA_SENTENCIAPRIMA LlaveCierra;
@@ -205,7 +214,7 @@ DECLARVARIABLEFILA ::= Coma Identificador:i {:EscritorASM.escribeVariable(i.toSt
 ARRAYDECLAR ::= TYPENAME ParenCuadAbre ParenCuadCierra Identificador ARRAYDECLARFILA | TYPENAME ParenCuadAbre ParenCuadCierra Identificador Op_atribucion EXPRESION;
 ARRAYDECLARFILA ::= Coma Identificador ARRAYDECLARFILA |{: RESULT = null; :};
 
-ASIGVARIABLE ::= Identificador Op_atribucion EXPRESION;
+ASIGVARIABLE ::= Identificador:i Op_atribucion:op EXPRESION:ex {:EscritorASM.escribeExp(i.toString(),op.toString(),ex.toString());:};
 ASIGVARIABLEFUN ::= EXPRESION Op_atribucion EXPRESION;
 
 ACCESSMOD ::= Private | Public | error PuntoComa | {: RESULT = null; :};
