@@ -164,7 +164,7 @@ SENTENCIA_WHILE ::= While
                     ParentAbre EXPRESION ParentCierre LlaveAbre LISTA_SENTENCIAPRIMA LlaveCierra
                         {:
                         String t = EscritorASM.etiq();  
-                        EscritorASM.escribeExp(null,"whileInit",null);
+                        EscritorASM.escribeExp(null,"whileEnd",null);
                         :};
 SENTENCIA_DOWHILE ::= Do LlaveAbre LISTA_SENTENCIAPRIMA LlaveCierra While ParentAbre EXPRESION ParentCierre;
 SENTENCIA_FOR ::= For ParentAbre DECLARVARIABLE PuntoComa EXPRESION PuntoComa EXPRESION ParentCierre LlaveAbre LISTA_SENTENCIAPRIMA LlaveCierra
