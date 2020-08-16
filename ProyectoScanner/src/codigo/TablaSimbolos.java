@@ -30,6 +30,7 @@ public class TablaSimbolos{
 
     public void reiniciarTipo(){
         ultimoTipoIngresado = "";
+        posibleIdSiendoAsignado = false;
     }
     
     public Simbolo insertar(String nombre){
@@ -71,12 +72,12 @@ public class TablaSimbolos{
         Simbolo simTest;
         String idSimInd = "";
         
-        System.out.println("Insertar Scope:");
+        /*System.out.println("Insertar Scope:");
         System.out.println("varGScope: "+varGlobal + " ID: "+nombreId);
         System.out.println("varLScope: "+varLocal + " ID: "+nombreId);
         System.out.println("varPScope: "+varParamet + " ID: "+nombreId);
         System.out.println("FunScope: "+funcion + " ID: "+nombreId);
-        
+        */
         if(varGlobal){
            scope = "Var. Global"; 
         }
@@ -101,7 +102,7 @@ public class TablaSimbolos{
     }
     
     public void insertarIdValorVariable(String id){
-        if(buscarBool(id)){
+        if(buscarNombre(id)){
             this.erroresLex += "Identificador " + id + " usado pero no declarado\n";
         }
     }
@@ -130,6 +131,21 @@ public class TablaSimbolos{
         return true;
     }
     
+        public Boolean buscarNombre(String nombreBusq){
+        Simbolo simTest;
+        String idSimInd = "";
+
+        for (int i = 0; i < t.size(); i++) {
+            idSimInd = Integer.toString(i);
+            simTest = (Simbolo)(t.get(idSimInd));
+
+            if(simTest.getNombre().equals(nombreBusq)){
+                return false;
+            }       
+        }
+        return true;
+    }
+    
     public Boolean revisarDeclaracion(String ultimoNombreIngresado){
         Simbolo simTest;
         String idSimInd = "";
@@ -150,12 +166,10 @@ public class TablaSimbolos{
     
     public void returnsEnFuncion(){
         returnsEnFuncion = true;
-        System.out.println("Esperando return");
     }
     
     public void returnEnFuncionIngresado(){
         returnIngresado = true;
-        System.out.println("Esperando return");
     }
     
     public void validarReturnFuncion(){

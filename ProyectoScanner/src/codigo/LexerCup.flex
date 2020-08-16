@@ -133,7 +133,7 @@ FLE4 = [0][0-9]+
 ( ")" ) { tabla.reiniciarTipo(); return new Symbol(sym.ParentCierre, yychar, yyline, yytext());}
 
 // Operadores Atribucion 
-( "+=" | "-="  | "*=" | "/=" | "=" ) { tabla.posibleIdSiendoAsignado = true;return new Symbol(sym.Op_atribucion, yychar, yyline, yytext());}
+( "+=" | "-="  | "*=" | "/=" | "=" ) {System.out.println("Viene: "+tabla.posibleIdSiendoAsignado); tabla.posibleIdSiendoAsignado = true; System.out.println(tabla.posibleIdSiendoAsignado); return new Symbol(sym.Op_atribucion, yychar, yyline, yytext());}
 
 // Operadores Incrementales
 ( "++" | "--" ) {return new Symbol(sym.Op_Incremental, yychar, yyline, yytext());}
@@ -183,10 +183,13 @@ FLE4 = [0][0-9]+
             return new Symbol(sym.Identificador, yychar, yyline, yytext());
         }
     }
-    else if (tabla.buscarBool(yytext())){
-        s = tabla.insertar(yytext());
-    }else{
-        tabla.erroresLex += "Variable repetida: "+ yytext() + ". Línea: " + (yyline+1) +"\n";
+    else if (!tabla.posibleIdSiendoAsignado){
+        if(tabla.buscarBool(yytext())){
+            s = tabla.insertar(yytext());
+        }
+        else{
+            tabla.erroresLex += "Variable repetida: "+ yytext() + ". Línea: " + (yyline+1) +"\n";
+        }
     }
     return new Symbol(sym.Identificador, yychar, yyline, yytext());
 }

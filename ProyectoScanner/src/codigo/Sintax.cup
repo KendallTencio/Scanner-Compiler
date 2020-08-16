@@ -232,7 +232,7 @@ ENUMVALUE ::= Identificador ENUMLIST;
 
 FUNCIONDEF ::= Function Identificador FUNCIONATRIB MODIFICADORES FUNCIONRETURNS FUNCIONCONTEN;
 
-FUNCIONATRIB ::= ParentAbre {: FrmPrincipal.tabla.varParamet = true; :} TYPENAME Identificador FUNATRIBDOS {: FrmPrincipal.tabla.varParamet = false; :} ParentCierre |  ParentAbre ParentCierre | error ParentCierre;
+FUNCIONATRIB ::= ParentAbre {: FrmPrincipal.tabla.varParamet = true; :} TYPENAME Identificador:id {: FrmPrincipal.tabla.insertarValorScope(id.toString()); :} FUNATRIBDOS {: FrmPrincipal.tabla.varParamet = false; :} ParentCierre |  ParentAbre ParentCierre | error ParentCierre;
 FUNATRIBDOS ::= Coma TYPENAME Identificador:id {: FrmPrincipal.tabla.insertarValorScope(id.toString()); :} FUNATRIBDOS | {: RESULT = null; :};
 
 MODIFICADORES ::= Payable | Private | Public | Internal | {: RESULT = null; :};
