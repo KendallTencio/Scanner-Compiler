@@ -96,7 +96,7 @@ public class EscritorASM {
     
     public static void escribeVariable(String id){
         agregaCodigo(""
-                + "var" + id + " DW 1 DUP(0)", "data" );
+                + id + " DW 1 DUP(0)", "data" );
     }
     
     public static void escribeExp(String ex1,String op,String ex2){
