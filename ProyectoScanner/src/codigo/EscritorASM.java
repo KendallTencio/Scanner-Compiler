@@ -187,7 +187,8 @@ public class EscritorASM {
                 break;
             case "whileEnd":
                 agregaCodigo(""
-                + "label" + contadorEtq + ":"
+                + "jmp "+ "label" + (contadorEtq-2) + "\n"
+                + "label" + (contadorEtq-1) + ":"
                 , "code" );
                 break;
             default:
