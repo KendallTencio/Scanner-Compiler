@@ -120,7 +120,12 @@ public class TablaSimbolos{
             simTest = (Simbolo)(t.get(idSimInd));
 
             if(simTest.getNombre().equals(nombreId)){
+                if(simTest.getTipo().equals("int") && !funcion){
                     simTest.setScope(scope);
+                }
+                else if(!simTest.getTipo().equals("int") && funcion){
+                    simTest.setScope(scope);
+                }   
             }       
         }
     }

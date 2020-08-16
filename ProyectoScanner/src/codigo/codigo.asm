@@ -5,16 +5,15 @@
 .STACK 200h
 
 .DATA
-varz DW 1 DUP(0)
-vart DW 1 DUP(0)
-vary DW 1 DUP(0)
-vary DW 1 DUP(0)
-varz DW 1 DUP(0)
-vart DW 1 DUP(0)
-vary DW 1 DUP(0)
-varwe DW 1 DUP(0)
-varzt DW 1 DUP(0)
-t1 DW 1 DUP(0)
+z DW 1 DUP(0)
+t DW 1 DUP(0)
+y DW 1 DUP(0)
+y DW 1 DUP(0)
+z DW 1 DUP(0)
+t DW 1 DUP(0)
+y DW 1 DUP(0)
+we DW 1 DUP(0)
+zt DW 1 DUP(0)
 ;dataFinal
 
 .CODE
@@ -22,10 +21,7 @@ t1 DW 1 DUP(0)
 mov ax,@data
 mov ds,ax
 mov es,ax
-mov ax,we
-sub ax,42
-mov t1,ax
-mov ax,t1
+mov ax,42
 mov yyy,ax
 mov ax,yyy
 mov p,ax

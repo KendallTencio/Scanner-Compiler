@@ -138,8 +138,8 @@ SENTENCIAFUN ::= SENTENCIA_IF
             | SENTENCIA_TERNARIA PuntoComa            
             | ASIGVARIABLE PuntoComa
             | FUNCCALL PuntoComa
-            | Break PuntoComa
-            | Continue PuntoComa
+            | Break PuntoComa {: FrmPrincipal.tabla.erroresLex += "Break fuera de estructura condicional\n"; :}
+            | Continue PuntoComa {: FrmPrincipal.tabla.erroresLex += "Continue fuera de estructura condicional\n"; :}
             | error PuntoComa 
             | error LlaveCierra 
             | error ParentCierre; 
