@@ -10,6 +10,7 @@ public class TablaSimbolos{
     Simbolo ultimoSimboloIngresado;
     public String ultimoTipoIngresado = "";
     public String ultimoIdentificadorIngresado = "";
+    public String ultimoIdIngresado = "";
     
     public boolean posibleIdSiendoAsignado = false;
     
@@ -50,6 +51,35 @@ public class TablaSimbolos{
         return null;
     }
     
+    public boolean revisarContantFoldingBinario(String exp1, String op, String exp2){
+        
+        if (exp1 == null && exp2 == null) {
+            return false;
+        }
+        try {
+            int expInt1 = Integer.parseInt(exp1);
+            int expInt2 = Integer.parseInt(exp2);
+        } catch (NumberFormatException nfe) {
+            return false;
+        }
+        
+        System.out.println("Sí se puede constant folding Binario");
+        return true;
+        
+    }
+    
+    public int aplicarContantFoldingBinario(int exp1, String op, int exp2){
+        int resultConstantFolding = 0;
+        if(op.equals("+")){
+            resultConstantFolding = exp1 + exp2;
+        }
+        else if (op.equals("-")) {
+            resultConstantFolding = exp1 - exp2;
+        }
+        
+        return resultConstantFolding;
+    }
+    
     public void insertarValorVariable(String valor){
 
         Simbolo simTest;
@@ -72,12 +102,6 @@ public class TablaSimbolos{
         Simbolo simTest;
         String idSimInd = "";
         
-        /*System.out.println("Insertar Scope:");
-        System.out.println("varGScope: "+varGlobal + " ID: "+nombreId);
-        System.out.println("varLScope: "+varLocal + " ID: "+nombreId);
-        System.out.println("varPScope: "+varParamet + " ID: "+nombreId);
-        System.out.println("FunScope: "+funcion + " ID: "+nombreId);
-        */
         if(varGlobal){
            scope = "Var. Global"; 
         }
@@ -104,11 +128,29 @@ public class TablaSimbolos{
     public void insertarIdValorVariable(String id){
         if(buscarNombre(id)){
             this.erroresLex += "Identificador " + id + " usado pero no declarado\n";
-        }
+        }else{
+            ultimoSimboloIngresado.setValor(id);
+            //Asignar id como valor
+        }       
     }
     
     public void asignarComoUltimoTipo(String tipo){
         ultimoTipoIngresado = tipo;
+    }
+    
+    public Simbolo buscarSimVar(String ultimoNombreIngresado){
+        Simbolo simTest;
+        String idSimInd = "";
+
+        for (int i = 0; i < t.size(); i++) {
+            idSimInd = Integer.toString(i);
+            simTest = (Simbolo)(t.get(idSimInd));
+
+            if(simTest.getNombre().equals(ultimoNombreIngresado)){
+                return simTest;
+            }       
+        }
+        return null;
     }
     
     public Boolean buscarBool(String ultimoNombreIngresado){
@@ -131,7 +173,7 @@ public class TablaSimbolos{
         return true;
     }
     
-        public Boolean buscarNombre(String nombreBusq){
+    public Boolean buscarNombre(String nombreBusq){
         Simbolo simTest;
         String idSimInd = "";
 
@@ -145,6 +187,8 @@ public class TablaSimbolos{
         }
         return true;
     }
+    
+    
     
     public Boolean revisarDeclaracion(String ultimoNombreIngresado){
         Simbolo simTest;
