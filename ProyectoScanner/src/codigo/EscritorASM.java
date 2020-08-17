@@ -200,6 +200,16 @@ public class EscritorASM {
                 + "label" + (contadorEtq-1) + ":"
                 , "code" );
                 break;
+            case "continue":
+                agregaCodigo(""
+                + "jmp " + "label" + (contadorEtq) 
+                , "code" );
+                break;
+            case "break":
+                agregaCodigo(""
+                + "jmp " + "label" + (contadorEtq+1) 
+                , "code" );
+                break;
             default:
                 break;
         }

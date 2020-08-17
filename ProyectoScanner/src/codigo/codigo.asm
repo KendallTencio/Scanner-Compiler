@@ -5,7 +5,6 @@
 .STACK 200h
 
 .DATA
-a DW 1 DUP(0)
 ;dataFinal
 
 .CODE
@@ -13,8 +12,13 @@ a DW 1 DUP(0)
 mov ax,@data
 mov ds,ax
 mov es,ax
-mov ax,3
-mov a,ax
+label1:
+mov ax,2
+cmp 3,ax
+je label2
+jmp label2:
+jmp label1
+label2:
 ;codeFinal
 
 	.EXIT

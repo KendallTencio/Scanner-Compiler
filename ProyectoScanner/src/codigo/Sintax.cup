@@ -122,8 +122,8 @@ SENTENCIA ::= SENTENCIA_IF
             | DECLARVARIABLE PuntoComa
             | ASIGVARIABLE PuntoComa
             | FUNCCALL PuntoComa
-            | Break PuntoComa
-            | Continue PuntoComa
+            | Break PuntoComa {:EscritorASM.escribeExp(null,"break",null);:}
+            | Continue PuntoComa {:EscritorASM.escribeExp(null,"continue",null);:}
             | error PuntoComa
             | error LlaveCierra
             | error ParentCierre; 
@@ -138,14 +138,14 @@ SENTENCIAFUN ::= SENTENCIA_IF
             | SENTENCIA_TERNARIA PuntoComa            
             | ASIGVARIABLE PuntoComa
             | FUNCCALL PuntoComa
-            | Break PuntoComa {: FrmPrincipal.tabla.erroresLex += "Break fuera de estructura condicional\n"; :}
-            | Continue PuntoComa {: FrmPrincipal.tabla.erroresLex += "Continue fuera de estructura condicional\n"; :}
+            | Break PuntoComa {: FrmPrincipal.tabla.erroresLex += "Break fuera de estructura condicional\n";:}
+            | Continue PuntoComa {: FrmPrincipal.tabla.erroresLex += "Continue fuera de estructura condicional\n";:}
             | error PuntoComa 
             | error LlaveCierra 
             | error ParentCierre; 
 
 SENTENCIA_IF ::= If ParentAbre EXPRESION ParentCierre LlaveAbre LISTA_SENTENCIAPRIMA LlaveCierra {:
-                                                                                                    EscritorASM.escribeExp(null,"ifExit",null);                                                                                                    
+                                                                                                    EscritorASM.escribeExp(null,"ifExit",null);
                                                                                                   :}
                | If ParentAbre EXPRESION ParentCierre LlaveAbre LISTA_SENTENCIAPRIMA LlaveCierra 
                                                                                                  {:
