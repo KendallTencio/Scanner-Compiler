@@ -102,14 +102,20 @@ public class TablaSimbolos{
         Simbolo simTest;
         String idSimInd = "";
         
-        if(varGlobal){
-           scope = "Var. Global"; 
+        System.err.println("Var: "+nombreId);
+        System.err.println(varParamet);
+        System.err.println(varLocal);
+        System.err.println(varGlobal);
+        System.err.println(funcion);
+        
+        if(varParamet){
+           scope = "Parámetro"; 
         }
         else if(varLocal){
            scope = "Var. Local"; 
         }
-        else if(varParamet){
-           scope = "Parámetro"; 
+        else if(varGlobal){
+           scope = "Var. Global"; 
         }
         else if(funcion){
            scope = "Función"; 
@@ -119,7 +125,16 @@ public class TablaSimbolos{
             idSimInd = Integer.toString(i);
             simTest = (Simbolo)(t.get(idSimInd));
 
-            if(simTest.getNombre().equals(nombreId)){
+            if(varParamet && simTest.getNombre().equals(nombreId) && (simTest.getScope().equals("Var. Global") || simTest.getScope().equals("Var. Local") || simTest.getScope().equals("Función"))){
+                continue;
+            }
+            else if(varLocal && simTest.getNombre().equals(nombreId) && (simTest.getScope().equals("Var. Global") || simTest.getScope().equals("Parámetro") || simTest.getScope().equals("Función"))){
+                continue;
+            }
+            else if(funcion && simTest.getNombre().equals(nombreId) && (simTest.getScope().equals("Var. Global") || simTest.getScope().equals("Var. Local") || simTest.getScope().equals("Parámetro"))){
+                continue;
+            }
+            else if(simTest.getNombre().equals(nombreId)){
                 if(simTest.getTipo().equals("int") && !funcion){
                     simTest.setScope(scope);
                 }
@@ -168,8 +183,14 @@ public class TablaSimbolos{
 
             if(simTest.getNombre().equals(ultimoNombreIngresado)){
                 if(simTest.getTipo().equals(ultimoTipoIngresado)){
-                    return false;
-                }
+                    if(varParamet){
+                       // varParamet = false;
+                        return true;
+                    }
+                    else{
+                        return false;   
+                    }
+                } 
                 else{
                     return true;
                 }
@@ -250,7 +271,12 @@ public class TablaSimbolos{
         Iterator it = t.values().iterator();
         while(it.hasNext()){
             Simbolo s = (Simbolo)it.next();
-            strTabla += s.nombre + "-----> Valor: "+ s.valor + "----Tipo: "+s.tipo+"----Scope: "+s.scope+"\n";
+            if(s.tipo.equals("function")){
+                strTabla += s.nombre + "-----> Scope: "+s.tipo+"\n";
+            }else{
+                strTabla += s.nombre + "-----> Valor: "+ s.valor + "----Tipo: "+s.tipo+"----Scope: "+s.scope+"\n";
+            }
+            
         }
         return strTabla;
     }
