@@ -125,7 +125,13 @@ public class TablaSimbolos{
             idSimInd = Integer.toString(i);
             simTest = (Simbolo)(t.get(idSimInd));
 
-            if(varParamet && simTest.getNombre().equals(nombreId) && simTest.getScope().equals("Var. Global")){
+            if(varParamet && simTest.getNombre().equals(nombreId) && (simTest.getScope().equals("Var. Global") || simTest.getScope().equals("Var. Local") || simTest.getScope().equals("Función"))){
+                continue;
+            }
+            else if(varLocal && simTest.getNombre().equals(nombreId) && (simTest.getScope().equals("Var. Global") || simTest.getScope().equals("Parámetro") || simTest.getScope().equals("Función"))){
+                continue;
+            }
+            else if(funcion && simTest.getNombre().equals(nombreId) && (simTest.getScope().equals("Var. Global") || simTest.getScope().equals("Var. Local") || simTest.getScope().equals("Parámetro"))){
                 continue;
             }
             else if(simTest.getNombre().equals(nombreId)){
