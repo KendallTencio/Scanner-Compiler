@@ -20,11 +20,20 @@ public class EscritorASM {
     
     public static int contadorEtq = 0;
     public static int contadorTemp = 0;
-    public static int varCont = 0;
+    public static int deepCont = 0;
 
+    
+    public static void profundidad(String valor){
+        if (valor == "mas"){
+            deepCont++;
+        }else{
+            deepCont--;
+        }
+    }
     public void reiniciar(){    
         contadorEtq = 0;    
-        contadorTemp = 0;    
+        contadorTemp = 0;
+        deepCont = -1;
     }
     public EscritorASM(){
         String currentDirectory = System.getProperty("user.dir");
