@@ -31,6 +31,13 @@ mov ax,23
 mov we,ax
 mov ax,p
 mov zt,ax
+label1:
+mov ax,2
+cmp we,ax
+jbe label2
+jmp label2
+jmp label1
+label2:
 ;codeFinal
 
 	.EXIT
