@@ -133,7 +133,7 @@ FLE4 = [0][0-9]+
 ( ")" ) { tabla.reiniciarTipo(); return new Symbol(sym.ParentCierre, yychar, yyline, yytext());}
 
 // Operadores Atribucion 
-( "+=" | "-="  | "*=" | "/=" | "=" ) {System.out.println("Viene: "+tabla.posibleIdSiendoAsignado); tabla.posibleIdSiendoAsignado = true; System.out.println(tabla.posibleIdSiendoAsignado); return new Symbol(sym.Op_atribucion, yychar, yyline, yytext());}
+( "+=" | "-="  | "*=" | "/=" | "=" ) { tabla.posibleIdSiendoAsignado = true; System.out.println(tabla.posibleIdSiendoAsignado); return new Symbol(sym.Op_atribucion, yychar, yyline, yytext());}
 
 // Operadores Incrementales
 ( "++" | "--" ) {return new Symbol(sym.Op_Incremental, yychar, yyline, yytext());}

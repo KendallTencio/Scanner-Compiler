@@ -138,8 +138,8 @@ SENTENCIAFUN ::= SENTENCIA_IF
             | SENTENCIA_TERNARIA PuntoComa            
             | ASIGVARIABLE PuntoComa
             | FUNCCALL PuntoComa
-            | Break PuntoComa
-            | Continue PuntoComa
+            | Break PuntoComa {: FrmPrincipal.tabla.erroresLex += "Break fuera de estructura condicional\n"; :}
+            | Continue PuntoComa {: FrmPrincipal.tabla.erroresLex += "Continue fuera de estructura condicional\n"; :}
             | error PuntoComa 
             | error LlaveCierra 
             | error ParentCierre; 
@@ -184,11 +184,41 @@ EXPRESION ::=         EXPRESION:ex1 Op_relacional:op EXPRESION:ex2 {:String t = 
                     | EXPRESION:ex1 Suma:op EXPRESION:ex2 {:
                                                             String t = EscritorASM.temp();
                                                             EscritorASM.escribeExp(ex1.toString(),op.toString(),ex2.toString());
+                                                            
+                                                        //Aquí se hace el contantFolding para la tabla
+                                                            String exp1 = ex1.toString();
+                                                            String sumOp = op.toString();
+                                                            String exp2 = ex2.toString();
+
+                                                            if(FrmPrincipal.tabla.revisarContantFoldingBinario(exp1,sumOp,exp2)){
+                                                                int resultado = FrmPrincipal.tabla.aplicarContantFoldingBinario(Integer.parseInt(exp1),op.toString(),Integer.parseInt(exp2)); 
+                                                                FrmPrincipal.tabla.insertarValorVariable(Integer.toString(resultado));
+                                                            }
+                                                            else{
+                                                                String resultadoStr = exp1+sumOp+exp2;
+                                                                FrmPrincipal.tabla.insertarValorVariable(resultadoStr);
+                                                            }
+
                                                             RESULT = t;
                                                            :}
                     | EXPRESION:ex1 Resta:op EXPRESION:ex2 {:
                                                             String t = EscritorASM.temp();
                                                             EscritorASM.escribeExp(ex1.toString(),op.toString(),ex2.toString());
+                                                            
+                                                        //Aquí se hace el contantFolding para la tabla
+                                                            String exp1 = ex1.toString();
+                                                            String sumOp = op.toString();
+                                                            String exp2 = ex2.toString();
+
+                                                            if(FrmPrincipal.tabla.revisarContantFoldingBinario(exp1,sumOp,exp2)){
+                                                               int resultado = FrmPrincipal.tabla.aplicarContantFoldingBinario(Integer.parseInt(exp1),op.toString(),Integer.parseInt(exp2)); 
+                                                               FrmPrincipal.tabla.insertarValorVariable(Integer.toString(resultado));
+                                                            }
+                                                            else{
+                                                                String resultadoStr = exp1+sumOp+exp2;
+                                                                FrmPrincipal.tabla.insertarValorVariable(resultadoStr);
+                                                            }
+
                                                             RESULT = t;
                                                         :}
                     | EXPRESION Mult EXPRESION
@@ -214,7 +244,7 @@ DECLARVARIABLEFILA ::= Coma Identificador:id {:EscritorASM.escribeVariable(id.to
 ARRAYDECLAR ::= TYPENAME ParenCuadAbre ParenCuadCierra Identificador ARRAYDECLARFILA | TYPENAME ParenCuadAbre ParenCuadCierra Identificador Op_atribucion EXPRESION;
 ARRAYDECLARFILA ::= Coma Identificador ARRAYDECLARFILA |{: RESULT = null; :};
 
-ASIGVARIABLE ::= Identificador:id {: FrmPrincipal.tabla.ultimoIdentificadorIngresado = id.toString(); FrmPrincipal.tabla.insertarValorScope(id.toString()); :} Op_atribucion:op EXPRESION:ex {:EscritorASM.escribeExp(id.toString(),op.toString(),ex.toString());:};
+ASIGVARIABLE ::= Identificador:id {: FrmPrincipal.tabla.ultimoSimboloIngresado = FrmPrincipal.tabla.buscarSimVar(id.toString()); FrmPrincipal.tabla.ultimoIdentificadorIngresado = id.toString(); :} Op_atribucion:op EXPRESION:ex {:EscritorASM.escribeExp(id.toString(),op.toString(),ex.toString());:};
 ASIGVARIABLEFUN ::= EXPRESION Op_atribucion EXPRESION;
 
 ACCESSMOD ::= Private | Public | error PuntoComa | {: RESULT = null; :};
@@ -230,7 +260,7 @@ ENUMCONTEN ::= LlaveAbre Identificador ENUMLIST LlaveCierra | error LlaveCierra;
 ENUMLIST ::= Coma ENUMVALUE | {: RESULT = null; :};
 ENUMVALUE ::= Identificador ENUMLIST;
 
-FUNCIONDEF ::= Function Identificador FUNCIONATRIB MODIFICADORES FUNCIONRETURNS FUNCIONCONTEN;
+FUNCIONDEF ::= Function {: FrmPrincipal.tabla.funcion = true; :} Identificador:id {:FrmPrincipal.tabla.insertarValorScope(id.toString()); FrmPrincipal.tabla.funcion = false; :} FUNCIONATRIB MODIFICADORES FUNCIONRETURNS FUNCIONCONTEN;
 
 FUNCIONATRIB ::= ParentAbre {: FrmPrincipal.tabla.varParamet = true; :} TYPENAME Identificador:id {: FrmPrincipal.tabla.insertarValorScope(id.toString()); :} FUNATRIBDOS {: FrmPrincipal.tabla.varParamet = false; :} ParentCierre |  ParentAbre ParentCierre | error ParentCierre;
 FUNATRIBDOS ::= Coma TYPENAME Identificador:id {: FrmPrincipal.tabla.insertarValorScope(id.toString()); :} FUNATRIBDOS | {: RESULT = null; :};
