@@ -35,7 +35,11 @@ label1:
 mov ax,2
 cmp we,ax
 jbe label2
+mov ax,666
+mov zt,ax
 jmp label2
+mov ax,1
+mov yyy,ax
 jmp label1
 label2:
 ;codeFinal
