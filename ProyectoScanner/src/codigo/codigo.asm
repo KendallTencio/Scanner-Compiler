@@ -8,10 +8,6 @@
 z DW 1 DUP(0)
 t DW 1 DUP(0)
 y DW 1 DUP(0)
-y DW 1 DUP(0)
-z DW 1 DUP(0)
-t DW 1 DUP(0)
-y DW 1 DUP(0)
 we DW 1 DUP(0)
 zt DW 1 DUP(0)
 ;dataFinal
@@ -23,16 +19,10 @@ mov ds,ax
 mov es,ax
 mov ax,42
 mov yyy,ax
-mov ax,yyy
-mov p,ax
 mov ax,6
-mov qwqwqw,ax
+mov qwq,ax
 mov ax,23
 mov we,ax
-mov ax,555
-mov xx,ax
-mov ax,p
-mov zt,ax
 ;codeFinal
 
 	.EXIT
