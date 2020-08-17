@@ -239,6 +239,7 @@ STRUCTCONTEN ::= DECLARVARIABLE PuntoComa STRUCTCONTEN | ASIGVARIABLE PuntoComa 
 
 DECLARVARIABLE ::= TYPENAME ACCESSMOD Identificador:id {: FrmPrincipal.tabla.insertarValorScope(id.toString()); EscritorASM.escribeVariable(id.toString());:} DECLARVARIABLEFILA | TYPENAME ACCESSMOD Identificador:id {: FrmPrincipal.tabla.ultimoIdentificadorIngresado = id.toString(); FrmPrincipal.tabla.insertarValorScope(id.toString()); :} Op_atribucion:op EXPRESION:ex {:
                                                                                                                                                                                             EscritorASM.escribeExp(id.toString(),op.toString(),ex.toString());
+                                                                                                                                                                                            EscritorASM.escribeVariable(id.toString());
                                                                                                                                                                                             :} | ARRAYDECLAR | TYPENAME error EXPRESION;
 DECLARVARIABLEFILA ::= Coma Identificador:id {:EscritorASM.escribeVariable(id.toString()); FrmPrincipal.tabla.insertarValorScope(id.toString()); :} DECLARVARIABLEFILA | {: RESULT = null; :};
 ARRAYDECLAR ::= TYPENAME ParenCuadAbre ParenCuadCierra Identificador ARRAYDECLARFILA | TYPENAME ParenCuadAbre ParenCuadCierra Identificador Op_atribucion EXPRESION;
