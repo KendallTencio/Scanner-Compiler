@@ -34,6 +34,29 @@ public class TablaSimbolos{
         posibleIdSiendoAsignado = false;
     }
     
+    public void limpiarTablaSimbolos(){
+        this.erroresLex = "";
+    
+        //Registro de últimos ingresados.
+        this.ultimoTipoIngresado = "";
+        this.ultimoIdentificadorIngresado = "";
+        this.ultimoIdIngresado = "";
+
+        this.posibleIdSiendoAsignado = false;
+
+        //Bandera de return en función ingresada
+        this.returnsEnFuncion = false;
+        this.returnIngresado = false;
+
+        //Variables de Scope
+        this.varGlobal = false;
+        this.varLocal = false;
+        this.varParamet = false;
+        this.funcion = false;
+        
+        this.t.clear();
+    }
+    
     public Simbolo insertar(String nombre){
         if(!posibleIdSiendoAsignado){
             String idSim = Integer.toString(t.size());
@@ -284,9 +307,5 @@ public class TablaSimbolos{
     public String getErroresDeLex(){
         return this.erroresLex;
     }
-    
-    public void limpiar(){
-        this.erroresLex = "";
-        this.t.clear();
-    }
+   
 }

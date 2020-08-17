@@ -485,7 +485,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
             System.err.println(ex);        
         }
         //Limpiar la tabla de símbolos
-        tabla.limpiar();
+        tabla.limpiarTablaSimbolos();
     }//GEN-LAST:event_btnAnalizarSintacticoActionPerformed
 
     /**
